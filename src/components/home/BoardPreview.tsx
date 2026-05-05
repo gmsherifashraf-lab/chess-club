@@ -15,21 +15,21 @@ function initials(name: string): string {
 export default function BoardPreview({ members }: { members: BoardMember[] }) {
   return (
     <section className="bg-ivory2">
-      <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-3 mb-3">
-            <span className="block w-7 h-[1.5px] bg-red" />
-            <span className="text-[0.65rem] uppercase tracking-[0.22em] text-red font-semibold">
+      <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
+        <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-20">
+          <div className="sec-tag inline-flex items-center justify-center gap-3 mb-4 text-red">
+            <span className="block w-9 h-[2px] bg-red" />
+            <span>
               <span className="ar">مجلس الإدارة</span>
               <span className="en">Board of Directors</span>
             </span>
-            <span className="block w-7 h-[1.5px] bg-red" />
+            <span className="block w-9 h-[2px] bg-red" />
           </div>
-          <h2 className="font-disp text-3xl sm:text-4xl lg:text-[2.6rem] text-ink leading-tight mb-4">
+          <h2 className="font-disp t-h2 text-ink mb-5">
             <span className="ar">القائدات خلف النادي</span>
             <span className="en">The Women Behind the Club</span>
           </h2>
-          <div className="h-[3px] w-20 mx-auto bg-gradient-to-r from-red via-white to-green2" />
+          <div className="h-[3px] w-24 mx-auto bg-gradient-to-r from-red via-white to-green2" />
         </div>
 
         {members.length === 0 ? (
@@ -62,11 +62,11 @@ export default function BoardPreview({ members }: { members: BoardMember[] }) {
                   </div>
                 </div>
 
-                <h3 className="font-disp text-lg text-ink mb-1.5 leading-tight">
+                <h3 className="font-disp text-xl text-ink mb-2 leading-tight">
                   {m.name}
                 </h3>
                 {m.role && (
-                  <div className="text-[0.68rem] uppercase tracking-[0.2em] text-red font-semibold">
+                  <div className="text-[0.78rem] uppercase tracking-[0.2em] text-red font-bold">
                     {m.role}
                   </div>
                 )}

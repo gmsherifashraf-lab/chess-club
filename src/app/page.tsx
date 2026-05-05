@@ -24,6 +24,7 @@ export default async function HomePage() {
         <Hero />
         <Stats />
         <NewsPreview items={news} />
+        <div className="sec-div" />
         <TournamentsPreview items={tournaments} />
         <BoardPreview members={board} />
         <AboutPreview />

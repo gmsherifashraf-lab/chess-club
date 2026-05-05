@@ -9,10 +9,10 @@ interface LangCtx {
   toggle: () => void;
 }
 
-const Ctx = createContext<LangCtx>({ lang: "ar", dir: "rtl", toggle: () => {} });
+const Ctx = createContext<LangCtx>({ lang: "en", dir: "ltr", toggle: () => {} });
 
 export function LangProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang] = useState<Lang>("ar");
+  const [lang, setLang] = useState<Lang>("en");
 
   const toggle = useCallback(() => setLang(l => l === "ar" ? "en" : "ar"), []);
 

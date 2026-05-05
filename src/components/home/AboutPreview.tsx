@@ -17,23 +17,23 @@ export default function AboutPreview() {
         style={{ background: "radial-gradient(circle, #007A38 0%, transparent 70%)" }}
       />
 
-      <div className="relative max-w-wrap-md mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
-        <div className="inline-flex items-center gap-3 mb-5">
-          <span className="block w-7 h-[1.5px] bg-red" />
-          <span className="text-[0.65rem] uppercase tracking-[0.22em] text-ivory font-semibold">
+      <div className="relative max-w-wrap-md mx-auto px-4 sm:px-6 lg:px-10 section-pad-lg">
+        <div className="sec-tag inline-flex items-center gap-3 mb-6 text-ivory">
+          <span className="block w-9 h-[2px] bg-red" />
+          <span>
             <span className="ar">من نحن</span>
             <span className="en">About Us</span>
           </span>
         </div>
 
-        <h2 className="font-disp text-3xl sm:text-4xl lg:text-[2.8rem] text-ivory leading-tight mb-6">
+        <h2 className="font-disp t-h1 text-ivory mb-7">
           <span className="ar">أكثر من نادٍ — <span className="text-red">مدرسة قيادة</span></span>
           <span className="en">More than a club — <span className="text-red">a leadership school.</span></span>
         </h2>
 
-        <div className="h-[3px] w-24 bg-gradient-to-r from-red via-white to-green2 mb-8" />
+        <div className="h-[3px] w-28 bg-gradient-to-r from-red via-white to-green2 mb-10" />
 
-        <p className="text-base sm:text-lg leading-relaxed text-ivory/75 max-w-2xl mb-10 font-noto-ar [dir=ltr]:font-dm">
+        <p className="text-lg sm:text-xl leading-[1.8] text-ivory/80 max-w-2xl mb-12">
           <span className="ar">
             نُؤمن بأن كل نقلة على الرقعة هي تدريب على قرار في الحياة. منذ تأسيسنا
             عام 2017، خرّجنا بطلات يمثلن الإمارات في المحافل الإقليمية والدولية،
@@ -49,7 +49,7 @@ export default function AboutPreview() {
 
         <Link
           href="/about"
-          className="inline-flex items-center gap-2 h-12 px-7 border border-ivory/40 text-ivory text-sm font-semibold tracking-wide hover:bg-ivory hover:text-ink transition-colors"
+          className="inline-flex items-center gap-2 h-14 px-9 border-2 border-ivory/50 text-ivory text-base font-semibold tracking-wide hover:bg-ivory hover:text-ink transition-colors"
         >
           <span className="ar">قصتنا الكاملة ←</span>
           <span className="en">Read Our Story →</span>

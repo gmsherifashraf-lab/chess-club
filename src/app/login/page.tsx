@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -17,6 +17,14 @@ const ROLES: { key: UserRole; icon: string; ar: string; en: string; descAr: stri
 ];
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "60vh" }} />}>
+      <LoginInner />
+    </Suspense>
+  );
+}
+
+function LoginInner() {
   const { lang } = useLang();
   const router       = useRouter();
   const searchParams = useSearchParams();

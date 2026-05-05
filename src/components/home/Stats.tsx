@@ -10,18 +10,18 @@ const STATS = [
 export default function Stats() {
   return (
     <section className="bg-white border-y border-stone">
-      <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+      <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 py-16 sm:py-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {STATS.map((s, i) => (
             <div
               key={i}
-              className="group relative text-center py-4 transition-transform hover:-translate-y-1"
+              className="group relative text-center py-5 transition-transform hover:-translate-y-1"
             >
-              <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-10 h-[2px] ${s.accent} opacity-70 group-hover:w-16 transition-all`} />
-              <div className="font-disp text-4xl sm:text-5xl text-ink leading-none mb-2">
+              <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-12 h-[2px] ${s.accent} opacity-80 group-hover:w-20 transition-all`} />
+              <div className="font-disp t-stat text-ink mb-3">
                 {s.value}
               </div>
-              <div className="text-[0.65rem] sm:text-xs uppercase tracking-[0.2em] text-ink3">
+              <div className="text-[0.72rem] sm:text-[0.78rem] uppercase tracking-[0.2em] text-ink3 font-semibold">
                 <span className="ar">{s.ar}</span>
                 <span className="en">{s.en}</span>
               </div>

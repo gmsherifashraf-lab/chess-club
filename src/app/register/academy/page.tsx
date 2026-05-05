@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createBrowserSupabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { signUp, ROLE_DASHBOARD } from "@/lib/auth";
 import { useLang } from "@/context/LangContext";
 import { LOGO_URI } from "@/lib/logo";
@@ -11,7 +11,7 @@ import { LOGO_URI } from "@/lib/logo";
 export default function AcademyRegPage() {
   const { lang } = useLang();
   const router   = useRouter();
-  const supabase = createBrowserSupabase();
+  const supabase = createClient();
 
   // Child info
   const [childFirst,   setChildFirst]   = useState("");

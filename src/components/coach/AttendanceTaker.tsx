@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useCurrentCoach } from "@/hooks/useCurrentCoach";
+import UnlinkedCoachBanner from "@/components/coach/UnlinkedCoachBanner";
 
 type Status = "present" | "absent" | "late" | "excused";
 
@@ -34,6 +36,7 @@ function todayISO() {
 
 export default function AttendanceTaker() {
   const supabase = createClient();
+  const { coachId, loading: coachLoading, unlinked } = useCurrentCoach();
 
   const [date,    setDate]    = useState(todayISO);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -43,13 +46,19 @@ export default function AttendanceTaker() {
   const [error,   setError]   = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
 
-  // ── Load players + existing attendance for the chosen date ────────────────
+  // ── Load assigned players + existing attendance for the chosen date ───────
   const load = useCallback(async () => {
+    if (coachLoading) return;
+    if (!coachId) { setLoading(false); return; }
+
     setLoading(true);
     setError(null);
 
     const [{ data: playerRows, error: pErr }, { data: attRows, error: aErr }] = await Promise.all([
-      supabase.from("players").select("id, name").order("name"),
+      supabase.from("players")
+        .select("id, name, coach_assignments!inner(coach_id)")
+        .eq("coach_assignments.coach_id", coachId)
+        .order("name"),
       supabase.from("attendance").select("player_id, status").eq("date", date),
     ]);
 
@@ -67,9 +76,11 @@ export default function AttendanceTaker() {
     }
     setStatusByPlayer(next);
     setLoading(false);
-  }, [supabase, date]);
+  }, [supabase, date, coachId, coachLoading]);
 
   useEffect(() => { load(); }, [load]);
+
+  if (unlinked) return <UnlinkedCoachBanner />;
 
   // ── Save all (bulk upsert) ────────────────────────────────────────────────
   async function handleSave() {
@@ -218,8 +229,8 @@ export default function AttendanceTaker() {
             {!loading && players.length === 0 && (
               <tr>
                 <td colSpan={2} style={{ padding: "1.5rem", textAlign: "center", color: "#999", fontSize: ".85rem" }}>
-                  <span className="ar">لا توجد لاعبات في قاعدة البيانات بعد</span>
-                  <span className="en">No players in the database yet — add some on the admin page.</span>
+                  <span className="ar">لا توجد لاعبات معيّنة لكِ</span>
+                  <span className="en">No players assigned to you yet — ask an admin to assign players.</span>
                 </td>
               </tr>
             )}

@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useCurrentCoach } from "@/hooks/useCurrentCoach";
+import UnlinkedCoachBanner from "@/components/coach/UnlinkedCoachBanner";
 
 interface Tournament { id: string; name: string; date: string }
 interface Player     { id: string; name: string }
@@ -14,6 +16,7 @@ interface ParticipationState {
 
 export default function ParticipationsEditor() {
   const supabase = createClient();
+  const { coachId, loading: coachLoading, unlinked } = useCurrentCoach();
 
   const [tournaments,    setTournaments]    = useState<Tournament[]>([]);
   const [players,        setPlayers]        = useState<Player[]>([]);
@@ -26,13 +29,19 @@ export default function ParticipationsEditor() {
   const [error,       setError]       = useState<string | null>(null);
   const [savedAt,     setSavedAt]     = useState<number | null>(null);
 
-  // ── Load tournaments + players once ────────────────────────────────────────
+  // ── Load tournaments + assigned players once ──────────────────────────────
   useEffect(() => {
+    if (coachLoading) return;
+    if (!coachId) { setLoadingTour(false); return; }
+
     (async () => {
       setLoadingTour(true);
       const [{ data: tRows, error: tErr }, { data: pRows, error: pErr }] = await Promise.all([
         supabase.from("tournaments").select("id, name, date").order("date", { ascending: false }),
-        supabase.from("players").select("id, name").order("name"),
+        supabase.from("players")
+          .select("id, name, coach_assignments!inner(coach_id)")
+          .eq("coach_assignments.coach_id", coachId)
+          .order("name"),
       ]);
 
       if (tErr || pErr) {
@@ -47,7 +56,9 @@ export default function ParticipationsEditor() {
       if (t.length > 0) setTournamentId(t[0].id);
       setLoadingTour(false);
     })();
-  }, [supabase]);
+  }, [supabase, coachId, coachLoading]);
+
+  if (unlinked) return <UnlinkedCoachBanner />;
 
   // ── When tournament changes, fetch its participations ──────────────────────
   const loadParticipations = useCallback(async () => {
@@ -246,8 +257,8 @@ export default function ParticipationsEditor() {
             {!loadingTour && !loadingRows && tournaments.length > 0 && players.length === 0 && (
               <tr>
                 <td colSpan={4} style={{ padding: "1.5rem", textAlign: "center", color: "#999", fontSize: ".85rem" }}>
-                  <span className="ar">لا توجد لاعبات بعد</span>
-                  <span className="en">No players yet — add some from the admin page.</span>
+                  <span className="ar">لا توجد لاعبات معيّنة لكِ</span>
+                  <span className="en">No players assigned to you yet — ask an admin to assign players.</span>
                 </td>
               </tr>
             )}

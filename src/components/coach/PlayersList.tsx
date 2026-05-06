@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useCurrentCoach } from "@/hooks/useCurrentCoach";
+import UnlinkedCoachBanner from "@/components/coach/UnlinkedCoachBanner";
 
 interface Player {
   id:     string;
@@ -17,31 +19,46 @@ interface Attendance {
 
 export default function PlayersList() {
   const supabase = createClient();
+  const { coachId, loading: coachLoading, unlinked } = useCurrentCoach();
 
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players,    setPlayers]    = useState<Player[]>([]);
   const [attendance, setAttendance] = useState<Attendance[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState<string | null>(null);
+  const [loading,    setLoading]    = useState(true);
+  const [error,      setError]      = useState<string | null>(null);
 
   useEffect(() => {
+    if (coachLoading) return;
+    if (!coachId) { setLoading(false); return; }
+
     (async () => {
       setLoading(true);
-      const [{ data: pRows, error: pErr }, { data: aRows, error: aErr }] = await Promise.all([
-        supabase.from("players").select("id, name, rating, age").order("rating", { ascending: false, nullsFirst: false }),
-        supabase.from("attendance").select("player_id, status"),
-      ]);
+      // Fetch only players assigned to this coach via inner join.
+      const { data: pRows, error: pErr } = await supabase
+        .from("players")
+        .select("id, name, rating, age, coach_assignments!inner(coach_id)")
+        .eq("coach_assignments.coach_id", coachId)
+        .order("rating", { ascending: false, nullsFirst: false });
 
-      if (pErr || aErr) {
-        setError(pErr?.message ?? aErr?.message ?? "Load failed");
-        setLoading(false);
-        return;
-      }
+      if (pErr) { setError(pErr.message); setLoading(false); return; }
 
-      setPlayers((pRows ?? []) as Player[]);
+      const fetched = (pRows ?? []) as Player[];
+      setPlayers(fetched);
+
+      if (fetched.length === 0) { setAttendance([]); setLoading(false); return; }
+
+      const ids = fetched.map((p) => p.id);
+      const { data: aRows, error: aErr } = await supabase
+        .from("attendance")
+        .select("player_id, status")
+        .in("player_id", ids);
+
+      if (aErr) { setError(aErr.message); setLoading(false); return; }
       setAttendance((aRows ?? []) as Attendance[]);
       setLoading(false);
     })();
-  }, [supabase]);
+  }, [supabase, coachId, coachLoading]);
+
+  if (unlinked) return <UnlinkedCoachBanner />;
 
   // Aggregate attendance per player
   const attByPlayer = new Map<string, { attended: number; missed: number }>();
@@ -103,8 +120,8 @@ export default function PlayersList() {
             {!loading && players.length === 0 && (
               <tr>
                 <td colSpan={4} style={{ padding: "1.5rem", textAlign: "center", color: "#999", fontSize: ".85rem" }}>
-                  <span className="ar">لا توجد لاعبات بعد</span>
-                  <span className="en">No players yet — add some from the admin page.</span>
+                  <span className="ar">لا توجد لاعبات معيّنة لكِ — تواصلي مع الإدارة لتعيينهن.</span>
+                  <span className="en">No players assigned to you yet — ask an admin to assign players in the Assignments tab.</span>
                 </td>
               </tr>
             )}

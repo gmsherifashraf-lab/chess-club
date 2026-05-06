@@ -6,6 +6,7 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { createClient } from "@/lib/supabase/client";
 import CrudShell        from "@/components/admin/CrudShell";
 import EnrollmentsList  from "@/components/admin/EnrollmentsList";
+import CoachAssignments from "@/components/admin/CoachAssignments";
 import {
   playerColumns, playerFields, type PlayerRow,
   coachColumns,  coachFields,  type CoachRow,
@@ -18,6 +19,7 @@ const NAV: NavItem[] = [
   { key: "overview",    icon: "⊞", ar: "نظرة عامة",     en: "Overview"     },
   { key: "players",     icon: "♟", ar: "اللاعبات",      en: "Players"      },
   { key: "coaches",     icon: "🎓", ar: "المدربات",      en: "Coaches"      },
+  { key: "assignments", icon: "🔗", ar: "التعيينات",     en: "Assignments"  },
   { key: "tournaments", icon: "🏆", ar: "البطولات",      en: "Tournaments"  },
   { key: "regs",        icon: "📋", ar: "الطلبات",       en: "Applications" },
   { key: "news",        icon: "📰", ar: "إدارة الأخبار", en: "News"         },
@@ -136,6 +138,9 @@ export default function AdminDashboard() {
           fields={coachFields}
         />
       )}
+
+      {/* ── ASSIGNMENTS ── */}
+      {tab === "assignments" && <CoachAssignments />}
 
       {/* ── TOURNAMENTS ── */}
       {tab === "tournaments" && (

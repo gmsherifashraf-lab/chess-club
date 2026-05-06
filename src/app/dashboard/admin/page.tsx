@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import DashboardShell, { type NavItem } from "@/components/dashboard/DashboardShell";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { createClient } from "@/lib/supabase/client";
-import CrudShell from "@/components/admin/CrudShell";
+import CrudShell        from "@/components/admin/CrudShell";
+import EnrollmentsList  from "@/components/admin/EnrollmentsList";
 import {
   playerColumns, playerFields, type PlayerRow,
   coachColumns,  coachFields,  type CoachRow,
@@ -148,37 +149,8 @@ export default function AdminDashboard() {
         />
       )}
 
-      {/* ── APPLICATIONS (mock for now) ── */}
-      {tab === "regs" && (
-        <div>
-          <h3 className="font-disp" style={{ fontSize: "1.05rem", color: "#141414", marginBottom: "1.25rem" }}><span className="ar">الطلبات المعلّقة (17)</span><span className="en">Pending Applications (17)</span></h3>
-          <div style={{ background: "#fff", border: "1px solid #D6D0C4", overflow: "auto" }}>
-            <table className="dtable">
-              <thead>
-                <tr>
-                  <Th ar="المتقدمة" en="Applicant" />
-                  <Th ar="البرنامج" en="Program" />
-                  <Th ar="التاريخ" en="Date" />
-                  <Th ar="الإجراء" en="Action" />
-                </tr>
-              </thead>
-              <tbody>{RECENT_REGS.map((r, i) => (
-                <tr key={i}>
-                  <Td><b><span className="ar">{r.nameAr}</span><span className="en">{r.nameEn}</span></b></Td>
-                  <Td><span className="ar">{r.progAr}</span><span className="en">{r.progEn}</span></Td>
-                  <Td><span style={{ opacity: .4 }}>{r.date}</span></Td>
-                  <Td>
-                    <div style={{ display: "flex", gap: ".5rem" }}>
-                      <button className="btn btn-green btn-sm"><span className="ar">قبول</span><span className="en">Approve</span></button>
-                      <button className="btn btn-sm" style={{ background: "rgba(212,43,60,.1)", color: "#B02030", border: "none" }}><span className="ar">رفض</span><span className="en">Reject</span></button>
-                    </div>
-                  </Td>
-                </tr>
-              ))}</tbody>
-            </table>
-          </div>
-        </div>
-      )}
+      {/* ── APPLICATIONS ── */}
+      {tab === "regs" && <EnrollmentsList />}
 
       {/* ── NEWS ── */}
       {tab === "news" && (

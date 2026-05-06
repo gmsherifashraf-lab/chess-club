@@ -3,15 +3,18 @@
 import { useState } from "react";
 import DashboardShell, { type NavItem } from "@/components/dashboard/DashboardShell";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import PlayersList         from "@/components/coach/PlayersList";
+import AttendanceTaker     from "@/components/coach/AttendanceTaker";
+import ParticipationsEditor from "@/components/coach/ParticipationsEditor";
 
 const NAV: NavItem[] = [
-  { key: "overview", icon: "⊞", ar: "نظرة عامة", en: "Overview"   },
-  { key: "players",  icon: "♟", ar: "لاعباتي",   en: "My Players" },
-  { key: "sessions", icon: "📅", ar: "الجلسات",   en: "Sessions"   },
-  { key: "reports",  icon: "📊", ar: "التقارير",  en: "Reports"    },
+  { key: "overview",       icon: "⊞", ar: "نظرة عامة",  en: "Overview"       },
+  { key: "players",        icon: "♟", ar: "لاعباتي",    en: "Players"        },
+  { key: "attendance",     icon: "📅", ar: "الحضور",     en: "Attendance"     },
+  { key: "participations", icon: "🏆", ar: "المشاركات",  en: "Participations" },
 ];
 
-const PLAYERS = [
+const OVERVIEW_PLAYERS = [
   { ar: "ليلى الراشد", en: "Layla Al-Rashid", rating: 1842, att: 96, color: "#D42B3C" },
   { ar: "ريم العلي",   en: "Reem Al-Ali",     rating: 1780, att: 89, color: "#D42B3C" },
   { ar: "هناء خليفة", en: "Hana Khalifa",    rating: 1456, att: 73, color: "#007A38" },
@@ -49,13 +52,12 @@ export default function CoachDashboard() {
           </div>
 
           <div className="g2">
-            {/* Player performance bars */}
             <div style={{ background: "#fff", border: "1px solid #D6D0C4", padding: "1.5rem" }}>
               <h3 className="font-disp" style={{ fontSize: ".92rem", color: "#141414", marginBottom: "1.25rem" }}>
                 <span className="ar">أداء اللاعبات</span><span className="en">Player Performance</span>
               </h3>
               <div style={{ display: "flex", flexDirection: "column", gap: ".9rem" }}>
-                {PLAYERS.map((p, i) => (
+                {OVERVIEW_PLAYERS.map((p, i) => (
                   <div key={i}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: ".82rem", marginBottom: ".35rem" }}>
                       <span style={{ color: "#555" }}><span className="ar">{p.ar}</span><span className="en">{p.en}</span></span>
@@ -69,7 +71,6 @@ export default function CoachDashboard() {
               </div>
             </div>
 
-            {/* Weekly schedule */}
             <div style={{ background: "#fff", border: "1px solid #D6D0C4", padding: "1.5rem" }}>
               <h3 className="font-disp" style={{ fontSize: ".92rem", color: "#141414", marginBottom: "1.25rem" }}>
                 <span className="ar">الجدول الأسبوعي</span><span className="en">This Week</span>
@@ -95,37 +96,9 @@ export default function CoachDashboard() {
         </div>
       )}
 
-      {tab === "players" && (
-        <div>
-          <h3 className="font-disp" style={{ fontSize: "1.05rem", color: "#141414", marginBottom: "1.25rem" }}>
-            <span className="ar">لاعباتي (28)</span><span className="en">My Players (28)</span>
-          </h3>
-          <div style={{ background: "#fff", border: "1px solid #D6D0C4", overflow: "auto" }}>
-            <table className="dtable">
-              <thead><tr>
-                <th><span className="ar">اللاعبة</span><span className="en">Player</span></th>
-                <th><span className="ar">التصنيف</span><span className="en">Rating</span></th>
-                <th><span className="ar">الحضور</span><span className="en">Att.</span></th>
-              </tr></thead>
-              <tbody>{PLAYERS.map((p, i) => (
-                <tr key={i}>
-                  <td><b><span className="ar">{p.ar}</span><span className="en">{p.en}</span></b></td>
-                  <td><b style={{ color: p.color }}>{p.rating || "—"}</b></td>
-                  <td><span style={{ color: p.att < 80 ? "#A07820" : "#007A38" }}>{p.att}%</span></td>
-                </tr>
-              ))}</tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {(tab === "sessions" || tab === "reports") && (
-        <div style={{ background: "#fff", border: "1px solid #D6D0C4", padding: "3rem", textAlign: "center" }}>
-          <p style={{ color: "#555", opacity: .5, fontFamily: "'Noto Sans Arabic','DM Sans',sans-serif" }}>
-            <span className="ar">قريباً…</span><span className="en">Coming soon…</span>
-          </p>
-        </div>
-      )}
+      {tab === "players"        && <PlayersList />}
+      {tab === "attendance"     && <AttendanceTaker />}
+      {tab === "participations" && <ParticipationsEditor />}
     </DashboardShell>
   );
 }

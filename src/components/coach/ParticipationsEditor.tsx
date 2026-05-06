@@ -58,8 +58,6 @@ export default function ParticipationsEditor() {
     })();
   }, [supabase, coachId, coachLoading]);
 
-  if (unlinked) return <UnlinkedCoachBanner />;
-
   // ── When tournament changes, fetch its participations ──────────────────────
   const loadParticipations = useCallback(async () => {
     if (!tournamentId) {
@@ -96,6 +94,8 @@ export default function ParticipationsEditor() {
   }, [supabase, tournamentId, players]);
 
   useEffect(() => { loadParticipations(); }, [loadParticipations]);
+
+  if (unlinked) return <UnlinkedCoachBanner />;
 
   // ── Field updaters ─────────────────────────────────────────────────────────
   function update(pid: string, patch: Partial<ParticipationState>) {

@@ -71,8 +71,8 @@ export default function ParentDashboard() {
           </h3>
           <div style={{ padding: "1.25rem", background: "#EDE9E2", borderRight: "3px solid #007A38" }}>
             <p style={{ fontSize: ".82rem", lineHeight: 1.85, color: "#555", fontFamily: "'Noto Sans Arabic','DM Sans',sans-serif" }}>
-              <span className="ar">"ليلى تُحقق تقدماً استثنائياً. أداؤها في البطولة الأخيرة كان رائعاً. أنصح بتكثيف التحضير لبطولة القاهرة."</span>
-              <span className="en">"Layla is progressing exceptionally. Her last tournament performance was outstanding. I recommend intensifying preparation for the Cairo championship."</span>
+              <span className="ar">&ldquo;ليلى تُحقق تقدماً استثنائياً. أداؤها في البطولة الأخيرة كان رائعاً. أنصح بتكثيف التحضير لبطولة القاهرة.&rdquo;</span>
+              <span className="en">&ldquo;Layla is progressing exceptionally. Her last tournament performance was outstanding. I recommend intensifying preparation for the Cairo championship.&rdquo;</span>
             </p>
             <div className="label-xs mt2">
               <span className="ar">مريم زهراء · المدربة الرئيسية</span><span className="en">Mariam Zahra · Head Coach</span>

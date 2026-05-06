@@ -31,7 +31,7 @@ export default function DashboardShell({
   children,
 }: Props) {
   const { user, signOut } = useAuth();
-  const { lang, dir }     = useLang();
+  const { lang }          = useLang();
   const [sbOpen, setSbOpen] = useState(false);
 
   const displayName =

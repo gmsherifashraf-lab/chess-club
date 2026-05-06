@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { signIn, ROLE_DASHBOARD, type UserRole } from "@/lib/auth";
+import { signIn, type UserRole } from "@/lib/auth";
 import { useLang } from "@/context/LangContext";
 import { LOGO_URI } from "@/lib/logo";
 

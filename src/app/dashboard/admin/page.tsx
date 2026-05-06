@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardShell, { type NavItem } from "@/components/dashboard/DashboardShell";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { createClient } from "@/lib/supabase/client";
 import CrudShell from "@/components/admin/CrudShell";
 import {
   playerColumns, playerFields, type PlayerRow,
@@ -39,6 +40,7 @@ const DISTRIB = [
 export default function AdminDashboard() {
   const { loading } = useRequireAuth("admin");
   const [tab, setTab] = useState("overview");
+  const counts = useAdminCounts();
 
   if (loading) return <LoadingScreen />;
 
@@ -55,10 +57,10 @@ export default function AdminDashboard() {
       {tab === "overview" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <div className="g4">
-            <Kpi labelAr="إجمالي اللاعبات" labelEn="Total Players"    value="180+" delta="↑ 12 هذا الشهر / this month" up cls="kpi-r" />
-            <Kpi labelAr="المدربات النشطات" labelEn="Active Coaches"   value="12"   delta="↑ 2 جديدة / new"              up cls="kpi-g" />
-            <Kpi labelAr="بطولات 2026"      labelEn="Tournaments 2026" value="8"                                             cls="kpi-k" />
-            <Kpi labelAr="طلبات معلّقة"     labelEn="Pending Apps."    value="17"   delta="تحتاج مراجعة / needs review" cls="kpi-r" />
+            <Kpi labelAr="إجمالي اللاعبات"   labelEn="Total Players"     value={counts.players}      cls="kpi-r" />
+            <Kpi labelAr="المدربات"          labelEn="Coaches"           value={counts.coaches}      cls="kpi-g" />
+            <Kpi labelAr={`بطولات ${counts.currentYear}`} labelEn={`Tournaments ${counts.currentYear}`} value={counts.tournamentsThisYear} cls="kpi-k" />
+            <Kpi labelAr="مقالات منشورة"    labelEn="Published News"    value={counts.publishedNews} cls="kpi-r" />
           </div>
 
           <div className="g2">
@@ -204,13 +206,52 @@ export default function AdminDashboard() {
   );
 }
 
+// ── Live counts for the Overview KPIs ────────────────────────────────────────
+function useAdminCounts() {
+  const currentYear = new Date().getFullYear();
+  const [counts, setCounts] = useState<{
+    players:             number | null;
+    coaches:             number | null;
+    tournamentsThisYear: number | null;
+    publishedNews:       number | null;
+  }>({ players: null, coaches: null, tournamentsThisYear: null, publishedNews: null });
+
+  useEffect(() => {
+    const supabase = createClient();
+    let cancelled = false;
+    (async () => {
+      const yearStart = `${currentYear}-01-01`;
+      const yearEnd   = `${currentYear + 1}-01-01`;
+
+      const [p, c, t, n] = await Promise.all([
+        supabase.from("players").select("*", { count: "exact", head: true }),
+        supabase.from("coaches").select("*", { count: "exact", head: true }),
+        supabase.from("tournaments").select("*", { count: "exact", head: true })
+          .gte("date", yearStart).lt("date", yearEnd),
+        supabase.from("news").select("*", { count: "exact", head: true })
+          .not("published_at", "is", null),
+      ]);
+
+      if (cancelled) return;
+      setCounts({
+        players:             p.count ?? 0,
+        coaches:             c.count ?? 0,
+        tournamentsThisYear: t.count ?? 0,
+        publishedNews:       n.count ?? 0,
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [currentYear]);
+
+  return { ...counts, currentYear };
+}
+
 // ── Micro-components ──────────────────────────────────────────────────────────
-function Kpi({ labelAr, labelEn, value, delta, up, cls }: { labelAr:string; labelEn:string; value:string; delta?:string; up?:boolean; cls:string }) {
+function Kpi({ labelAr, labelEn, value, cls }: { labelAr: string; labelEn: string; value: number | null; cls: string }) {
   return (
     <div className={`kpi ${cls}`}>
       <div className="kpi-lbl"><span className="ar">{labelAr}</span><span className="en">{labelEn}</span></div>
-      <div className="kpi-num">{value}</div>
-      {delta && <div className={`kpi-delta ${up ? "delta-up" : ""}`}>{delta}</div>}
+      <div className="kpi-num">{value == null ? "—" : value}</div>
     </div>
   );
 }

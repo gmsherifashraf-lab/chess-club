@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { signIn, type UserRole } from "@/lib/auth";
@@ -26,7 +26,6 @@ export default function LoginPage() {
 
 function LoginInner() {
   const { lang } = useLang();
-  const router       = useRouter();
   const searchParams = useSearchParams();
   const supabase     = createClient();
 
@@ -53,17 +52,29 @@ function LoginInner() {
     setLoading(true);
     setError(null);
 
-    const { error: authError, dashboard } = await signIn(supabase, { email, password });
+    try {
+      const { error: authError, dashboard } = await signIn(supabase, { email, password });
 
-    if (authError) {
-      setError(friendlyError(authError, lang));
+      if (authError) {
+        setError(friendlyError(authError, lang));
+        setLoading(false);
+        return;
+      }
+
+      // Use a hard navigation rather than router.push: in production builds
+      // some setups silently swallow errors from the client router, leaving
+      // the form stuck on "Signing in…". A full reload is also necessary to
+      // make the layout's server components see the new session cookie.
+      const target = nextPath || dashboard || "/dashboard/parent";
+      window.location.assign(target);
+    } catch (err) {
+      // signInWithPassword can throw on transient issues (cookie write fail,
+      // network blip). Surface it instead of spinning forever.
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error("[login] signIn threw:", err);
+      setError(friendlyError(msg, lang));
       setLoading(false);
-      return;
     }
-
-    // Redirect to the "next" param if middleware set one, else the role dashboard
-    router.push(nextPath || dashboard || "/dashboard/parent");
-    router.refresh(); // flush server-component cache so layout reads new session
   }
 
   // ── Role-card quick-select (pre-fills a demo account for that role) ───────

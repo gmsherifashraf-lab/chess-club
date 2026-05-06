@@ -87,7 +87,7 @@ export default function BoardDashboard() {
             {DECISIONS.map((d, i) => (
               <div key={i} style={{ padding: ".9rem", background: "#EDE9E2", borderRight: `3px solid ${d.border}`, display: "flex", alignItems: "center", gap: "1rem" }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: ".82rem", fontWeight: 500, color: "#141414", fontFamily: "'Noto Serif Arabic','Playfair Display',serif" }}>
+                  <div style={{ fontSize: ".82rem", fontWeight: 500, color: "#141414", fontFamily: "'Noto Serif Arabic',var(--font-playfair),serif" }}>
                     <span className="ar">{d.ar}</span><span className="en">{d.en}</span>
                   </div>
                   <div className="label-xs mt1"><span className="ar">{d.subAr}</span><span className="en">{d.subEn}</span></div>

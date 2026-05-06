@@ -93,10 +93,10 @@ export default function ParentDashboard() {
               <div key={i} style={{ display: "flex", gap: ".75rem", alignItems: "center" }}>
                 <div style={{ width: 46, height: 46, background: t.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <div style={{ fontSize: ".45rem", color: "rgba(255,255,255,.7)", fontFamily: "'DM Sans',sans-serif" }}>{t.month}</div>
-                  <div style={{ fontFamily: "'Playfair Display',serif", fontSize: ".9rem", fontWeight: 700, color: "#fff", lineHeight: 1 }}>{t.day}</div>
+                  <div style={{ fontFamily: "var(--font-playfair),serif", fontSize: ".9rem", fontWeight: 700, color: "#fff", lineHeight: 1 }}>{t.day}</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: ".82rem", fontWeight: 500, color: "#141414", fontFamily: "'Noto Serif Arabic','Playfair Display',serif" }}>
+                  <div style={{ fontSize: ".82rem", fontWeight: 500, color: "#141414", fontFamily: "'Noto Serif Arabic',var(--font-playfair),serif" }}>
                     <span className="ar">{t.ar}</span><span className="en">{t.en}</span>
                   </div>
                   <div className="label-xs"><span className="ar">مسجّلة ✓</span><span className="en">Registered ✓</span></div>

@@ -105,7 +105,7 @@ export default function DashboardShell({
             {userInitial}
           </div>
           <div style={{ flex: 1, overflow: "hidden" }}>
-            <div style={{ fontSize: ".8rem", color: "#F8F5F0", fontFamily: "'Noto Serif Arabic','Playfair Display',serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            <div style={{ fontSize: ".8rem", color: "#F8F5F0", fontFamily: "'Noto Serif Arabic',var(--font-playfair),serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {displayName}
             </div>
             <div style={{ fontSize: ".6rem", color: "rgba(248,245,240,.28)", marginTop: 2, fontFamily: "'DM Sans',sans-serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>

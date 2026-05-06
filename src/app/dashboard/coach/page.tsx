@@ -79,10 +79,10 @@ export default function CoachDashboard() {
                   <div key={i} style={{ display: "flex", gap: ".75rem", alignItems: "center", background: "#EDE9E2", padding: ".75rem" }}>
                     <div style={{ width: 46, height: 46, flexShrink: 0, background: s.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                       <div style={{ fontSize: ".45rem", color: "rgba(255,255,255,.7)", fontFamily: "'DM Sans',sans-serif" }}>{s.dayEn}</div>
-                      <div style={{ fontFamily: "'Playfair Display',serif", fontSize: ".9rem", fontWeight: 700, color: "#fff", lineHeight: 1 }}>{s.num}</div>
+                      <div style={{ fontFamily: "var(--font-playfair),serif", fontSize: ".9rem", fontWeight: 700, color: "#fff", lineHeight: 1 }}>{s.num}</div>
                     </div>
                     <div>
-                      <div style={{ fontSize: ".82rem", fontWeight: 500, color: "#141414", fontFamily: "'Noto Serif Arabic','Playfair Display',serif" }}>
+                      <div style={{ fontSize: ".82rem", fontWeight: 500, color: "#141414", fontFamily: "'Noto Serif Arabic',var(--font-playfair),serif" }}>
                         <span className="ar">{s.ar}</span><span className="en">{s.en}</span>
                       </div>
                       <div className="label-xs">{s.time}</div>

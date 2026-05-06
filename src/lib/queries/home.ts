@@ -24,7 +24,7 @@ export interface NewsItem {
 }
 
 export async function getTournaments(limit = 6): Promise<Tournament[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("tournaments")
     .select("id, name, date, location, description")
@@ -39,7 +39,7 @@ export async function getTournaments(limit = 6): Promise<Tournament[]> {
 }
 
 export async function getBoardMembers(): Promise<BoardMember[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("board_members")
     .select("id, name, role, image_url");
@@ -52,7 +52,7 @@ export async function getBoardMembers(): Promise<BoardMember[]> {
 }
 
 export async function getNews(limit = 3): Promise<NewsItem[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("news")
     .select("id, title, category, published_at, excerpt")

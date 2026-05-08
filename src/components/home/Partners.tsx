@@ -1,5 +1,8 @@
 "use client";
 
+import { motion } from "framer-motion";
+import Reveal from "@/components/motion/Reveal";
+
 interface Partner {
   ar: string;
   en: string;
@@ -17,59 +20,75 @@ const PARTNERS: Partner[] = [
   { ar: "الاتحاد العربي للشطرنج",            en: "Arab Chess Federation",         type: "sports"     },
 ];
 
-const typeColor = {
-  government: "border-red",
-  sports:     "border-green2",
-  cultural:   "border-gold",
-  education:  "border-ink",
+const typeAccent = {
+  government: "#C8102E",
+  sports:     "#1F6B4F",
+  cultural:   "#1F6B4F",
+  education:  "#FFFFFF",
 } as const;
 
 export default function Partners() {
   return (
-    <section className="bg-white">
-      <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="sec-tag inline-flex items-center justify-center gap-3 mb-4 text-red">
-            <span className="block w-9 h-[2px] bg-red" />
-            <span>
+    <section className="relative lux-dark lux-tex lux-section">
+      <div
+        aria-hidden
+        className="absolute -top-20 right-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-15 pointer-events-none"
+        style={{ background: "radial-gradient(circle, #1F6B4F 0%, transparent 65%)" }}
+      />
+
+      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
+        <Reveal>
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="eyebrow-lux mb-5">
+              <span className="dot" />
               <span className="ar">الشركاء والداعمون</span>
               <span className="en">Partners &amp; Supporters</span>
             </span>
-            <span className="block w-9 h-[2px] bg-red" />
+            <h2 className="font-disp t-mega text-white mb-6 mt-6">
+              <span className="ar">شراكات مؤسسية تليق بالنادي.</span>
+              <span className="en">Institutional partnerships of distinction.</span>
+            </h2>
+            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E] mb-8" />
+            <p className="text-base leading-[1.85] text-white/65 max-w-2xl mx-auto">
+              <span className="ar">
+                نفخر بشراكاتنا الراسخة مع الجهات الحكومية والرياضية والثقافية في الإمارات.
+              </span>
+              <span className="en">
+                We are proud of our long-standing partnerships with UAE government,
+                sporting, and cultural institutions.
+              </span>
+            </p>
           </div>
-          <h2 className="font-disp t-h2 text-ink mb-5">
-            <span className="ar">شراكات مؤسسية تليق بالنادي</span>
-            <span className="en">Institutional partnerships of distinction</span>
-          </h2>
-          <div className="h-[3px] w-24 mx-auto bg-gradient-to-r from-red via-white to-green2 mb-6" />
-          <p className="text-base leading-[1.85] text-ink3 max-w-2xl mx-auto">
-            <span className="ar">
-              نفخر بشراكاتنا الراسخة مع الجهات الحكومية والرياضية والثقافية في الإمارات.
-            </span>
-            <span className="en">
-              We are proud of our long-standing partnerships with UAE government,
-              sporting, and cultural institutions.
-            </span>
-          </p>
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+        >
           {PARTNERS.map((p, i) => (
-            <div
+            <motion.div
               key={i}
-              className={`group bg-ivory2 border-l-[3px] ${typeColor[p.type]} border-y border-r border-stone p-5 sm:p-6 transition-all hover:bg-white hover:-translate-y-1 hover:shadow-[0_18px_44px_-22px_rgba(20,20,20,0.25)]`}
+              variants={{
+                hidden:  { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.2, 0.8, 0.2, 1] } },
+              }}
+              className="group relative bg-white/[0.03] border-l-[2px] border-y border-r border-y-white/10 border-r-white/10 backdrop-blur p-5 sm:p-6 transition-all duration-500 hover:bg-white/[0.06] hover:-translate-y-1"
+              style={{ borderLeftColor: typeAccent[p.type] }}
             >
-              <div className="font-disp text-base sm:text-lg text-ink leading-tight">
+              <div className="font-disp text-base sm:text-lg text-white leading-tight">
                 <span className="ar">{p.ar}</span>
                 <span className="en">{p.en}</span>
               </div>
-              <div className="text-[0.6rem] uppercase tracking-[0.18em] text-ink3 font-semibold mt-2 opacity-70">
+              <div className="text-[0.6rem] uppercase tracking-[0.22em] text-white/40 font-semibold mt-2.5">
                 <span className="ar">شريك مؤسسي</span>
                 <span className="en">Institutional Partner</span>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

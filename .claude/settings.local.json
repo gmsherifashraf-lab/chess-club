@@ -12,7 +12,9 @@
       "Bash(git commit -m ' *)",
       "WebFetch(domain:www.instagram.com)",
       "WebFetch(domain:www.facebook.com)",
-      "Bash(npm ls *)"
+      "Bash(npm ls *)",
+      "Bash(tasklist)",
+      "Bash(netstat -ano)"
     ]
   }
 }

@@ -1,5 +1,8 @@
 "use client";
 
+import { motion } from "framer-motion";
+import Reveal from "@/components/motion/Reveal";
+
 interface Quote {
   ar:    string;
   en:    string;
@@ -7,7 +10,7 @@ interface Quote {
   whoEn: string;
   roleAr: string;
   roleEn: string;
-  accent: "red" | "green" | "ink";
+  accent: "emerald" | "scarlet" | "white";
 }
 
 const QUOTES: Quote[] = [
@@ -18,7 +21,7 @@ const QUOTES: Quote[] = [
     whoEn:  "Parent of an Elite Squad player",
     roleAr: "ولية أمر",
     roleEn: "Parent",
-    accent: "red",
+    accent: "scarlet",
   },
   {
     ar:     "بيئة احترافية ومُلهِمة، ونموذج راقٍ لما يجب أن يكون عليه النادي النسائي في الإمارات. شراكتنا مع النادي مصدر فخر.",
@@ -27,7 +30,7 @@ const QUOTES: Quote[] = [
     whoEn:  "Institutional partner",
     roleAr: "شريك مؤسسي",
     roleEn: "Institutional Partner",
-    accent: "green",
+    accent: "emerald",
   },
   {
     ar:     "بدأتُ في النادي وأنا في السابعة. اليوم أُمثّل الإمارات في البطولات الدولية. كل ما حققته بدأ من هنا.",
@@ -36,62 +39,78 @@ const QUOTES: Quote[] = [
     whoEn:  "Elite Squad player",
     roleAr: "لاعبة",
     roleEn: "Player",
-    accent: "ink",
+    accent: "white",
   },
 ];
 
-const accentMap = { red: "#D42B3C", green: "#007A38", ink: "#141414" } as const;
+const accentMap = { emerald: "#1F6B4F", scarlet: "#C8102E", white: "#FFFFFF" } as const;
 
 export default function Testimonials() {
   return (
-    <section className="bg-white">
-      <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <div className="sec-tag inline-flex items-center justify-center gap-3 mb-4 text-red">
-            <span className="block w-9 h-[2px] bg-red" />
-            <span>
+    <section className="relative lux-dark lux-tex lux-section">
+      <div
+        aria-hidden
+        className="absolute top-0 right-1/4 w-[520px] h-[400px] rounded-full blur-3xl opacity-20 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, #1F6B4F 0%, transparent 70%)" }}
+      />
+
+      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
+        <Reveal>
+          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
+            <span className="eyebrow-lux mb-5">
+              <span className="dot" />
               <span className="ar">شهادات</span>
               <span className="en">Testimonials</span>
             </span>
-            <span className="block w-9 h-[2px] bg-red" />
+            <h2 className="font-disp t-mega text-white mb-6 mt-6">
+              <span className="ar">بصوت عائلتنا.</span>
+              <span className="en">In their own words.</span>
+            </h2>
+            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
           </div>
-          <h2 className="font-disp t-h2 text-ink mb-5">
-            <span className="ar">بصوت عائلتنا</span>
-            <span className="en">In the words of our family</span>
-          </h2>
-          <div className="h-[3px] w-24 mx-auto bg-gradient-to-r from-red via-white to-green2" />
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
+        >
           {QUOTES.map((q, i) => (
-            <figure
+            <motion.figure
               key={i}
-              className="relative bg-ivory2 border border-stone p-8 sm:p-10 transition-all hover:-translate-y-1 hover:shadow-[0_22px_50px_-25px_rgba(20,20,20,0.3)]"
+              variants={{
+                hidden:  { opacity: 0, y: 32 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.2, 0.8, 0.2, 1] } },
+              }}
+              whileHover={{ y: -6 }}
+              className="relative bg-white/[0.03] border border-white/10 backdrop-blur p-8 sm:p-10 hover:bg-white/[0.06] transition-colors duration-500"
             >
               <div
-                className="absolute top-3 right-5 font-disp text-7xl leading-none opacity-15 select-none"
+                className="absolute top-3 right-5 font-disp text-7xl leading-none opacity-20 select-none"
                 style={{ color: accentMap[q.accent] }}
               >
                 &ldquo;
               </div>
-              <blockquote className="relative text-base sm:text-lg leading-[1.85] text-ink2 mb-7">
+              <blockquote className="relative text-base sm:text-lg leading-[1.85] text-white/80 mb-7">
                 <span className="ar" dangerouslySetInnerHTML={{ __html: q.ar }} />
                 <span className="en" dangerouslySetInnerHTML={{ __html: q.en }} />
               </blockquote>
               <div className="h-px w-12 mb-4" style={{ background: accentMap[q.accent] }} />
               <figcaption>
-                <div className="font-disp text-base text-ink mb-1">
+                <div className="font-disp text-base text-white mb-1">
                   <span className="ar">{q.whoAr}</span>
                   <span className="en">{q.whoEn}</span>
                 </div>
-                <div className="text-[0.62rem] uppercase tracking-[0.22em] font-bold" style={{ color: accentMap[q.accent] }}>
+                <div className="text-[0.6rem] uppercase tracking-[0.28em] font-bold" style={{ color: accentMap[q.accent] }}>
                   <span className="ar">{q.roleAr}</span>
                   <span className="en">{q.roleEn}</span>
                 </div>
               </figcaption>
-            </figure>
+            </motion.figure>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

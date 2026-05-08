@@ -18,20 +18,18 @@ export default function AboutPreview() {
       />
 
       <div className="relative max-w-wrap-md mx-auto px-4 sm:px-6 lg:px-10 section-pad-lg">
-        <div className="sec-tag inline-flex items-center gap-3 mb-6 text-ivory">
-          <span className="block w-9 h-[2px] bg-red" />
-          <span>
-            <span className="ar">عن النادي</span>
-            <span className="en">About the Club</span>
-          </span>
-        </div>
+        <span className="eyebrow-lux mb-6">
+          <span className="dot" />
+          <span className="ar">عن النادي</span>
+          <span className="en">About the Club</span>
+        </span>
 
-        <h2 className="font-disp t-h1 text-ivory mb-7">
-          <span className="ar">إرث من <span className="text-red">القيادة النسائية</span> في الشطرنج الإماراتي</span>
-          <span className="en">A legacy of <span className="text-red">women&rsquo;s leadership</span> in UAE chess.</span>
+        <h2 className="font-disp t-mega text-ivory mb-7 mt-5">
+          <span className="ar">إرث من <span className="text-[#1F6B4F]">القيادة النسائية</span> في الشطرنج الإماراتي.</span>
+          <span className="en">A legacy of <span className="text-[#1F6B4F]">women&rsquo;s leadership</span> in UAE chess.</span>
         </h2>
 
-        <div className="h-[3px] w-28 bg-gradient-to-r from-red via-white to-green2 mb-10" />
+        <div className="h-[2px] w-32 bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E] mb-10" />
 
         <p className="text-lg sm:text-xl leading-[1.85] text-ivory/80 max-w-2xl mb-8">
           <span className="ar">
@@ -65,10 +63,7 @@ export default function AboutPreview() {
           </span>
         </p>
 
-        <Link
-          href="/about"
-          className="inline-flex items-center gap-2 h-14 px-9 border-2 border-ivory/50 text-ivory text-base font-semibold tracking-wide hover:bg-ivory hover:text-ink transition-colors"
-        >
+        <Link href="/about" className="btn-emerald">
           <span className="ar">قصة النادي الكاملة ←</span>
           <span className="en">Read Our Full Story →</span>
         </Link>

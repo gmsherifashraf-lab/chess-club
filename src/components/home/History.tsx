@@ -1,12 +1,15 @@
 "use client";
 
+import { motion } from "framer-motion";
+import Reveal from "@/components/motion/Reveal";
+
 interface Milestone {
   year:  string;
   ar:    string;
   en:    string;
   arDsc: string;
   enDsc: string;
-  accent: "red" | "green" | "ink" | "gold";
+  accent: "emerald" | "scarlet" | "white";
 }
 
 const MILESTONES: Milestone[] = [
@@ -16,7 +19,7 @@ const MILESTONES: Milestone[] = [
     en:    "Foundation",
     arDsc: "تأسس النادي رسمياً ليكون أول كيان نسائي مخصص للشطرنج والثقافة في إمارة الشارقة.",
     enDsc: "The club is officially established as one of the first dedicated women&rsquo;s chess and cultural institutions in the Emirate of Sharjah.",
-    accent: "red",
+    accent: "scarlet",
   },
   {
     year:  "2000s",
@@ -24,7 +27,7 @@ const MILESTONES: Milestone[] = [
     en:    "Professional Era",
     arDsc: "إطلاق برامج تدريبية احترافية وتأهيل أول جيل من المدربات الإماراتيات.",
     enDsc: "Launch of professional training programmes and the qualification of the first generation of Emirati women coaches.",
-    accent: "green",
+    accent: "emerald",
   },
   {
     year:  "2010s",
@@ -32,7 +35,7 @@ const MILESTONES: Milestone[] = [
     en:    "Regional Excellence",
     arDsc: "حصد الميداليات في البطولات الخليجية والعربية، وتمثيل الإمارات في المحافل الدولية.",
     enDsc: "Medal-winning performances at GCC and Arab championships, and international representation of the UAE.",
-    accent: "ink",
+    accent: "white",
   },
   {
     year:  "2018",
@@ -40,7 +43,7 @@ const MILESTONES: Milestone[] = [
     en:    "ISO Certification",
     arDsc: "حصل النادي على شهادة الجودة العالمية ISO تتويجاً لمنظومته الإدارية الاحترافية.",
     enDsc: "The club is awarded international ISO quality certification, recognising its professional management framework.",
-    accent: "gold",
+    accent: "emerald",
   },
   {
     year:  "اليوم • Today",
@@ -48,72 +51,84 @@ const MILESTONES: Milestone[] = [
     en:    "The New Generation",
     arDsc: "أكثر من 180 لاعبة في برامج النادي، ومنظومة رقمية حديثة لإدارة التدريب والتقييم.",
     enDsc: "Over 180 active players across our programmes, supported by a modern digital platform for training and assessment.",
-    accent: "red",
+    accent: "scarlet",
   },
 ];
 
+const accentColor = { emerald: "#1F6B4F", scarlet: "#C8102E", white: "#FFFFFF" } as const;
+
 export default function History() {
   return (
-    <section className="bg-ivory2 relative overflow-hidden">
-      <div className="chess-tex absolute inset-0 opacity-30" />
+    <section className="relative lux-dark lux-tex lux-section">
+      <div
+        aria-hidden
+        className="absolute -top-32 right-0 w-[480px] h-[480px] rounded-full blur-3xl opacity-20 pointer-events-none"
+        style={{ background: "radial-gradient(circle, #1F6B4F 0%, transparent 65%)" }}
+      />
+
       <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <div className="sec-tag inline-flex items-center justify-center gap-3 mb-4 text-red">
-            <span className="block w-9 h-[2px] bg-red" />
-            <span>
+        <Reveal>
+          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
+            <span className="eyebrow-lux mb-5">
+              <span className="dot" />
               <span className="ar">التاريخ والإرث</span>
               <span className="en">History &amp; Legacy</span>
             </span>
-            <span className="block w-9 h-[2px] bg-red" />
+            <h2 className="font-disp t-mega text-white mb-6 mt-6">
+              <span className="ar">أكثر من ثلاثة عقود من العطاء.</span>
+              <span className="en">Over three decades of legacy.</span>
+            </h2>
+            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
           </div>
-          <h2 className="font-disp t-h2 text-ink mb-5">
-            <span className="ar">أكثر من ثلاثة عقود من العطاء</span>
-            <span className="en">Over three decades of legacy</span>
-          </h2>
-          <div className="h-[3px] w-24 mx-auto bg-gradient-to-r from-red via-white to-green2" />
-        </div>
+        </Reveal>
 
-        {/* Timeline */}
         <div className="relative">
-          {/* Vertical line — visible on md+ */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-stone to-transparent" />
+          {/* Vertical line */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/15 to-transparent" />
 
-          <div className="space-y-10 md:space-y-16">
+          <div className="space-y-12 md:space-y-20">
             {MILESTONES.map((m, i) => {
-              const accentMap = { red: "bg-red", green: "bg-green2", ink: "bg-ink", gold: "bg-gold" } as const;
-              const colorMap  = { red: "#D42B3C", green: "#007A38", ink: "#141414", gold: "#A07820" } as const;
               const isLeft = i % 2 === 0;
+              const color  = accentColor[m.accent];
 
               return (
-                <div key={i} className="md:grid md:grid-cols-2 md:gap-10 items-center">
-                  {/* Year card */}
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 36 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+                  className="md:grid md:grid-cols-2 md:gap-10 items-center"
+                >
+                  {/* Year */}
                   <div className={`${isLeft ? "md:text-right md:order-1" : "md:order-2 md:pl-8"}`}>
-                    <div className={`inline-block ${isLeft ? "" : ""}`}>
-                      <div className="font-disp text-5xl sm:text-6xl font-bold leading-none mb-2" style={{ color: colorMap[m.accent] }}>
-                        {m.year}
-                      </div>
-                      <div className="text-[0.65rem] uppercase tracking-[0.22em] font-bold text-ink">
-                        <span className="ar">{m.ar}</span>
-                        <span className="en">{m.en}</span>
-                      </div>
+                    <div className="font-disp text-6xl sm:text-7xl font-bold leading-none mb-2" style={{ color }}>
+                      {m.year}
+                    </div>
+                    <div className="text-[0.6rem] uppercase tracking-[0.28em] font-bold text-white/85">
+                      <span className="ar">{m.ar}</span>
+                      <span className="en">{m.en}</span>
                     </div>
                   </div>
 
-                  {/* Dot — desktop only */}
-                  <div className="hidden md:block absolute left-1/2 -translate-x-1/2" style={{ top: `${50}%` }}>
-                    <div className={`w-3 h-3 rounded-full ${accentMap[m.accent]} ring-4 ring-ivory2`} />
+                  {/* Dot */}
+                  <div className="hidden md:block absolute left-1/2 -translate-x-1/2" style={{ top: "50%" }}>
+                    <div
+                      className="w-4 h-4 rounded-full ring-4 ring-black"
+                      style={{ background: color, boxShadow: `0 0 22px ${color}` }}
+                    />
                   </div>
 
                   {/* Description */}
                   <div className={`mt-3 md:mt-0 ${isLeft ? "md:order-2 md:pl-8" : "md:order-1 md:text-right md:pr-8"}`}>
-                    <div className={`bg-white border-t-[3px] ${accentMap[m.accent]} border border-stone p-6 sm:p-7 max-w-md ${isLeft ? "" : "md:ml-auto"}`}>
-                      <p className="text-base leading-[1.85] text-ink2">
+                    <div className={`bg-white/[0.03] border-t-[2px] border border-white/10 backdrop-blur p-6 sm:p-7 max-w-md ${isLeft ? "" : "md:ml-auto"}`} style={{ borderTopColor: color }}>
+                      <p className="text-base leading-[1.85] text-white/75">
                         <span className="ar">{m.arDsc}</span>
                         <span className="en" dangerouslySetInnerHTML={{ __html: m.enDsc }} />
                       </p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>

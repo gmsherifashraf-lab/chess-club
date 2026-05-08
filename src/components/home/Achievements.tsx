@@ -1,12 +1,15 @@
 "use client";
 
+import { motion } from "framer-motion";
+import Reveal from "@/components/motion/Reveal";
+
 interface Achievement {
   icon:  string;
   ar:    string;
   en:    string;
   arDsc: string;
   enDsc: string;
-  accent: "red" | "green" | "ink" | "gold";
+  accent: "emerald" | "scarlet" | "white";
 }
 
 const ACHIEVEMENTS: Achievement[] = [
@@ -16,7 +19,7 @@ const ACHIEVEMENTS: Achievement[] = [
     en:    "UAE Women's Championships",
     arDsc: "حضور مستمر على منصات التتويج في بطولات الشطرنج النسائية الرئيسية بالدولة.",
     enDsc: "A continuous presence on the podium in the UAE&rsquo;s leading women&rsquo;s chess championships.",
-    accent: "red",
+    accent: "scarlet",
   },
   {
     icon:  "🏛",
@@ -24,7 +27,7 @@ const ACHIEVEMENTS: Achievement[] = [
     en:    "Institutional Excellence",
     arDsc: "تكريمات وتقديرات رسمية من جهات حكومية ورياضية في الإمارات على مدار السنوات.",
     enDsc: "Repeated official recognition from UAE government and sporting bodies for institutional excellence.",
-    accent: "ink",
+    accent: "white",
   },
   {
     icon:  "✓",
@@ -32,7 +35,7 @@ const ACHIEVEMENTS: Achievement[] = [
     en:    "ISO Quality Certification",
     arDsc: "اعتماد دولي يؤكد التزام النادي بأعلى معايير الإدارة والتشغيل.",
     enDsc: "International certification confirming the club&rsquo;s commitment to top-tier management and operations standards.",
-    accent: "gold",
+    accent: "emerald",
   },
   {
     icon:  "♕",
@@ -40,7 +43,7 @@ const ACHIEVEMENTS: Achievement[] = [
     en:    "Promoting Chess for Girls",
     arDsc: "مبادرات وطنية لنشر الشطرنج بين الفتيات في المدارس والمراكز المجتمعية.",
     enDsc: "National outreach initiatives bringing chess to girls in schools and community centres across the UAE.",
-    accent: "green",
+    accent: "emerald",
   },
   {
     icon:  "☀",
@@ -48,7 +51,7 @@ const ACHIEVEMENTS: Achievement[] = [
     en:    "Summer Camp",
     arDsc: "برامج تطوير الشباب الصيفية بحضور ميداني واسع وإنجازات تدريبية ملموسة.",
     enDsc: "Annual summer development programmes drawing strong attendance and producing measurable training results.",
-    accent: "red",
+    accent: "scarlet",
   },
   {
     icon:  "❀",
@@ -56,65 +59,81 @@ const ACHIEVEMENTS: Achievement[] = [
     en:    "Cultural & Community Activities",
     arDsc: "حضور فاعل في الفعاليات الثقافية والمجتمعية بالشارقة والإمارات.",
     enDsc: "Active participation in cultural and community events across Sharjah and the wider UAE.",
-    accent: "green",
+    accent: "emerald",
   },
 ];
 
-const accentMap = { red: "#D42B3C", green: "#007A38", ink: "#141414", gold: "#A07820" } as const;
-const accentBg  = { red: "bg-red", green: "bg-green2", ink: "bg-ink", gold: "bg-gold" } as const;
+const accentColor = { emerald: "#1F6B4F", scarlet: "#C8102E", white: "#FFFFFF" } as const;
 
 export default function Achievements() {
   return (
-    <section className="bg-ivory2 relative overflow-hidden">
+    <section className="relative lux-dark lux-tex lux-section">
       <div
         aria-hidden
-        className="absolute top-32 -right-32 w-[400px] h-[400px] rounded-full blur-3xl opacity-15"
-        style={{ background: "radial-gradient(circle, #D42B3C 0%, transparent 70%)" }}
+        className="absolute top-1/4 -right-32 w-[420px] h-[420px] rounded-full blur-3xl opacity-15 pointer-events-none"
+        style={{ background: "radial-gradient(circle, #C8102E 0%, transparent 70%)" }}
       />
+      <div
+        aria-hidden
+        className="absolute bottom-0 left-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-20 pointer-events-none"
+        style={{ background: "radial-gradient(circle, #1F6B4F 0%, transparent 65%)" }}
+      />
+
       <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <div className="sec-tag inline-flex items-center justify-center gap-3 mb-4 text-red">
-            <span className="block w-9 h-[2px] bg-red" />
-            <span>
+        <Reveal>
+          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
+            <span className="eyebrow-lux mb-5">
+              <span className="dot" />
               <span className="ar">الإنجازات</span>
               <span className="en">Achievements</span>
             </span>
-            <span className="block w-9 h-[2px] bg-red" />
+            <h2 className="font-disp t-mega text-white mb-6 mt-6">
+              <span className="ar">إرث من التميّز والتتويج.</span>
+              <span className="en">A legacy of excellence and titles.</span>
+            </h2>
+            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
           </div>
-          <h2 className="font-disp t-h2 text-ink mb-5">
-            <span className="ar">إرث من التميّز والتتويج</span>
-            <span className="en">A legacy of excellence and titles</span>
-          </h2>
-          <div className="h-[3px] w-24 mx-auto bg-gradient-to-r from-red via-white to-green2" />
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6"
+        >
           {ACHIEVEMENTS.map((a, i) => (
-            <article
+            <motion.article
               key={i}
-              className="group relative bg-white border border-stone p-7 transition-all hover:-translate-y-1 hover:shadow-[0_22px_50px_-25px_rgba(20,20,20,0.3)]"
+              variants={{
+                hidden:  { opacity: 0, y: 28 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.2, 0.8, 0.2, 1] } },
+              }}
+              whileHover={{ y: -6 }}
+              className="group relative bg-white/[0.03] border border-white/10 backdrop-blur p-8 overflow-hidden transition-colors duration-500 hover:bg-white/[0.06]"
             >
-              <div className={`absolute top-0 left-0 right-0 h-[3px] ${accentBg[a.accent]}`} />
+              <div aria-hidden className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accentColor[a.accent] }} />
               <div
-                className="absolute -top-6 -right-2 text-[7rem] opacity-[0.05] leading-none select-none"
-                style={{ color: accentMap[a.accent] }}
+                aria-hidden
+                className="absolute -top-6 -right-2 text-[7rem] opacity-[0.06] leading-none select-none transition-opacity duration-500 group-hover:opacity-[0.12]"
+                style={{ color: accentColor[a.accent] }}
               >
                 {a.icon}
               </div>
               <div className="relative">
-                <div className="text-3xl mb-4">{a.icon}</div>
-                <h3 className="font-disp text-xl text-ink mb-3 leading-tight">
+                <div className="text-3xl mb-5">{a.icon}</div>
+                <h3 className="font-disp text-xl sm:text-2xl text-white mb-3 leading-tight">
                   <span className="ar">{a.ar}</span>
                   <span className="en">{a.en}</span>
                 </h3>
-                <p className="text-[0.92rem] leading-[1.75] text-ink3">
+                <p className="text-[0.92rem] leading-[1.8] text-white/60">
                   <span className="ar">{a.arDsc}</span>
                   <span className="en" dangerouslySetInnerHTML={{ __html: a.enDsc }} />
                 </p>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

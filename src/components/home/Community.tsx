@@ -50,19 +50,16 @@ export default function Community() {
       />
       <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <div className="sec-tag inline-flex items-center justify-center gap-3 mb-4 text-ivory">
-            <span className="block w-9 h-[2px] bg-red" />
-            <span>
-              <span className="ar">المجتمع والثقافة</span>
-              <span className="en">Community &amp; Culture</span>
-            </span>
-            <span className="block w-9 h-[2px] bg-red" />
-          </div>
-          <h2 className="font-disp t-h2 text-ivory mb-5">
-            <span className="ar">أكثر من رياضة — أسلوب حياة</span>
-            <span className="en">More than a sport — a way of life</span>
+          <span className="eyebrow-lux mb-5">
+            <span className="dot" />
+            <span className="ar">المجتمع والثقافة</span>
+            <span className="en">Community &amp; Culture</span>
+          </span>
+          <h2 className="font-disp t-mega text-ivory mb-6 mt-6">
+            <span className="ar">أكثر من رياضة — أسلوب حياة.</span>
+            <span className="en">More than a sport — a way of life.</span>
           </h2>
-          <div className="h-[3px] w-24 mx-auto bg-gradient-to-r from-red via-white to-green2" />
+          <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">

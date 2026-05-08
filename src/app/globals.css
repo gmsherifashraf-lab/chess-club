@@ -791,7 +791,24 @@ p { line-height: 1.7; }
   100% { opacity: 1; transform: scale(1) rotate(0); }
 }
 .logo-mount { animation: logo-mount-in 1.1s cubic-bezier(.2,.8,.2,1) both; }
-@media (prefers-reduced-motion: reduce) { .logo-mount { animation: none; } }
+
+/* Loading screen */
+@keyframes loading-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.loading-fade { animation: loading-fade-in 1.1s cubic-bezier(.2,.8,.2,1) .35s both; }
+
+@keyframes loading-bar-slide {
+  0%   { transform: translateX(-220%); }
+  100% { transform: translateX(420%); }
+}
+.loading-bar-track { animation: loading-bar-slide 1.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-mount, .loading-fade { animation: none; }
+  .loading-bar-track { animation: none; transform: translateX(0); }
+}
 
 /* Section watermark wrapper */
 .lux-section { position: relative; overflow: hidden; }

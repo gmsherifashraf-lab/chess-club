@@ -4,7 +4,9 @@ import { useEffect, useState, useCallback, type ReactNode } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-export type FieldType = "text" | "number" | "date" | "datetime" | "textarea" | "url";
+export type FieldType = "text" | "number" | "date" | "datetime" | "textarea" | "url" | "select" | "boolean";
+
+export interface SelectOption { value: string; labelAr?: string; labelEn?: string }
 
 export interface FieldConfig {
   key:        string;
@@ -13,6 +15,12 @@ export interface FieldConfig {
   type:       FieldType;
   required?:  boolean;
   placeholder?: string;
+  /** Optional default value (string) used when adding a new row.
+   *  For boolean fields, "true" prefills as checked. For select fields,
+   *  this is the selected option value. */
+  defaultValue?: string;
+  /** for type='select' */
+  options?:   SelectOption[];
 }
 
 export interface ColumnConfig<T> {
@@ -72,7 +80,7 @@ export default function CrudShell<T extends { id: string }>({
   // ── Modal helpers ─────────────────────────────────────────────────────────
   function openAdd() {
     setEditing(null);
-    setForm(Object.fromEntries(fields.map((f) => [f.key, ""])));
+    setForm(Object.fromEntries(fields.map((f) => [f.key, f.defaultValue ?? ""])));
     setFormError(null);
     setModalOpen(true);
   }
@@ -104,7 +112,13 @@ export default function CrudShell<T extends { id: string }>({
 
     const payload: Record<string, unknown> = {};
     for (const f of fields) {
-      const raw = form[f.key]?.trim() ?? "";
+      const rawVal = form[f.key];
+      // Booleans are stored in form state as "true" / "false" strings.
+      if (f.type === "boolean") {
+        payload[f.key] = rawVal === "true";
+        continue;
+      }
+      const raw = rawVal?.trim() ?? "";
       if (!raw) {
         if (f.required) {
           setFormError(`${f.labelEn} is required`);
@@ -307,6 +321,34 @@ function FormModal({
                   required={f.required}
                   disabled={saving}
                 />
+              ) : f.type === "select" ? (
+                <select
+                  className="form-inp"
+                  value={form[f.key] ?? ""}
+                  onChange={(e) => update(f.key, e.target.value)}
+                  required={f.required}
+                  disabled={saving}
+                >
+                  <option value="">—</option>
+                  {(f.options ?? []).map((o) => (
+                    <option key={o.value} value={o.value}>
+                      {o.labelEn ?? o.value}
+                    </option>
+                  ))}
+                </select>
+              ) : f.type === "boolean" ? (
+                <label style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: ".55rem 0", cursor: "pointer" }}>
+                  <input
+                    type="checkbox"
+                    checked={form[f.key] === "true"}
+                    onChange={(e) => update(f.key, e.target.checked ? "true" : "false")}
+                    disabled={saving}
+                    style={{ width: 18, height: 18, accentColor: "#D42B3C", cursor: "pointer" }}
+                  />
+                  <span style={{ fontSize: ".85rem", color: "#444" }}>
+                    {f.placeholder ?? "Yes / On"}
+                  </span>
+                </label>
               ) : (
                 <input
                   className="form-inp"

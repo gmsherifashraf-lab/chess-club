@@ -17,6 +17,7 @@ import {
   coachColumns,  coachFields,  type CoachRow,
   tournamentColumns, tournamentFields, type TournamentRow,
   newsColumns,   newsFields,   type NewsRow,
+  galleryColumns, galleryFields, type GalleryRow,
 } from "@/components/admin/configs";
 
 const NAV: NavItem[] = [
@@ -30,6 +31,7 @@ const NAV: NavItem[] = [
   { key: "tournaments", icon: "🏆", ar: "البطولات",      en: "Tournaments"   },
   { key: "regs",        icon: "📋", ar: "طلبات الانضمام", en: "Applications" },
   { key: "news",        icon: "📰", ar: "الأخبار",        en: "News"          },
+  { key: "gallery",     icon: "🖼", ar: "معرض الصور",    en: "Gallery"       },
   { key: "settings",    icon: "⚙", ar: "الإعدادات",      en: "Settings"      },
 ];
 
@@ -162,6 +164,17 @@ export default function AdminDashboard() {
           columns={newsColumns}
           fields={newsFields}
           orderBy={{ column: "published_at", ascending: false }}
+        />
+      )}
+
+      {tab === "gallery" && (
+        <CrudShell<GalleryRow>
+          table="gallery_images"
+          titleAr="إدارة معرض الصور" titleEn="Gallery"
+          addLabelAr="+ صورة جديدة" addLabelEn="+ Add Image"
+          columns={galleryColumns}
+          fields={galleryFields}
+          orderBy={{ column: "sort_order", ascending: true }}
         />
       )}
 

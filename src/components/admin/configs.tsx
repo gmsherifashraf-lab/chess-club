@@ -5,6 +5,7 @@ export interface PlayerRow      { id: string; name: string; rating: number | nul
 export interface CoachRow       { id: string; name: string; title: string | null; image_url: string | null; created_at: string }
 export interface TournamentRow  { id: string; name: string; date: string; location: string | null; description: string | null; created_at: string }
 export interface NewsRow        { id: string; title: string; category: string | null; excerpt: string | null; body: string | null; image_url: string | null; published_at: string | null; created_at: string }
+export interface GalleryRow     { id: string; title_ar: string; title_en: string; subtitle_ar: string | null; subtitle_en: string | null; image_url: string | null; emoji: string | null; span: string; accent: string; sort_order: number; is_published: boolean; created_at: string }
 
 // ─── Shared cell renderers ───────────────────────────────────────────────────
 function Thumb({ url, alt }: { url: string | null; alt: string }) {
@@ -95,5 +96,45 @@ export const newsFields: FieldConfig[] = [
   { key: "body",         labelAr: "المحتوى",       labelEn: "Body",         type: "textarea" },
   { key: "image_url",    labelAr: "رابط الصورة",   labelEn: "Image URL",    type: "url" },
   { key: "published_at", labelAr: "تاريخ النشر",  labelEn: "Published At", type: "datetime" },
+];
+
+// ─── Gallery ─────────────────────────────────────────────────────────────────
+export const galleryColumns: ColumnConfig<GalleryRow>[] = [
+  { headerAr: "الصورة",  headerEn: "Image",  width: "70px", render: (r) => <Thumb url={r.image_url} alt={r.title_en} /> },
+  { headerAr: "العنوان", headerEn: "Title",  render: (r) => (
+    <div>
+      <div style={{ fontWeight: 600, color: "#141414" }}>{r.title_en}</div>
+      <div style={{ fontSize: ".78rem", opacity: .55, marginTop: 2 }}>{r.title_ar}</div>
+    </div>
+  )},
+  { headerAr: "النوع",   headerEn: "Span",   width: "90px",  render: (r) => <span className="badge badge-ink">{r.span}</span> },
+  { headerAr: "اللون",   headerEn: "Accent", width: "90px",  render: (r) => <span className={`badge ${r.accent === "red" ? "badge-red" : r.accent === "green" ? "badge-green" : r.accent === "gold" ? "badge-gold" : "badge-ink"}`}>{r.accent}</span> },
+  { headerAr: "الترتيب", headerEn: "Order",  width: "80px",  render: (r) => <span style={{ opacity: .7 }}>{r.sort_order}</span> },
+  { headerAr: "النشر",   headerEn: "Status", width: "100px", render: (r) => r.is_published
+    ? <span className="badge badge-green">Published</span>
+    : <span className="badge badge-gold">Draft</span>
+  },
+];
+
+export const galleryFields: FieldConfig[] = [
+  { key: "title_en",      labelAr: "العنوان (إنجليزي)", labelEn: "Title (English)",   type: "text", required: true },
+  { key: "title_ar",      labelAr: "العنوان (عربي)",    labelEn: "Title (Arabic)",    type: "text", required: true },
+  { key: "subtitle_en",   labelAr: "الوصف (إنجليزي)",   labelEn: "Subtitle (English)",type: "text" },
+  { key: "subtitle_ar",   labelAr: "الوصف (عربي)",      labelEn: "Subtitle (Arabic)", type: "text" },
+  { key: "image_url",     labelAr: "رابط الصورة",        labelEn: "Image URL",         type: "url",  placeholder: "https://… (leave empty to show gradient tile)" },
+  { key: "emoji",         labelAr: "رمز (اختياري)",      labelEn: "Emoji (fallback)",  type: "text", placeholder: "🏆 ♛ 🥇 …", defaultValue: "✦" },
+  { key: "accent",        labelAr: "اللون المؤسسي",      labelEn: "Accent",            type: "select", required: true, defaultValue: "red", options: [
+    { value: "red",   labelEn: "Red"    },
+    { value: "green", labelEn: "Green"  },
+    { value: "ink",   labelEn: "Ink"    },
+    { value: "gold",  labelEn: "Gold"   },
+  ]},
+  { key: "span",          labelAr: "حجم البلاطة",       labelEn: "Tile Size",         type: "select", required: true, defaultValue: "normal", options: [
+    { value: "normal", labelEn: "Normal (1×1)" },
+    { value: "wide",   labelEn: "Wide (2×1)"   },
+    { value: "tall",   labelEn: "Tall (1×2)"   },
+  ]},
+  { key: "sort_order",    labelAr: "الترتيب",           labelEn: "Sort Order",        type: "number", placeholder: "0", defaultValue: "0" },
+  { key: "is_published",  labelAr: "نشر علناً",         labelEn: "Published",         type: "boolean", defaultValue: "true", placeholder: "Visible on public site" },
 ];
 

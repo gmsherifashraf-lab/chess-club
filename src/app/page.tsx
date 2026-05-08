@@ -17,14 +17,15 @@ import Gallery from "@/components/home/Gallery";
 import Testimonials from "@/components/home/Testimonials";
 import Contact from "@/components/home/Contact";
 
-import { getNews, getTournaments } from "@/lib/queries/home";
+import { getNews, getTournaments, getGalleryImages } from "@/lib/queries/home";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [news, tournaments] = await Promise.all([
+  const [news, tournaments, gallery] = await Promise.all([
     getNews(3),
     getTournaments(3),
+    getGalleryImages(12),
   ]);
 
   return (
@@ -68,7 +69,7 @@ export default async function HomePage() {
         <Partners />
 
         {/* Visual gallery */}
-        <Gallery />
+        <Gallery items={gallery} />
 
         {/* Testimonials */}
         <Testimonials />

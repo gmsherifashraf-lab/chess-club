@@ -46,12 +46,11 @@ export default function Contact() {
 
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/register/academy"
-                className="inline-flex items-center gap-2 h-13 px-7 bg-red text-white text-sm font-semibold tracking-wide hover:bg-red-dk transition-all hover:-translate-y-0.5"
-                style={{ height: 52 }}
+                href="/register"
+                className="btn-emerald"
               >
-                <span className="ar">التسجيل في الأكاديمية ←</span>
-                <span className="en">Enroll Now →</span>
+                <span className="ar">انضمي إلى النادي ←</span>
+                <span className="en">Become a Member →</span>
               </Link>
               <a
                 href="mailto:info@sharjah-women-chess.ae"

@@ -137,12 +137,9 @@ export default function TrainingPrograms() {
         </div>
 
         <div className="text-center">
-          <Link
-            href="/register/academy"
-            className="inline-flex items-center gap-2 h-14 px-9 bg-red text-white text-base font-semibold tracking-wide hover:bg-red-dk transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_36px_rgba(212,43,60,0.4)]"
-          >
-            <span className="ar">سجّلي ابنتك في الأكاديمية ←</span>
-            <span className="en">Enroll Your Daughter →</span>
+          <Link href="/register" className="btn-emerald">
+            <span className="ar">انضمي إلى النادي ←</span>
+            <span className="en">Join the Club →</span>
           </Link>
         </div>
       </div>

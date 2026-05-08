@@ -8,7 +8,11 @@
       "Bash(cp /c/Users/sherif/Downloads/chess-club-nextjs-supabase/chess-club/.env.local .env.local && ls -la .env.local)",
       "Bash(npm install *)",
       "Bash(git add *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git commit -m ' *)",
+      "WebFetch(domain:www.instagram.com)",
+      "WebFetch(domain:www.facebook.com)",
+      "Bash(npm ls *)"
     ]
   }
 }

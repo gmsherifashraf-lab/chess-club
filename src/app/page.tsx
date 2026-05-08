@@ -15,6 +15,7 @@ import NewsPreview from "@/components/home/NewsPreview";
 import Partners from "@/components/home/Partners";
 import Gallery from "@/components/home/Gallery";
 import Testimonials from "@/components/home/Testimonials";
+import SocialSection from "@/components/home/SocialSection";
 import Contact from "@/components/home/Contact";
 
 import { getNews, getTournaments, getGalleryImages } from "@/lib/queries/home";
@@ -73,6 +74,9 @@ export default async function HomePage() {
 
         {/* Testimonials */}
         <Testimonials />
+
+        {/* Real social media integration */}
+        <SocialSection />
 
         {/* Contact / CTA */}
         <Contact />

@@ -23,41 +23,11 @@ const BOARD: Member[] = [
     honorific: HONORIFIC,
     highlighted: true,
   },
-  {
-    ar:    "أروى محمد سلطان محمد العويس",
-    en:    "Arwa Mohammed Sultan Mohammed Al Owais",
-    arRole: "عضو مجلس الإدارة",
-    enRole: "Board Member",
-    honorific: HONORIFIC,
-  },
-  {
-    ar:    "أمينة جمعة حسن صالح الجسمي",
-    en:    "Amina Juma Hassan Saleh Al Jasmi",
-    arRole: "عضو مجلس الإدارة",
-    enRole: "Board Member",
-    honorific: HONORIFIC,
-  },
-  {
-    ar:    "إيمان محمد مبارك محمد العلي",
-    en:    "Iman Mohammed Mubarak Mohammed Al Ali",
-    arRole: "عضو مجلس الإدارة",
-    enRole: "Board Member",
-    honorific: HONORIFIC,
-  },
-  {
-    ar:    "حمدة سالم سلطان العقروبي السويدي",
-    en:    "Hamda Salem Sultan Al Aqroubi Al Suwaidi",
-    arRole: "عضو مجلس الإدارة",
-    enRole: "Board Member",
-    honorific: HONORIFIC,
-  },
-  {
-    ar:    "علياء علي غريب أحمد المزمي",
-    en:    "Alia Ali Gharib Ahmed Al Mazmi",
-    arRole: "عضو مجلس الإدارة",
-    enRole: "Board Member",
-    honorific: HONORIFIC,
-  },
+  { ar: "أروى محمد سلطان محمد العويس",        en: "Arwa Mohammed Sultan Mohammed Al Owais",      arRole: "عضو مجلس الإدارة", enRole: "Board Member", honorific: HONORIFIC },
+  { ar: "أمينة جمعة حسن صالح الجسمي",         en: "Amina Juma Hassan Saleh Al Jasmi",            arRole: "عضو مجلس الإدارة", enRole: "Board Member", honorific: HONORIFIC },
+  { ar: "إيمان محمد مبارك محمد العلي",         en: "Iman Mohammed Mubarak Mohammed Al Ali",        arRole: "عضو مجلس الإدارة", enRole: "Board Member", honorific: HONORIFIC },
+  { ar: "حمدة سالم سلطان العقروبي السويدي",  en: "Hamda Salem Sultan Al Aqroubi Al Suwaidi",     arRole: "عضو مجلس الإدارة", enRole: "Board Member", honorific: HONORIFIC },
+  { ar: "علياء علي غريب أحمد المزمي",         en: "Alia Ali Gharib Ahmed Al Mazmi",              arRole: "عضو مجلس الإدارة", enRole: "Board Member", honorific: HONORIFIC },
   {
     ar:    "ميثاء عيسى خلفان بن عيسى الذبحاني",
     en:    "Maitha Issa Khalfan bin Isa Al Dhabahi",
@@ -88,39 +58,27 @@ function initials(name: string): string {
 
 export default function BoardOfDirectors() {
   return (
-    <section className="relative lux-dark lux-tex lux-section">
-      <div
-        aria-hidden
-        className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full blur-3xl opacity-25 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(31,107,79,0.6) 0%, transparent 65%)" }}
-      />
-
+    <section className="relative bg-white overflow-hidden">
       <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
         <Reveal>
           <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-            <span className="eyebrow-lux mb-5">
-              <span className="dot" />
+            <span className="eyebrow-light mb-5">
+              <span className="dot-emerald" />
               <span className="ar">مجلس الإدارة</span>
               <span className="en">Board of Directors</span>
             </span>
-            <h2 className="font-disp t-mega text-white mb-6 mt-6">
+            <h2 className="font-disp t-mega text-ink mb-6 mt-6">
               <span className="ar">القيادة المؤسسية للنادي.</span>
               <span className="en">Institutional leadership.</span>
             </h2>
-            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E] mb-8" />
-            <p className="text-base sm:text-lg leading-[1.85] text-white/65">
-              <span className="ar">
-                يقود النادي مجلس إدارة من سيدات إماراتيات يجمعن بين الخبرة المؤسسية والريادة الاجتماعية.
-              </span>
-              <span className="en">
-                The club is led by a board of distinguished Emirati women combining
-                institutional expertise with social leadership.
-              </span>
+            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E] mb-8" />
+            <p className="text-base sm:text-lg leading-[1.85] text-ink3">
+              <span className="ar">يقود النادي مجلس إدارة من سيدات إماراتيات يجمعن بين الخبرة المؤسسية والريادة الاجتماعية.</span>
+              <span className="en">The club is led by a board of distinguished Emirati women combining institutional expertise with social leadership.</span>
             </p>
           </div>
         </Reveal>
 
-        {/* Board cards */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -136,30 +94,30 @@ export default function BoardOfDirectors() {
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] } },
               }}
               whileHover={{ y: -6 }}
-              className={`group relative bg-white/[0.03] border ${m.highlighted ? "border-[#1F6B4F]/60" : "border-white/10"} backdrop-blur pt-9 pb-7 px-6 text-center transition-colors duration-500 hover:bg-white/[0.06]`}
+              className={`group relative bg-ivory2 border ${m.highlighted ? "border-[#0B3D2E]/40" : "border-stone"} pt-9 pb-7 px-6 text-center transition-all duration-500 hover:shadow-[0_24px_55px_-25px_rgba(11,61,46,0.35)]`}
             >
-              <div aria-hidden className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
+              <div aria-hidden className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
 
               <div className="relative w-24 h-24 mx-auto mb-5">
                 <div className="absolute -inset-1 bg-gradient-to-br from-[#1F6B4F] via-white to-[#C8102E] rounded-full opacity-50 group-hover:opacity-90 transition-opacity duration-500" />
-                <div className="relative w-full h-full rounded-full bg-black/80 overflow-hidden flex items-center justify-center text-white border border-white/10">
+                <div className="relative w-full h-full rounded-full bg-ink overflow-hidden flex items-center justify-center text-ivory">
                   <span className="font-disp text-2xl">{initials(m.en)}</span>
                 </div>
               </div>
 
               {m.honorific && (
-                <div className="text-[0.6rem] uppercase tracking-[0.28em] text-[#1F6B4F] font-bold mb-2">
+                <div className="text-[0.6rem] uppercase tracking-[0.28em] text-[#0B3D2E] font-bold mb-2">
                   <span className="ar">{m.honorific.ar}</span>
                   <span className="en">{m.honorific.en}</span>
                 </div>
               )}
 
-              <h3 className="font-disp text-[1.05rem] text-white mb-3 leading-tight px-1">
+              <h3 className="font-disp text-[1.05rem] text-ink mb-3 leading-tight px-1">
                 <span className="ar">{m.ar}</span>
                 <span className="en">{m.en}</span>
               </h3>
 
-              <div className="text-[0.7rem] uppercase tracking-[0.18em] text-white/55 font-semibold border-t border-white/10 pt-3 mt-3">
+              <div className="text-[0.7rem] uppercase tracking-[0.18em] text-ink3 font-semibold border-t border-stone pt-3 mt-3">
                 <span className="ar">{m.arRole}</span>
                 <span className="en">{m.enRole}</span>
               </div>
@@ -167,23 +125,22 @@ export default function BoardOfDirectors() {
           ))}
         </motion.div>
 
-        {/* Executive Leadership */}
         <Reveal>
-          <div className="border-t border-white/10 pt-16">
+          <div className="border-t border-stone pt-16">
             <div className="text-center max-w-2xl mx-auto mb-10">
-              <div className="text-[0.6rem] uppercase tracking-[0.28em] text-[#1F6B4F] font-bold mb-3">
+              <div className="text-[0.6rem] uppercase tracking-[0.28em] text-[#0B3D2E] font-bold mb-3">
                 <span className="ar">الإدارة التنفيذية</span>
                 <span className="en">Executive Leadership</span>
               </div>
-              <h3 className="font-disp text-3xl sm:text-4xl text-white">
+              <h3 className="font-disp text-3xl sm:text-4xl text-ink">
                 <span className="ar">القيادة التنفيذية للنادي</span>
                 <span className="en">Operational Leadership</span>
               </h3>
             </div>
 
             <div className="max-w-md mx-auto">
-              <article className="relative bg-gradient-to-br from-[#0B3D2E]/40 via-black/40 to-[#0B3D2E]/40 border border-[#1F6B4F]/30 backdrop-blur pt-10 pb-9 px-6 text-center overflow-hidden">
-                <div aria-hidden className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
+              <article className="relative bg-ink text-ivory pt-10 pb-9 px-6 text-center overflow-hidden">
+                <div aria-hidden className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
                 <div
                   aria-hidden
                   className="absolute -bottom-20 -right-20 w-[280px] h-[280px] rounded-full blur-3xl opacity-30 pointer-events-none"
@@ -192,11 +149,11 @@ export default function BoardOfDirectors() {
                 <div className="relative">
                   <div className="relative w-28 h-28 mx-auto mb-6">
                     <div className="absolute -inset-1 bg-gradient-to-br from-[#1F6B4F] via-white to-[#C8102E] rounded-full opacity-80" />
-                    <div className="relative w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center text-black">
+                    <div className="relative w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center text-ink">
                       <span className="font-disp text-3xl">{initials(EXECUTIVE.en)}</span>
                     </div>
                   </div>
-                  <h3 className="font-disp text-2xl sm:text-3xl text-white mb-3 leading-tight">
+                  <h3 className="font-disp text-2xl sm:text-3xl text-ivory mb-3 leading-tight">
                     <span className="ar">{EXECUTIVE.ar}</span>
                     <span className="en">{EXECUTIVE.en}</span>
                   </h3>

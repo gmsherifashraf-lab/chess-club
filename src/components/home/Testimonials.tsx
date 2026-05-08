@@ -10,7 +10,7 @@ interface Quote {
   whoEn: string;
   roleAr: string;
   roleEn: string;
-  accent: "emerald" | "scarlet" | "white";
+  accent: "emerald" | "scarlet" | "ink";
 }
 
 const QUOTES: Quote[] = [
@@ -39,34 +39,28 @@ const QUOTES: Quote[] = [
     whoEn:  "Elite Squad player",
     roleAr: "لاعبة",
     roleEn: "Player",
-    accent: "white",
+    accent: "ink",
   },
 ];
 
-const accentMap = { emerald: "#1F6B4F", scarlet: "#C8102E", white: "#FFFFFF" } as const;
+const accentMap = { emerald: "#0B3D2E", scarlet: "#C8102E", ink: "#141414" } as const;
 
 export default function Testimonials() {
   return (
-    <section className="relative lux-dark lux-tex lux-section">
-      <div
-        aria-hidden
-        className="absolute top-0 right-1/4 w-[520px] h-[400px] rounded-full blur-3xl opacity-20 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, #1F6B4F 0%, transparent 70%)" }}
-      />
-
+    <section className="relative bg-white">
       <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
         <Reveal>
           <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-            <span className="eyebrow-lux mb-5">
-              <span className="dot" />
+            <span className="eyebrow-light mb-5">
+              <span className="dot-emerald" />
               <span className="ar">شهادات</span>
               <span className="en">Testimonials</span>
             </span>
-            <h2 className="font-disp t-mega text-white mb-6 mt-6">
+            <h2 className="font-disp t-mega text-ink mb-6 mt-6">
               <span className="ar">بصوت عائلتنا.</span>
               <span className="en">In their own words.</span>
             </h2>
-            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
+            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E]" />
           </div>
         </Reveal>
 
@@ -85,21 +79,21 @@ export default function Testimonials() {
                 visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.2, 0.8, 0.2, 1] } },
               }}
               whileHover={{ y: -6 }}
-              className="relative bg-white/[0.03] border border-white/10 backdrop-blur p-8 sm:p-10 hover:bg-white/[0.06] transition-colors duration-500"
+              className="relative bg-ivory2 border border-stone p-8 sm:p-10 hover:shadow-[0_22px_50px_-25px_rgba(20,20,20,0.25)] transition-all duration-500"
             >
               <div
-                className="absolute top-3 right-5 font-disp text-7xl leading-none opacity-20 select-none"
+                className="absolute top-3 right-5 font-disp text-7xl leading-none opacity-15 select-none"
                 style={{ color: accentMap[q.accent] }}
               >
                 &ldquo;
               </div>
-              <blockquote className="relative text-base sm:text-lg leading-[1.85] text-white/80 mb-7">
+              <blockquote className="relative text-base sm:text-lg leading-[1.85] text-ink2 mb-7">
                 <span className="ar" dangerouslySetInnerHTML={{ __html: q.ar }} />
                 <span className="en" dangerouslySetInnerHTML={{ __html: q.en }} />
               </blockquote>
               <div className="h-px w-12 mb-4" style={{ background: accentMap[q.accent] }} />
               <figcaption>
-                <div className="font-disp text-base text-white mb-1">
+                <div className="font-disp text-base text-ink mb-1">
                   <span className="ar">{q.whoAr}</span>
                   <span className="en">{q.whoEn}</span>
                 </div>

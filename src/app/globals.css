@@ -641,6 +641,56 @@ p { line-height: 1.7; }
 /* Smaller form input variant for inline editors */
 .form-inp.compact { padding: .5rem .75rem; font-size: .82rem; }
 
+/* ── LUXURY LIGHT HERO ── */
+.hero-light {
+  background:
+    radial-gradient(ellipse 100% 70% at 50% 0%, rgba(31,107,79,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 80% at 100% 100%, rgba(200,16,46,0.06) 0%, transparent 70%),
+    linear-gradient(180deg, #FAF7F2 0%, #F8F5F0 50%, #EDE9E2 100%);
+}
+
+/* Eyebrow tag — light variant */
+.eyebrow-light {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .35rem .9rem;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(31,107,79,0.35);
+  color: #141414;
+  font-size: .65rem;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: 'Noto Sans Arabic','DM Sans',sans-serif;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 18px -8px rgba(11,61,46,0.18);
+}
+.eyebrow-light .dot-emerald {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #1F6B4F;
+  box-shadow: 0 0 10px rgba(31,107,79,0.9);
+  animation: eyebrow-dot-pulse 2.4s ease-in-out infinite;
+}
+
+/* Outline button — ink, for light hero */
+.btn-outline-ink {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: 1.05rem 2.15rem;
+  background: transparent;
+  color: #141414;
+  font-weight: 600;
+  font-size: .95rem;
+  letter-spacing: .03em;
+  border: 1.5px solid #141414;
+  cursor: pointer;
+  transition: all .25s ease;
+  font-family: 'Noto Sans Arabic','DM Sans',sans-serif;
+}
+.btn-outline-ink:hover { background: #141414; color: #fff; transform: translateY(-2px); box-shadow: 0 18px 50px -16px rgba(20,20,20,0.45); }
+
 /* ── LUXURY DARK SECTION (used across home cinematic sections) ── */
 .lux-dark {
   background:

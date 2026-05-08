@@ -26,24 +26,19 @@ export default function Gallery({ items }: { items?: GalleryImage[] }) {
   const hasRealImages = tiles.some((t) => !!t.image_url);
 
   return (
-    <section className="relative lux-dark lux-tex lux-section">
-      <div
-        aria-hidden
-        className="absolute -top-20 left-0 w-[420px] h-[420px] rounded-full blur-3xl opacity-15 pointer-events-none"
-        style={{ background: "radial-gradient(circle, #1F6B4F 0%, transparent 65%)" }}
-      />
+    <section className="relative bg-ivory2">
       <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <span className="eyebrow-lux mb-5">
-            <span className="dot" />
+          <span className="eyebrow-light mb-5">
+            <span className="dot-emerald" />
             <span className="ar">معرض الصور</span>
             <span className="en">Gallery</span>
           </span>
-          <h2 className="font-disp t-mega text-white mb-6 mt-6">
+          <h2 className="font-disp t-mega text-ink mb-6 mt-6">
             <span className="ar">لحظات من رحلة النادي.</span>
             <span className="en">Moments from our journey.</span>
           </h2>
-          <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
+          <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E]" />
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-[180px] sm:auto-rows-[220px] gap-3 sm:gap-4">
@@ -106,7 +101,7 @@ export default function Gallery({ items }: { items?: GalleryImage[] }) {
         </div>
 
         {!hasRealImages && (
-          <p className="text-center text-[0.85rem] text-white/50 mt-10 italic">
+          <p className="text-center text-[0.85rem] text-ink3 mt-10 italic opacity-70">
             <span className="ar">معرض رسمي بالصور قريباً.</span>
             <span className="en">An official photo gallery is coming soon.</span>
           </p>

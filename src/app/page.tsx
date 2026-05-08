@@ -19,7 +19,6 @@ import SocialSection from "@/components/home/SocialSection";
 import Contact from "@/components/home/Contact";
 
 import ScrollProgress from "@/components/motion/ScrollProgress";
-import SectionDivider from "@/components/motion/SectionDivider";
 
 import { getNews, getTournaments, getGalleryImages } from "@/lib/queries/home";
 
@@ -37,21 +36,17 @@ export default async function HomePage() {
       <ScrollProgress />
       <Navbar />
       <main>
-        {/* Hero — cinematic intro */}
+        {/* Hero — light luxury cinematic intro */}
         <Hero />
 
         {/* Headline metrics */}
         <Stats />
 
-        <SectionDivider glyph="♛" accent="emerald" />
-
-        {/* Institutional narrative */}
+        {/* DARK ACCENT — institutional narrative */}
         <AboutPreview />
 
         {/* Three-decade history */}
         <History />
-
-        <SectionDivider glyph="♚" accent="white" />
 
         {/* Vision, Mission, Core Values */}
         <VisionMission />
@@ -59,23 +54,17 @@ export default async function HomePage() {
         {/* Awards and recognition */}
         <Achievements />
 
-        <SectionDivider glyph="♞" accent="emerald" />
-
         {/* Live tournaments preview */}
         <TournamentsPreview items={tournaments} />
 
         {/* Training programmes */}
         <TrainingPrograms />
 
-        <SectionDivider glyph="♝" accent="scarlet" />
-
         {/* Board + Executive Leadership */}
         <BoardOfDirectors />
 
-        {/* Cultural & community work */}
+        {/* DARK ACCENT — cultural & community work */}
         <Community />
-
-        <SectionDivider glyph="♜" accent="emerald" />
 
         {/* Live news preview */}
         <NewsPreview items={news} />
@@ -83,17 +72,13 @@ export default async function HomePage() {
         {/* Institutional partners */}
         <Partners />
 
-        <SectionDivider glyph="♕" accent="white" />
-
         {/* Visual gallery */}
         <Gallery items={gallery} />
 
         {/* Testimonials */}
         <Testimonials />
 
-        <SectionDivider glyph="♟" accent="emerald" />
-
-        {/* Real social media integration */}
+        {/* DARK ACCENT — real social media integration */}
         <SocialSection />
 
         {/* Contact / CTA */}

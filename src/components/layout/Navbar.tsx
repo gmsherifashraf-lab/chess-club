@@ -24,7 +24,6 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Sticky-transparent → solid black on scroll
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -32,7 +31,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock page scroll while mobile drawer is open
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -41,21 +39,27 @@ export default function Navbar() {
   const dashboardHref = (role && ROLE_DASHBOARD[role]) || DEFAULT_DASHBOARD;
 
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 nav-floating ${scrolled ? "is-scrolled" : ""}`}>
-      {/* UAE flag accent */}
-      <div className="h-[2px] w-full bg-gradient-to-r from-[#C8102E] via-white to-[#1F6B4F] opacity-80" />
+    <header
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-ivory/95 backdrop-blur-xl border-b border-stone shadow-[0_4px_24px_-12px_rgba(20,20,20,0.18)]"
+          : "bg-ivory/70 backdrop-blur-md border-b border-stone/40"
+      }`}
+    >
+      {/* UAE flag accent strip */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-[#C8102E] via-white to-[#1F6B4F] opacity-95" />
 
       <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between gap-4 lg:gap-8 h-[78px]">
-          {/* Logo + Wordmark */}
+          {/* Logo + wordmark */}
           <Link href="/" className="flex items-center gap-3 lg:gap-4 group min-w-0">
-            <Logo size={52} glow ring tone="white" />
+            <Logo size={52} glow />
             <div className="hidden sm:flex flex-col leading-none min-w-0">
-              <span className="font-disp text-white text-[1rem] lg:text-[1.18rem] font-bold tracking-tight">
+              <span className="font-disp text-ink text-[1rem] lg:text-[1.18rem] font-bold tracking-tight">
                 <span className="ar">نادي الشطرنج والثقافة للفتيات</span>
                 <span className="en">Chess &amp; Culture Club for Women</span>
               </span>
-              <span className="text-[0.55rem] uppercase tracking-[0.28em] text-[#1F6B4F] font-semibold mt-1.5">
+              <span className="text-[0.55rem] uppercase tracking-[0.28em] text-[#0B3D2E] font-bold mt-1.5">
                 <span className="ar">الشارقة • تأسس 1991</span>
                 <span className="en">Sharjah · Est. 1991</span>
               </span>
@@ -71,7 +75,7 @@ export default function Navbar() {
                   key={l.href}
                   href={l.href}
                   className={`relative text-[0.92rem] font-medium tracking-wide transition-colors ${
-                    active ? "text-white" : "text-white/65 hover:text-white"
+                    active ? "text-[#0B3D2E]" : "text-ink/70 hover:text-[#0B3D2E]"
                   }`}
                 >
                   <span className="ar">{l.ar}</span>
@@ -90,33 +94,31 @@ export default function Navbar() {
 
           {/* Right cluster */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Social icons (hidden on small screens to save room) */}
+            {/* Social icons */}
             <div className="hidden lg:block">
-              <SocialRow variant="light" size={16} />
+              <SocialRow variant="dark" size={16} />
             </div>
 
-            {/* Lang toggle */}
             <button
               onClick={toggle}
               aria-label="Toggle language"
-              className="hidden sm:inline-flex items-center justify-center min-w-[2.5rem] h-9 px-2.5 text-[0.78rem] font-semibold tracking-wider border border-white/15 text-white/80 hover:bg-white hover:text-ink hover:border-white transition-colors"
+              className="hidden sm:inline-flex items-center justify-center min-w-[2.5rem] h-9 px-2.5 text-[0.78rem] font-semibold tracking-wider border border-ink/20 text-ink hover:bg-ink hover:text-ivory hover:border-ink transition-colors"
             >
               {lang === "ar" ? "EN" : "ع"}
             </button>
 
-            {/* Auth CTA */}
             {user ? (
-              <Link href={dashboardHref} className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide bg-[#0B3D2E] text-white hover:bg-[#1F6B4F] transition-all hover:shadow-[0_8px_24px_rgba(31,107,79,0.45)]">
+              <Link href={dashboardHref} className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide bg-[#0B3D2E] text-white hover:bg-[#1F6B4F] transition-all hover:shadow-[0_8px_24px_rgba(11,61,46,0.4)]">
                 <span className="ar">حسابي</span>
                 <span className="en">My Account</span>
               </Link>
             ) : (
               <>
-                <Link href="/login" className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide border border-white/20 text-white/85 hover:border-white hover:text-white transition-colors">
+                <Link href="/login" className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide border border-ink/30 text-ink hover:border-ink hover:bg-ink hover:text-ivory transition-colors">
                   <span className="ar">دخول</span>
                   <span className="en">Login</span>
                 </Link>
-                <Link href="/register" className="inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide bg-[#0B3D2E] text-white hover:bg-[#1F6B4F] transition-all hover:shadow-[0_8px_24px_rgba(31,107,79,0.45)]">
+                <Link href="/register" className="inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide bg-[#0B3D2E] text-white hover:bg-[#1F6B4F] transition-all hover:shadow-[0_8px_24px_rgba(11,61,46,0.4)]">
                   <span className="ar">انضمي</span>
                   <span className="en">Join Club</span>
                 </Link>
@@ -128,11 +130,11 @@ export default function Navbar() {
               onClick={() => setOpen((o) => !o)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
-              className="md:hidden inline-flex flex-col justify-center items-center w-10 h-10 gap-[5px] border border-white/20 hover:border-white transition-colors"
+              className="md:hidden inline-flex flex-col justify-center items-center w-10 h-10 gap-[5px] border border-ink/25 hover:border-ink transition-colors"
             >
-              <span className={`block w-5 h-[2px] bg-white transition-transform duration-300 ${open ? "translate-y-[7px] rotate-45" : ""}`} />
-              <span className={`block w-5 h-[2px] bg-white transition-opacity duration-300 ${open ? "opacity-0" : ""}`} />
-              <span className={`block w-5 h-[2px] bg-white transition-transform duration-300 ${open ? "-translate-y-[7px] -rotate-45" : ""}`} />
+              <span className={`block w-5 h-[2px] bg-ink transition-transform duration-300 ${open ? "translate-y-[7px] rotate-45" : ""}`} />
+              <span className={`block w-5 h-[2px] bg-ink transition-opacity duration-300 ${open ? "opacity-0" : ""}`} />
+              <span className={`block w-5 h-[2px] bg-ink transition-transform duration-300 ${open ? "-translate-y-[7px] -rotate-45" : ""}`} />
             </button>
           </div>
         </div>
@@ -147,7 +149,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="md:hidden fixed inset-0 top-[80px] z-40 bg-black/95 backdrop-blur-xl"
+            className="md:hidden fixed inset-0 top-[80px] z-40 bg-ivory/98 backdrop-blur-xl"
           >
             <motion.nav
               initial={{ y: -20, opacity: 0 }}
@@ -169,7 +171,7 @@ export default function Navbar() {
                       href={l.href}
                       onClick={() => setOpen(false)}
                       className={`block py-4 px-2 text-[1.45rem] font-disp border-b transition-colors ${
-                        active ? "text-white border-[#1F6B4F]" : "text-white/70 border-white/8 hover:text-white"
+                        active ? "text-[#0B3D2E] border-[#1F6B4F]" : "text-ink/75 border-stone hover:text-ink"
                       }`}
                     >
                       <span className="ar">{l.ar}</span>
@@ -182,7 +184,7 @@ export default function Navbar() {
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => { toggle(); setOpen(false); }}
-                  className="text-[0.78rem] font-semibold tracking-wider px-4 py-2.5 border border-white/20 text-white/85"
+                  className="text-[0.78rem] font-semibold tracking-wider px-4 py-2.5 border border-ink/25 text-ink"
                 >
                   {lang === "ar" ? "EN" : "العربية"}
                 </button>
@@ -190,7 +192,7 @@ export default function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setOpen(false)}
-                    className="text-[0.85rem] font-semibold tracking-wide px-5 py-2.5 border border-white/20 text-white/85"
+                    className="text-[0.85rem] font-semibold tracking-wide px-5 py-2.5 border border-ink/25 text-ink"
                   >
                     <span className="ar">دخول</span>
                     <span className="en">Login</span>
@@ -206,12 +208,12 @@ export default function Navbar() {
                 </Link>
               </div>
 
-              <div className="mt-10 pt-6 border-t border-white/10">
-                <div className="text-[0.6rem] uppercase tracking-[0.28em] text-white/45 font-semibold mb-4">
+              <div className="mt-10 pt-6 border-t border-stone">
+                <div className="text-[0.6rem] uppercase tracking-[0.28em] text-ink3 font-bold mb-4">
                   <span className="ar">تابعينا</span>
                   <span className="en">Follow us</span>
                 </div>
-                <SocialRow variant="light" size={20} />
+                <SocialRow variant="dark" size={20} />
               </div>
             </motion.nav>
           </motion.div>

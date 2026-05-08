@@ -81,26 +81,20 @@ const PROGRAMS: Program[] = [
 
 export default function TrainingPrograms() {
   return (
-    <section className="relative lux-dark lux-tex lux-section">
-      <div
-        aria-hidden
-        className="absolute -top-40 right-1/4 w-[520px] h-[520px] rounded-full blur-3xl opacity-20 pointer-events-none"
-        style={{ background: "radial-gradient(circle, #1F6B4F 0%, transparent 65%)" }}
-      />
-
+    <section className="relative bg-white">
       <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
         <Reveal>
           <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-            <span className="eyebrow-lux mb-5">
-              <span className="dot" />
+            <span className="eyebrow-light mb-5">
+              <span className="dot-emerald" />
               <span className="ar">برامج التدريب</span>
               <span className="en">Training Programs</span>
             </span>
-            <h2 className="font-disp t-mega text-white mb-6 mt-6">
+            <h2 className="font-disp t-mega text-ink mb-6 mt-6">
               <span className="ar">من النقلة الأولى إلى المنصة الدولية.</span>
               <span className="en">From first move to international stage.</span>
             </h2>
-            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
+            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E]" />
           </div>
         </Reveal>
 
@@ -113,7 +107,7 @@ export default function TrainingPrograms() {
         >
           {PROGRAMS.map((p, i) => {
             const isEmerald = p.accent === "emerald";
-            const accentColor = isEmerald ? "#1F6B4F" : "#C8102E";
+            const accentColor = isEmerald ? "#0B3D2E" : "#C8102E";
             return (
               <motion.article
                 key={i}
@@ -122,9 +116,9 @@ export default function TrainingPrograms() {
                   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.2, 0.8, 0.2, 1] } },
                 }}
                 whileHover={{ y: -6 }}
-                className="group relative bg-white/[0.03] border border-white/10 backdrop-blur p-7 sm:p-9 overflow-hidden transition-colors duration-500 hover:bg-white/[0.05]"
+                className="group relative bg-ivory2 border border-stone p-7 sm:p-9 overflow-hidden transition-all duration-500 hover:shadow-[0_22px_50px_-25px_rgba(20,20,20,0.25)]"
               >
-                <div aria-hidden className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: accentColor }} />
+                <div aria-hidden className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: accentColor }} />
                 <div
                   aria-hidden
                   className="absolute -bottom-10 -right-10 text-[14rem] font-disp opacity-[0.05] leading-none select-none transition-opacity duration-500 group-hover:opacity-[0.1]"
@@ -140,21 +134,21 @@ export default function TrainingPrograms() {
                         <span className="ar">{p.ageAr}</span>
                         <span className="en">{p.ageEn}</span>
                       </div>
-                      <h3 className="font-disp text-2xl sm:text-3xl text-white leading-tight">
+                      <h3 className="font-disp text-2xl sm:text-3xl text-ink leading-tight">
                         <span className="ar">{p.ar}</span>
                         <span className="en">{p.en}</span>
                       </h3>
                     </div>
                   </div>
 
-                  <p className="text-[0.92rem] leading-[1.85] text-white/65 mb-6">
+                  <p className="text-[0.92rem] leading-[1.85] text-ink3 mb-6">
                     <span className="ar">{p.arDsc}</span>
                     <span className="en" dangerouslySetInnerHTML={{ __html: p.enDsc }} />
                   </p>
 
-                  <ul className="space-y-2.5 pt-4 border-t border-white/10">
+                  <ul className="space-y-2.5 pt-4 border-t border-stone">
                     {p.bullets.map((b, j) => (
-                      <li key={j} className="flex items-start gap-3 text-[0.88rem] text-white/75">
+                      <li key={j} className="flex items-start gap-3 text-[0.88rem] text-ink2">
                         <span className="mt-1.5 block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: accentColor }} />
                         <span>
                           <span className="ar">{b.ar}</span>

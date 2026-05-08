@@ -16,20 +16,18 @@ export default async function NewsPage() {
     <>
       <Navbar />
       <main>
-        <section className="pg-hdr text-ivory">
-          <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 pt-28 pb-16 sm:pt-32 sm:pb-20 relative">
-            <div className="sec-tag inline-flex items-center gap-3 mb-4 text-ivory">
-              <span className="block w-9 h-[2px] bg-[#1F6B4F]" />
-              <span>
-                <span className="ar">الأخبار</span>
-                <span className="en">News &amp; Media</span>
-              </span>
-            </div>
-            <h1 className="font-disp t-h1 text-ivory mb-4">
+        <section className="bg-ivory2 border-b border-stone">
+          <div className="max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 pt-32 pb-16 sm:pt-36 sm:pb-20 relative">
+            <span className="eyebrow-light mb-4">
+              <span className="dot-emerald" />
+              <span className="ar">الأخبار</span>
+              <span className="en">News &amp; Media</span>
+            </span>
+            <h1 className="font-disp t-mega text-ink mt-5 mb-4">
               <span className="ar">آخر أخبار النادي</span>
               <span className="en">Latest from the Club</span>
             </h1>
-            <div className="h-[2px] w-32 bg-gradient-to-r from-[#1F6B4F] via-white to-[#C8102E]" />
+            <div className="h-[2px] w-32 bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E]" />
           </div>
         </section>
         <NewsPreview items={news} />

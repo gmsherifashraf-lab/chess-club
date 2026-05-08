@@ -19,25 +19,24 @@ export default function AboutPage() {
     <>
       <Navbar />
       <main>
-        {/* Cinematic page hero */}
-        <section className="pg-hdr text-ivory relative">
-          <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 pt-24 pb-20 sm:pt-28 sm:pb-28">
-            <div className="sec-tag inline-flex items-center gap-3 mb-6 text-ivory">
-              <span className="block w-9 h-[2px] bg-red" />
-              <span>
-                <span className="ar">المؤسسة</span>
-                <span className="en">The Institution</span>
-              </span>
-            </div>
+        {/* Page hero — light luxury opener */}
+        <section className="hero-light border-b border-stone relative overflow-hidden">
+          <div className="chess-tex absolute inset-0 opacity-40" />
+          <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 pt-32 pb-20 sm:pt-40 sm:pb-28">
+            <span className="eyebrow-light mb-6">
+              <span className="dot-emerald" />
+              <span className="ar">المؤسسة</span>
+              <span className="en">The Institution</span>
+            </span>
 
-            <h1 className="font-disp t-h1 text-ivory mb-6 max-w-4xl">
+            <h1 className="font-disp t-mega text-ink mb-6 mt-6 max-w-4xl">
               <span className="ar">نادي الشطرنج والثقافة للفتيات بالشارقة</span>
               <span className="en">Chess &amp; Culture Club for Women — Sharjah</span>
             </h1>
 
-            <div className="h-[3px] w-32 bg-gradient-to-r from-red via-white to-green2 mb-8" />
+            <div className="h-[2px] w-40 bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E] mb-8" />
 
-            <p className="text-lg sm:text-xl leading-[1.85] text-ivory/80 max-w-3xl">
+            <p className="text-lg sm:text-xl leading-[1.85] text-ink2 max-w-3xl">
               <span className="ar">
                 مؤسسة رياضية وثقافية رائدة، تأسست عام 1991 لتقود مسيرة الشطرنج النسائي
                 في الإمارات العربية المتحدة، وتُسهم في تمكين الفتاة الإماراتية ذهنياً وقيادياً
@@ -52,18 +51,18 @@ export default function AboutPage() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-ivory/8 border border-ivory/15 text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
-                <span className="block w-1.5 h-1.5 rounded-full bg-red" />
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/70 border border-stone text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
+                <span className="block w-1.5 h-1.5 rounded-full bg-[#C8102E]" />
                 <span className="ar">تأسس 1991</span>
                 <span className="en">Est. 1991</span>
               </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-ivory/8 border border-ivory/15 text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
-                <span className="block w-1.5 h-1.5 rounded-full bg-green2" />
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/70 border border-stone text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
+                <span className="block w-1.5 h-1.5 rounded-full bg-[#0B3D2E]" />
                 <span className="ar">معتمد ISO</span>
                 <span className="en">ISO Certified</span>
               </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-ivory/8 border border-ivory/15 text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
-                <span className="block w-1.5 h-1.5 rounded-full bg-gold" />
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/70 border border-stone text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
+                <span className="block w-1.5 h-1.5 rounded-full bg-[#1F6B4F]" />
                 <span className="ar">مؤسسة نسائية رائدة</span>
                 <span className="en">Leading Women&rsquo;s Institution</span>
               </span>

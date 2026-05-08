@@ -18,8 +18,7 @@ export async function middleware(request: NextRequest) {
   // is validated and any auth cookies on the response are refreshed in one
   // call. With @supabase/ssr ≥0.5 this is the only supported middleware
   // pattern; getSession() can return stale data and won't trigger cookie
-  // rotation, which is what was causing the post-sign-in /login redirect
-  // loop on Vercel.
+  // rotation.
   const supabase = createMiddlewareClient(request, response);
   const {
     data: { user },
@@ -36,9 +35,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Treat /register/academy (public enrollment) as NOT an auth route — anyone
+  // can submit it without an account.
+  const isPureAuthRoute =
+    isAuthRoute && !pathname.startsWith("/register/academy");
+
   // ── Logged in → don't show /login or /register ──────────────────────────
-  if (isAuthRoute && user) {
-    const role = (user.user_metadata?.role ?? "parent") as UserRole;
+  if (isPureAuthRoute && user) {
+    const role = normaliseRole(user.user_metadata?.role);
     const dashboard = ROLE_DASHBOARD[role] ?? DEFAULT_DASHBOARD;
     const url = request.nextUrl.clone();
     url.pathname = dashboard;
@@ -47,8 +51,11 @@ export async function middleware(request: NextRequest) {
 
   // ── Wrong dashboard role → redirect to correct one ──────────────────────
   if (user && pathname.startsWith("/dashboard")) {
-    const role = (user.user_metadata?.role ?? "parent") as UserRole;
+    const role = normaliseRole(user.user_metadata?.role);
     const correctDash = ROLE_DASHBOARD[role] ?? DEFAULT_DASHBOARD;
+
+    // The /dashboard index page does its own redirect; let it through.
+    if (pathname === "/dashboard") return response;
 
     if (!pathname.startsWith(correctDash)) {
       const url = request.nextUrl.clone();
@@ -58,6 +65,14 @@ export async function middleware(request: NextRequest) {
   }
 
   return response;
+}
+
+// Map any legacy / unknown role value to a valid UserRole. Old accounts
+// still have role='parent' or 'board' in their JWT until profile sync
+// runs; treat them as 'player' so they don't get stuck on the wrong page.
+function normaliseRole(raw: unknown): UserRole {
+  if (raw === "admin" || raw === "coach" || raw === "player") return raw;
+  return "player";
 }
 
 export const config = {

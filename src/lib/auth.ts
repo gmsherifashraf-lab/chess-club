@@ -1,19 +1,31 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-// ─── ROLE MAPPING ─────────────────────────────────────────────────────────────
-// The login page shows four role cards: admin / coach / parent / board.
-// We store the chosen role in the user's metadata at sign-up so we can
-// redirect them to the right dashboard after every login.
-export type UserRole = "admin" | "coach" | "parent" | "board";
+// ─── ROLE SYSTEM ─────────────────────────────────────────────────────────────
+// Three roles only: admin (super-admin), coach, player.
+// Stored in `public.profiles.role` and mirrored into
+// auth.users.raw_user_meta_data.role by a trigger so middleware can
+// read it from the JWT without a DB round-trip.
+export type UserRole = "admin" | "coach" | "player";
 
 export const ROLE_DASHBOARD: Record<UserRole, string> = {
   admin:  "/dashboard/admin",
   coach:  "/dashboard/coach",
-  parent: "/dashboard/parent",
-  board:  "/dashboard/board",
+  player: "/dashboard/player",
 };
 
-export const DEFAULT_DASHBOARD = "/dashboard/parent";
+export const DEFAULT_DASHBOARD = "/dashboard/player";
+
+export const ROLE_LABEL: Record<UserRole, { ar: string; en: string }> = {
+  admin:  { ar: "مدير النظام", en: "Administrator" },
+  coach:  { ar: "المدرب",      en: "Coach"         },
+  player: { ar: "اللاعب",       en: "Player"        },
+};
+
+export const ROLE_COLOR: Record<UserRole, string> = {
+  admin:  "#D42B3C",
+  coach:  "#007A38",
+  player: "#A07820",
+};
 
 // ─── SIGN UP ──────────────────────────────────────────────────────────────────
 export interface SignUpParams {
@@ -54,7 +66,7 @@ export interface SignInParams {
 
 export interface SignInResult {
   error:     string | null;
-  dashboard: string | null; // redirect target on success
+  dashboard: string | null;
 }
 
 export async function signIn(
@@ -68,9 +80,24 @@ export async function signIn(
 
   if (error) return { error: error.message, dashboard: null };
 
-  const role = (data.user?.user_metadata?.role ?? "parent") as UserRole;
-  const dashboard = ROLE_DASHBOARD[role] ?? DEFAULT_DASHBOARD;
+  // Prefer the role from the freshest source: profiles row. Fall back
+  // to JWT metadata, then to 'player' default.
+  let role: UserRole = (data.user?.user_metadata?.role ?? "player") as UserRole;
 
+  try {
+    if (data.user?.id) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .maybeSingle();
+      if (profile?.role) role = profile.role as UserRole;
+    }
+  } catch {
+    /* ignore — fall back to metadata */
+  }
+
+  const dashboard = ROLE_DASHBOARD[role] ?? DEFAULT_DASHBOARD;
   return { error: null, dashboard };
 }
 
@@ -88,5 +115,5 @@ export async function getSession(supabase: SupabaseClient) {
 // ─── GET USER ROLE (server-side helper) ──────────────────────────────────────
 export async function getUserRole(supabase: SupabaseClient): Promise<UserRole> {
   const { data: { user } } = await supabase.auth.getUser();
-  return (user?.user_metadata?.role ?? "parent") as UserRole;
+  return (user?.user_metadata?.role ?? "player") as UserRole;
 }

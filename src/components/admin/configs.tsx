@@ -5,7 +5,6 @@ export interface PlayerRow      { id: string; name: string; rating: number | nul
 export interface CoachRow       { id: string; name: string; title: string | null; image_url: string | null; created_at: string }
 export interface TournamentRow  { id: string; name: string; date: string; location: string | null; description: string | null; created_at: string }
 export interface NewsRow        { id: string; title: string; category: string | null; excerpt: string | null; body: string | null; image_url: string | null; published_at: string | null; created_at: string }
-export interface BoardRow       { id: string; name: string; role: string | null; image_url: string | null; bio: string | null; created_at: string }
 
 // ─── Shared cell renderers ───────────────────────────────────────────────────
 function Thumb({ url, alt }: { url: string | null; alt: string }) {
@@ -98,17 +97,3 @@ export const newsFields: FieldConfig[] = [
   { key: "published_at", labelAr: "تاريخ النشر",  labelEn: "Published At", type: "datetime" },
 ];
 
-// ─── Board members ───────────────────────────────────────────────────────────
-export const boardColumns: ColumnConfig<BoardRow>[] = [
-  { headerAr: "الصورة", headerEn: "Image", width: "60px", render: (r) => <Thumb url={r.image_url} alt={r.name} /> },
-  { headerAr: "الاسم",  headerEn: "Name",  render: (r) => <b>{r.name}</b> },
-  { headerAr: "الدور",  headerEn: "Role",  render: (r) => r.role ?? dim(null) },
-  { headerAr: "السيرة", headerEn: "Bio",   render: (r) => truncate(r.bio) ?? dim(null) },
-];
-
-export const boardFields: FieldConfig[] = [
-  { key: "name",      labelAr: "الاسم",       labelEn: "Name",      type: "text",     required: true },
-  { key: "role",      labelAr: "الدور",       labelEn: "Role",      type: "text",     placeholder: "e.g. Chairperson" },
-  { key: "image_url", labelAr: "رابط الصورة", labelEn: "Image URL", type: "url" },
-  { key: "bio",       labelAr: "السيرة",      labelEn: "Bio",       type: "textarea" },
-];

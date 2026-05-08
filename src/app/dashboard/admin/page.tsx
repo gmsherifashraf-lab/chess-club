@@ -4,149 +4,147 @@ import { useState, useEffect } from "react";
 import DashboardShell, { type NavItem } from "@/components/dashboard/DashboardShell";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/context/AuthContext";
+
 import CrudShell        from "@/components/admin/CrudShell";
 import EnrollmentsList  from "@/components/admin/EnrollmentsList";
 import CoachAssignments from "@/components/admin/CoachAssignments";
+import UsersManager     from "@/components/admin/UsersManager";
+import TasksManager     from "@/components/tasks/TasksManager";
+import SubmissionsReviewer from "@/components/tasks/SubmissionsReviewer";
 import {
   playerColumns, playerFields, type PlayerRow,
   coachColumns,  coachFields,  type CoachRow,
   tournamentColumns, tournamentFields, type TournamentRow,
   newsColumns,   newsFields,   type NewsRow,
-  boardColumns,  boardFields,  type BoardRow,
 } from "@/components/admin/configs";
 
 const NAV: NavItem[] = [
-  { key: "overview",    icon: "⊞", ar: "نظرة عامة",     en: "Overview"     },
-  { key: "players",     icon: "♟", ar: "اللاعبات",      en: "Players"      },
-  { key: "coaches",     icon: "🎓", ar: "المدربات",      en: "Coaches"      },
-  { key: "assignments", icon: "🔗", ar: "التعيينات",     en: "Assignments"  },
-  { key: "tournaments", icon: "🏆", ar: "البطولات",      en: "Tournaments"  },
-  { key: "regs",        icon: "📋", ar: "الطلبات",       en: "Applications" },
-  { key: "news",        icon: "📰", ar: "إدارة الأخبار", en: "News"         },
-  { key: "board",       icon: "👥", ar: "مجلس الإدارة",  en: "Board"        },
-];
-
-const RECENT_REGS = [
-  { nameAr: "نور السيد",    nameEn: "Noor Al-Sayed",  progAr: "النجوم الصاعدة", progEn: "Rising Stars", date: "Apr 30", status: "pending"  },
-  { nameAr: "هناء خليفة",  nameEn: "Hana Khalifa",   progAr: "فريق النخبة",   progEn: "Elite Squad",  date: "Apr 29", status: "approved" },
-  { nameAr: "ريم العلي",   nameEn: "Reem Al-Ali",    progAr: "الجيل التنافسي",progEn: "Competitive",  date: "Apr 27", status: "pending"  },
-  { nameAr: "سارة منصور", nameEn: "Sara Mansour",   progAr: "الملكات الصغيرات",progEn: "Little Queens",date: "Apr 26", status: "approved" },
-];
-
-const DISTRIB = [
-  { ar: "الملكات الصغيرات", en: "Little Queens",      pct: 28, color: "#D42B3C" },
-  { ar: "النجوم الصاعدات",  en: "Rising Stars",       pct: 45, color: "#007A38" },
-  { ar: "الجيل التنافسي",   en: "Competitive Juniors",pct: 57, color: "#D42B3C" },
-  { ar: "فريق النخبة",      en: "Elite Squad",         pct: 18, color: "#141414" },
+  { key: "overview",    icon: "⊞", ar: "نظرة عامة",      en: "Overview"      },
+  { key: "users",       icon: "👥", ar: "المستخدمون",   en: "Users"         },
+  { key: "tasks",       icon: "📝", ar: "المهام",        en: "Tasks"         },
+  { key: "submissions", icon: "📥", ar: "المُسلَّمات",   en: "Submissions"   },
+  { key: "players",     icon: "♟", ar: "اللاعبون",      en: "Players"       },
+  { key: "coaches",     icon: "🎓", ar: "المدربون",      en: "Coaches"       },
+  { key: "assignments", icon: "🔗", ar: "التعيينات",     en: "Assignments"   },
+  { key: "tournaments", icon: "🏆", ar: "البطولات",      en: "Tournaments"   },
+  { key: "regs",        icon: "📋", ar: "طلبات الانضمام", en: "Applications" },
+  { key: "news",        icon: "📰", ar: "الأخبار",        en: "News"          },
+  { key: "settings",    icon: "⚙", ar: "الإعدادات",      en: "Settings"      },
 ];
 
 export default function AdminDashboard() {
   const { loading } = useRequireAuth("admin");
+  const { profile } = useAuth();
   const [tab, setTab] = useState("overview");
   const counts = useAdminCounts();
 
   if (loading) return <LoadingScreen />;
 
+  const initial = (profile?.full_name ?? profile?.email ?? "A").trim().charAt(0).toUpperCase();
+
   return (
     <DashboardShell
       roleAr="مدير النظام" roleEn="Administrator"
       roleColor="#D42B3C"
-      userInitial="م"
+      userInitial={initial}
       navItems={NAV}
       activeTab={tab}
       onTab={setTab}
     >
-      {/* ── OVERVIEW ── */}
       {tab === "overview" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          <div className="banner">
+            <div style={{ fontSize: ".68rem", letterSpacing: ".18em", textTransform: "uppercase", opacity: .6, marginBottom: ".4rem" }}>
+              <span className="ar">لوحة التحكم</span>
+              <span className="en">Control Panel</span>
+            </div>
+            <h2 className="font-disp" style={{ fontSize: "1.7rem", marginBottom: ".4rem" }}>
+              <span className="ar">مرحباً بك في الإدارة</span>
+              <span className="en">Welcome back, Admin</span>
+            </h2>
+            <p style={{ fontSize: ".88rem", opacity: .7, maxWidth: 540, lineHeight: 1.6 }}>
+              <span className="ar">صلاحيات كاملة على المنصة. أدِر المستخدمين، المحتوى، والتقدم من مكان واحد.</span>
+              <span className="en">Full platform access. Manage users, content, and progress from a single command center.</span>
+            </p>
+          </div>
+
           <div className="g4">
-            <Kpi labelAr="إجمالي اللاعبات"   labelEn="Total Players"     value={counts.players}      cls="kpi-r" />
-            <Kpi labelAr="المدربات"          labelEn="Coaches"           value={counts.coaches}      cls="kpi-g" />
-            <Kpi labelAr={`بطولات ${counts.currentYear}`} labelEn={`Tournaments ${counts.currentYear}`} value={counts.tournamentsThisYear} cls="kpi-k" />
-            <Kpi labelAr="مقالات منشورة"    labelEn="Published News"    value={counts.publishedNews} cls="kpi-r" />
+            <Kpi labelAr="إجمالي المستخدمين" labelEn="Total Users" value={counts.totalUsers} icon="👥" tone="t-red" />
+            <Kpi labelAr="اللاعبون"          labelEn="Players"     value={counts.players}    icon="♟" tone="t-grn" />
+            <Kpi labelAr="المدربون"          labelEn="Coaches"     value={counts.coaches}    icon="🎓" tone="t-ink" />
+            <Kpi labelAr="المهام النشطة"     labelEn="Active Tasks" value={counts.openTasks} icon="📝" tone="t-gold" />
           </div>
 
           <div className="g2">
-            <div style={{ background: "#fff", border: "1px solid #D6D0C4", padding: "1.5rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-                <h3 className="font-disp" style={{ fontSize: ".92rem", color: "#141414" }}>
-                  <span className="ar">آخر الطلبات</span><span className="en">Recent Registrations</span>
-                </h3>
-                <button onClick={() => setTab("regs")} style={{ fontSize: ".72rem", color: "#D42B3C", background: "none", border: "none", cursor: "pointer" }}>
-                  <span className="ar">الكل →</span><span className="en">All →</span>
-                </button>
+            <div className="panel">
+              <div className="panel-hd">
+                <div className="panel-ttl">
+                  <span className="ar">إجراءات سريعة</span>
+                  <span className="en">Quick Actions</span>
+                </div>
               </div>
-              <table className="dtable">
-                <thead>
-                  <tr>
-                    <Th ar="اللاعبة" en="Player" />
-                    <Th ar="البرنامج" en="Program" />
-                    <Th ar="التاريخ" en="Date" />
-                    <Th ar="الحالة" en="Status" />
-                  </tr>
-                </thead>
-                <tbody>{RECENT_REGS.map((r, i) => (
-                  <tr key={i}>
-                    <Td><b><span className="ar">{r.nameAr}</span><span className="en">{r.nameEn}</span></b></Td>
-                    <Td><span className="ar">{r.progAr}</span><span className="en">{r.progEn}</span></Td>
-                    <Td><span style={{ opacity: .4 }}>{r.date}</span></Td>
-                    <Td><span className={`badge ${r.status === "approved" ? "badge-green" : "badge-gold"}`}><span className="ar">{r.status === "approved" ? "مقبولة" : "معلّق"}</span><span className="en">{r.status === "approved" ? "Approved" : "Pending"}</span></span></Td>
-                  </tr>
-                ))}</tbody>
-              </table>
+              <div className="panel-pad" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".6rem" }}>
+                <QuickAction icon="👥" ar="إدارة المستخدمين" en="Manage Users"    onClick={() => setTab("users")} />
+                <QuickAction icon="📝" ar="إنشاء مهمة"        en="Create Task"     onClick={() => setTab("tasks")} />
+                <QuickAction icon="🎓" ar="إضافة مدرب"        en="Add Coach"       onClick={() => setTab("coaches")} />
+                <QuickAction icon="♟" ar="إضافة لاعب"        en="Add Player"      onClick={() => setTab("players")} />
+                <QuickAction icon="🏆" ar="بطولة جديدة"       en="New Tournament"  onClick={() => setTab("tournaments")} />
+                <QuickAction icon="📰" ar="نشر خبر"          en="Publish News"    onClick={() => setTab("news")} />
+              </div>
             </div>
 
-            <div style={{ background: "#fff", border: "1px solid #D6D0C4", padding: "1.5rem" }}>
-              <h3 className="font-disp" style={{ fontSize: ".92rem", color: "#141414", marginBottom: "1.25rem" }}>
-                <span className="ar">اللاعبات حسب البرنامج</span><span className="en">Players by Program</span>
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: ".85rem" }}>
-                {DISTRIB.map((d, i) => (
-                  <div key={i}>
-                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: ".82rem", marginBottom: ".35rem" }}>
-                      <span style={{ color: "#555" }}><span className="ar">{d.ar}</span><span className="en">{d.en}</span></span>
-                      <span style={{ color: d.color, fontWeight: 700 }}>{d.pct}%</span>
-                    </div>
-                    <div className="ptrack"><div className="pbar" style={{ width: `${d.pct}%`, background: d.color }} /></div>
-                  </div>
-                ))}
+            <div className="panel">
+              <div className="panel-hd">
+                <div className="panel-ttl">
+                  <span className="ar">حالة المنصة</span>
+                  <span className="en">Platform Status</span>
+                </div>
+              </div>
+              <div className="panel-pad" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <Stat ar="الطلبات المعلّقة"  en="Pending Applications" value={counts.pendingEnrollments} max={Math.max(counts.totalEnrollments, 1)} color="#D42B3C" />
+                <Stat ar="بطولات السنة"       en={`Tournaments ${counts.currentYear}`}  value={counts.tournamentsThisYear} max={Math.max(counts.tournamentsThisYear, 1)} color="#007A38" />
+                <Stat ar="الأخبار المنشورة"  en="Published News"       value={counts.publishedNews} max={Math.max(counts.publishedNews, 1)} color="#A07820" />
+                <Stat ar="المسلَّمات"         en="Submissions"          value={counts.submissions}  max={Math.max(counts.submissions, 1)} color="#141414" />
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── PLAYERS ── */}
+      {tab === "users"       && <UsersManager />}
+
+      {tab === "tasks"       && <TasksManager scopeToOwn={false} />}
+
+      {tab === "submissions" && <SubmissionsReviewer scopeToOwn={false} />}
+
       {tab === "players" && (
         <CrudShell<PlayerRow>
           table="players"
-          titleAr="إدارة اللاعبات" titleEn="Player Management"
-          addLabelAr="+ إضافة لاعبة" addLabelEn="+ Add Player"
+          titleAr="إدارة اللاعبين" titleEn="Players Roster"
+          addLabelAr="+ إضافة لاعب" addLabelEn="+ Add Player"
           columns={playerColumns}
           fields={playerFields}
           orderBy={{ column: "rating", ascending: false }}
         />
       )}
 
-      {/* ── COACHES ── */}
       {tab === "coaches" && (
         <CrudShell<CoachRow>
           table="coaches"
-          titleAr="إدارة المدربات" titleEn="Coach Management"
-          addLabelAr="+ إضافة مدربة" addLabelEn="+ Add Coach"
+          titleAr="إدارة المدربين" titleEn="Coaches Roster"
+          addLabelAr="+ إضافة مدرب" addLabelEn="+ Add Coach"
           columns={coachColumns}
           fields={coachFields}
         />
       )}
 
-      {/* ── ASSIGNMENTS ── */}
       {tab === "assignments" && <CoachAssignments />}
 
-      {/* ── TOURNAMENTS ── */}
       {tab === "tournaments" && (
         <CrudShell<TournamentRow>
           table="tournaments"
-          titleAr="إدارة البطولات" titleEn="Tournament Management"
+          titleAr="إدارة البطولات" titleEn="Tournaments"
           addLabelAr="+ بطولة جديدة" addLabelEn="+ Add Tournament"
           columns={tournamentColumns}
           fields={tournamentFields}
@@ -154,14 +152,12 @@ export default function AdminDashboard() {
         />
       )}
 
-      {/* ── APPLICATIONS ── */}
       {tab === "regs" && <EnrollmentsList />}
 
-      {/* ── NEWS ── */}
       {tab === "news" && (
         <CrudShell<NewsRow>
           table="news"
-          titleAr="إدارة الأخبار" titleEn="News Management"
+          titleAr="إدارة الأخبار" titleEn="News &amp; Announcements"
           addLabelAr="+ مقال جديد" addLabelEn="+ New Article"
           columns={newsColumns}
           fields={newsFields}
@@ -169,15 +165,21 @@ export default function AdminDashboard() {
         />
       )}
 
-      {/* ── BOARD MEMBERS ── */}
-      {tab === "board" && (
-        <CrudShell<BoardRow>
-          table="board_members"
-          titleAr="مجلس الإدارة" titleEn="Board Members"
-          addLabelAr="+ إضافة عضو" addLabelEn="+ Add Member"
-          columns={boardColumns}
-          fields={boardFields}
-        />
+      {tab === "settings" && (
+        <div className="panel panel-pad">
+          <h3 className="dash-h">
+            <span className="ar">الإعدادات</span>
+            <span className="en">Settings</span>
+          </h3>
+          <p className="dash-sub">
+            <span className="ar">صلاحيات النظام والإعدادات العامة.</span>
+            <span className="en">Platform permissions and global settings.</span>
+          </p>
+          <div className="ribbon" style={{ marginTop: "1rem" }}>
+            <span className="ar">صلاحيات الأدوار تُدار عبر سياسات Supabase RLS — انظر ملف 0005_role_system_refactor.sql.</span>
+            <span className="en">Role permissions are governed by Supabase RLS policies — see migration 0005_role_system_refactor.sql.</span>
+          </div>
+        </div>
       )}
     </DashboardShell>
   );
@@ -186,12 +188,18 @@ export default function AdminDashboard() {
 // ── Live counts for the Overview KPIs ────────────────────────────────────────
 function useAdminCounts() {
   const currentYear = new Date().getFullYear();
-  const [counts, setCounts] = useState<{
-    players:             number | null;
-    coaches:             number | null;
-    tournamentsThisYear: number | null;
-    publishedNews:       number | null;
-  }>({ players: null, coaches: null, tournamentsThisYear: null, publishedNews: null });
+  const [counts, setCounts] = useState({
+    totalUsers: 0,
+    players: 0,
+    coaches: 0,
+    admins: 0,
+    openTasks: 0,
+    submissions: 0,
+    pendingEnrollments: 0,
+    totalEnrollments: 0,
+    tournamentsThisYear: 0,
+    publishedNews: 0,
+  });
 
   useEffect(() => {
     const supabase = createClient();
@@ -200,20 +208,30 @@ function useAdminCounts() {
       const yearStart = `${currentYear}-01-01`;
       const yearEnd   = `${currentYear + 1}-01-01`;
 
-      const [p, c, t, n] = await Promise.all([
-        supabase.from("players").select("*", { count: "exact", head: true }),
-        supabase.from("coaches").select("*", { count: "exact", head: true }),
-        supabase.from("tournaments").select("*", { count: "exact", head: true })
-          .gte("date", yearStart).lt("date", yearEnd),
-        supabase.from("news").select("*", { count: "exact", head: true })
-          .not("published_at", "is", null),
+      const [u, p, c, a, t, s, eAll, ePend, ty, n] = await Promise.all([
+        supabase.from("profiles").select("*", { count: "exact", head: true }),
+        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "player"),
+        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "coach"),
+        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "admin"),
+        supabase.from("tasks").select("*",    { count: "exact", head: true }).in("status", ["open", "in_progress", "submitted"]),
+        supabase.from("submissions").select("*", { count: "exact", head: true }),
+        supabase.from("enrollments").select("*", { count: "exact", head: true }),
+        supabase.from("enrollments").select("*", { count: "exact", head: true }).eq("status", "pending"),
+        supabase.from("tournaments").select("*",  { count: "exact", head: true }).gte("date", yearStart).lt("date", yearEnd),
+        supabase.from("news").select("*", { count: "exact", head: true }).not("published_at", "is", null),
       ]);
 
       if (cancelled) return;
       setCounts({
+        totalUsers:          u.count ?? 0,
         players:             p.count ?? 0,
         coaches:             c.count ?? 0,
-        tournamentsThisYear: t.count ?? 0,
+        admins:              a.count ?? 0,
+        openTasks:           t.count ?? 0,
+        submissions:         s.count ?? 0,
+        totalEnrollments:    eAll.count ?? 0,
+        pendingEnrollments:  ePend.count ?? 0,
+        tournamentsThisYear: ty.count ?? 0,
         publishedNews:       n.count ?? 0,
       });
     })();
@@ -223,21 +241,39 @@ function useAdminCounts() {
   return { ...counts, currentYear };
 }
 
-// ── Micro-components ──────────────────────────────────────────────────────────
-function Kpi({ labelAr, labelEn, value, cls }: { labelAr: string; labelEn: string; value: number | null; cls: string }) {
+// ── Pieces ───────────────────────────────────────────────────────────────────
+function Kpi({ labelAr, labelEn, value, icon, tone }: { labelAr: string; labelEn: string; value: number | null; icon: string; tone: string }) {
   return (
-    <div className={`kpi ${cls}`}>
+    <div className={`kpi-tile ${tone}`}>
+      <div className="kpi-icon">{icon}</div>
       <div className="kpi-lbl"><span className="ar">{labelAr}</span><span className="en">{labelEn}</span></div>
       <div className="kpi-num">{value == null ? "—" : value}</div>
     </div>
   );
 }
-function Th({ ar, en }: { ar: string; en: string }) {
-  return <th><span className="ar">{ar}</span><span className="en">{en}</span></th>;
+
+function QuickAction({ icon, ar, en, onClick }: { icon: string; ar: string; en: string; onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="qa-btn">
+      <span className="qa-ic">{icon}</span>
+      <span><span className="ar">{ar}</span><span className="en">{en}</span></span>
+    </button>
+  );
 }
-function Td({ children }: { children: React.ReactNode }) {
-  return <td>{children}</td>;
+
+function Stat({ ar, en, value, max, color }: { ar: string; en: string; value: number; max: number; color: string }) {
+  const pct = Math.min(100, Math.round((value / Math.max(max, 1)) * 100));
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: ".82rem", marginBottom: ".4rem" }}>
+        <span style={{ color: "#444" }}><span className="ar">{ar}</span><span className="en">{en}</span></span>
+        <span style={{ color, fontWeight: 700 }}>{value}</span>
+      </div>
+      <div className="bar"><span style={{ width: `${pct}%`, background: color }} /></div>
+    </div>
+  );
 }
+
 function LoadingScreen() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#EDE9E2" }}>

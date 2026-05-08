@@ -8,13 +8,6 @@ export interface Tournament {
   description: string | null;
 }
 
-export interface BoardMember {
-  id:        string | number;
-  name:      string;
-  role:      string | null;
-  image_url: string | null;
-}
-
 export interface NewsItem {
   id:           string | number;
   title:        string;
@@ -36,19 +29,6 @@ export async function getTournaments(limit = 6): Promise<Tournament[]> {
     return [];
   }
   return (data ?? []) as Tournament[];
-}
-
-export async function getBoardMembers(): Promise<BoardMember[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("board_members")
-    .select("id, name, role, image_url");
-
-  if (error) {
-    console.error("getBoardMembers:", error.message);
-    return [];
-  }
-  return (data ?? []) as BoardMember[];
 }
 
 export async function getNews(limit = 3): Promise<NewsItem[]> {

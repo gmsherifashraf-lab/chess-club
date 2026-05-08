@@ -3,18 +3,17 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import type { UserRole } from "@/lib/auth";
+import { ROLE_DASHBOARD, DEFAULT_DASHBOARD, type UserRole } from "@/lib/auth";
 
 /**
  * useRequireAuth
  *
- * Call at the top of any dashboard page component.
- * If the session is gone (e.g. token expired mid-session), sends the user
- * back to /login.
+ * Call at the top of any dashboard page.
+ *  - Redirects to /login if no session.
+ *  - If `requiredRole` is provided and the user's role is different,
+ *    redirects to that user's correct dashboard.
  *
- * @param requiredRole  If supplied, also checks that the logged-in user
- *                      has this specific role. Redirects to their own
- *                      dashboard if the role doesn't match.
+ * Admin role bypasses the role check (super-admin has access everywhere).
  */
 export function useRequireAuth(requiredRole?: UserRole) {
   const { session, role, loading } = useAuth();
@@ -28,16 +27,9 @@ export function useRequireAuth(requiredRole?: UserRole) {
       return;
     }
 
-    if (requiredRole && role !== requiredRole) {
-      // Wrong role — middleware normally catches this, but handle it
-      // client-side too for robustness.
-      const DASHBOARDS: Record<UserRole, string> = {
-        admin:  "/dashboard/admin",
-        coach:  "/dashboard/coach",
-        parent: "/dashboard/parent",
-        board:  "/dashboard/board",
-      };
-      router.replace(DASHBOARDS[role ?? "parent"]);
+    if (requiredRole && role !== requiredRole && role !== "admin") {
+      const correct = role ? ROLE_DASHBOARD[role] : DEFAULT_DASHBOARD;
+      router.replace(correct ?? DEFAULT_DASHBOARD);
     }
   }, [session, role, loading, requiredRole, router]);
 

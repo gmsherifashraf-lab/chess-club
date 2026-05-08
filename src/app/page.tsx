@@ -18,6 +18,9 @@ import Testimonials from "@/components/home/Testimonials";
 import SocialSection from "@/components/home/SocialSection";
 import Contact from "@/components/home/Contact";
 
+import ScrollProgress from "@/components/motion/ScrollProgress";
+import SectionDivider from "@/components/motion/SectionDivider";
+
 import { getNews, getTournaments, getGalleryImages } from "@/lib/queries/home";
 
 export const revalidate = 60;
@@ -31,6 +34,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <ScrollProgress />
       <Navbar />
       <main>
         {/* Hero — cinematic intro */}
@@ -39,11 +43,15 @@ export default async function HomePage() {
         {/* Headline metrics */}
         <Stats />
 
+        <SectionDivider glyph="♛" accent="emerald" />
+
         {/* Institutional narrative */}
         <AboutPreview />
 
         {/* Three-decade history */}
         <History />
+
+        <SectionDivider glyph="♚" accent="white" />
 
         {/* Vision, Mission, Core Values */}
         <VisionMission />
@@ -51,11 +59,15 @@ export default async function HomePage() {
         {/* Awards and recognition */}
         <Achievements />
 
+        <SectionDivider glyph="♞" accent="emerald" />
+
         {/* Live tournaments preview */}
         <TournamentsPreview items={tournaments} />
 
         {/* Training programmes */}
         <TrainingPrograms />
+
+        <SectionDivider glyph="♝" accent="scarlet" />
 
         {/* Board + Executive Leadership */}
         <BoardOfDirectors />
@@ -63,17 +75,23 @@ export default async function HomePage() {
         {/* Cultural & community work */}
         <Community />
 
+        <SectionDivider glyph="♜" accent="emerald" />
+
         {/* Live news preview */}
         <NewsPreview items={news} />
 
         {/* Institutional partners */}
         <Partners />
 
+        <SectionDivider glyph="♕" accent="white" />
+
         {/* Visual gallery */}
         <Gallery items={gallery} />
 
         {/* Testimonials */}
         <Testimonials />
+
+        <SectionDivider glyph="♟" accent="emerald" />
 
         {/* Real social media integration */}
         <SocialSection />

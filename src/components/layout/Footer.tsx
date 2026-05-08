@@ -32,7 +32,7 @@ export default function Footer() {
       <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 py-16 sm:py-20">
         {/* Brand row — large logo + name */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 mb-12 sm:mb-14">
-          <Logo size={92} glow ring />
+          <Logo size={104} glow ring tone="white" />
           <div className="leading-tight">
             <div className="font-disp text-white text-[1.5rem] sm:text-[1.75rem] font-bold tracking-tight">
               <span className="ar">نادي الشطرنج والثقافة للفتيات بالشارقة</span>

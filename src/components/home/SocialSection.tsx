@@ -120,7 +120,7 @@ export default function SocialSection() {
           transition={{ duration: 0.9, delay: 0.4 }}
           className="flex justify-center mt-16"
         >
-          <Logo size={68} glow />
+          <Logo size={76} glow tone="white" />
         </motion.div>
       </div>
     </section>

@@ -49,7 +49,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between gap-4 lg:gap-8 h-[78px]">
           {/* Logo + Wordmark */}
           <Link href="/" className="flex items-center gap-3 lg:gap-4 group min-w-0">
-            <Logo size={48} glow ring />
+            <Logo size={52} glow ring tone="white" />
             <div className="hidden sm:flex flex-col leading-none min-w-0">
               <span className="font-disp text-white text-[1rem] lg:text-[1.18rem] font-bold tracking-tight">
                 <span className="ar">نادي الشطرنج والثقافة للفتيات</span>

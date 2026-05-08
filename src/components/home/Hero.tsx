@@ -16,7 +16,7 @@ const PIECES: { glyph: string; top: string; left?: string; right?: string; size:
   { glyph: "♟", top: "32%", left: "28%", size: 52,  delay: 0.50, opacity: 0.06 },
 ];
 
-const PARTICLE_COUNT = 28;
+const PARTICLE_COUNT = 56;
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -146,7 +146,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="flex items-center gap-5 mb-9"
             >
-              <Logo size={84} glow animate />
+              <Logo size={92} glow animate tone="white" />
               <div className="leading-tight">
                 <div className="font-disp text-white/90 text-[1.05rem] sm:text-[1.2rem] tracking-tight">
                   <span className="ar">نادي الشطرنج والثقافة للفتيات</span>
@@ -244,7 +244,7 @@ export default function Hero() {
                   style={{ background: "linear-gradient(90deg, transparent, rgba(31,107,79,0.7), transparent)" }}
                 />
                 <div className="flex items-center justify-center mb-6">
-                  <Logo size={156} glow animate ring />
+                  <Logo size={172} glow animate ring tone="white" />
                 </div>
                 <div className="text-center">
                   <div className="text-[0.6rem] uppercase tracking-[0.28em] text-[#1F6B4F] font-bold mb-3">
@@ -266,6 +266,32 @@ export default function Hero() {
           </div>
         </div>
       </motion.div>
+
+      {/* Slow institutional word marquee */}
+      <div
+        aria-hidden
+        className="absolute bottom-24 inset-x-0 overflow-hidden text-white/15 text-[0.7rem] uppercase tracking-[0.32em] font-semibold pointer-events-none"
+      >
+        <div className="hero-marquee py-2">
+          {[
+            "Excellence", "تميّز",
+            "Leadership", "ريادة",
+            "Heritage", "إرث",
+            "Empowerment", "تمكين",
+            "Sharjah · 1991",
+            "Excellence", "تميّز",
+            "Leadership", "ريادة",
+            "Heritage", "إرث",
+            "Empowerment", "تمكين",
+            "Sharjah · 1991",
+          ].map((w, i) => (
+            <span key={i} className="inline-flex items-center gap-12">
+              <span>{w}</span>
+              <span className="w-1 h-1 rounded-full bg-[#1F6B4F]/60" />
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* Bottom scroll cue */}
       <motion.div

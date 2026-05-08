@@ -37,7 +37,7 @@ export default function LoadingScreen({ small = false }: { small?: boolean }) {
 
       {/* Center stack */}
       <div className="relative flex flex-col items-center gap-6">
-        <Logo size={small ? 80 : 120} glow ring animate />
+        <Logo size={small ? 80 : 132} glow ring animate tone="white" />
 
         {/* Wordmark */}
         <div className="text-center loading-fade">

@@ -855,7 +855,34 @@ p { line-height: 1.7; }
   font-family: 'Noto Sans Arabic','DM Sans',sans-serif;
   backdrop-filter: blur(6px);
 }
-.eyebrow-lux .dot { width: 6px; height: 6px; border-radius: 50%; background: #1F6B4F; box-shadow: 0 0 10px rgba(31,107,79,0.9); }
+.eyebrow-lux .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #1F6B4F;
+  box-shadow: 0 0 10px rgba(31,107,79,0.9);
+  animation: eyebrow-dot-pulse 2.4s ease-in-out infinite;
+}
+@keyframes eyebrow-dot-pulse {
+  0%, 100% { transform: scale(1);   box-shadow: 0 0 10px rgba(31,107,79,0.6); }
+  50%      { transform: scale(1.4); box-shadow: 0 0 18px rgba(31,107,79,1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow-lux .dot { animation: none; }
+}
+
+/* Hero marquee wordmark — slow horizontal scroll, very subtle */
+@keyframes hero-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.hero-marquee {
+  display: inline-flex;
+  gap: 3rem;
+  white-space: nowrap;
+  animation: hero-marquee 38s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-marquee { animation: none; }
+}
 
 /* ── HERO CINEMATIC ANIMATIONS ── */
 @keyframes hero-fade-up {

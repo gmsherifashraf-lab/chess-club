@@ -21,29 +21,47 @@ export default function AboutPreview() {
         <div className="sec-tag inline-flex items-center gap-3 mb-6 text-ivory">
           <span className="block w-9 h-[2px] bg-red" />
           <span>
-            <span className="ar">من نحن</span>
-            <span className="en">About Us</span>
+            <span className="ar">عن النادي</span>
+            <span className="en">About the Club</span>
           </span>
         </div>
 
         <h2 className="font-disp t-h1 text-ivory mb-7">
-          <span className="ar">أكثر من نادٍ — <span className="text-red">مدرسة قيادة</span></span>
-          <span className="en">More than a club — <span className="text-red">a leadership school.</span></span>
+          <span className="ar">إرث من <span className="text-red">القيادة النسائية</span> في الشطرنج الإماراتي</span>
+          <span className="en">A legacy of <span className="text-red">women&rsquo;s leadership</span> in UAE chess.</span>
         </h2>
 
         <div className="h-[3px] w-28 bg-gradient-to-r from-red via-white to-green2 mb-10" />
 
-        <p className="text-lg sm:text-xl leading-[1.8] text-ivory/80 max-w-2xl mb-12">
+        <p className="text-lg sm:text-xl leading-[1.85] text-ivory/80 max-w-2xl mb-8">
           <span className="ar">
-            نُؤمن بأن كل نقلة على الرقعة هي تدريب على قرار في الحياة. منذ تأسيسنا
-            عام 2017، خرّجنا بطلات يمثلن الإمارات في المحافل الإقليمية والدولية،
-            وبنينا مجتمعاً من الأمهات والمدربات يدعم كل لاعبة في رحلتها.
+            تأسس نادي الشطرنج والثقافة للفتيات بالشارقة عام 1991 ليكون أحد أعرق
+            المؤسسات النسائية في الإمارات العربية المتحدة. على مدار أكثر من ثلاثة
+            عقود، نهضنا بمسيرة الشطرنج النسائي محلياً وإقليمياً، وقدّمنا أجيالاً
+            من البطلات والقائدات، وأسهمنا في رسم ملامح المشهد الرياضي والثقافي
+            للفتاة الإماراتية.
           </span>
           <span className="en">
-            We believe every move on the board trains a decision in life. Since
-            2017 we have graduated champions representing the UAE on regional
-            and international stages, and built a community of mothers and
-            coaches that supports every player&apos;s journey.
+            Founded in 1991, the Chess &amp; Culture Club for Women in Sharjah is
+            one of the oldest and most respected women&rsquo;s sporting institutions
+            in the United Arab Emirates. For more than three decades we have
+            advanced the women&rsquo;s chess movement locally and regionally,
+            graduated generations of champions and leaders, and helped shape the
+            sporting and cultural landscape for Emirati women.
+          </span>
+        </p>
+
+        <p className="text-base sm:text-lg leading-[1.85] text-ivory/65 max-w-2xl mb-12">
+          <span className="ar">
+            من خلال برامج تدريبية احترافية، وأنشطة ثقافية، ومبادرات مجتمعية، نُمكّن
+            الفتيات من تطوير قدراتهن الذهنية والقيادية في بيئة راقية تليق بالمرأة
+            الإماراتية.
+          </span>
+          <span className="en">
+            Through professional training programmes, cultural activities, and
+            community initiatives, we empower girls to develop their intellectual
+            and leadership capacities in an environment that befits the Emirati
+            woman.
           </span>
         </p>
 
@@ -51,8 +69,8 @@ export default function AboutPreview() {
           href="/about"
           className="inline-flex items-center gap-2 h-14 px-9 border-2 border-ivory/50 text-ivory text-base font-semibold tracking-wide hover:bg-ivory hover:text-ink transition-colors"
         >
-          <span className="ar">قصتنا الكاملة ←</span>
-          <span className="en">Read Our Story →</span>
+          <span className="ar">قصة النادي الكاملة ←</span>
+          <span className="en">Read Our Full Story →</span>
         </Link>
       </div>
     </section>

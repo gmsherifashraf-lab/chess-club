@@ -641,3 +641,49 @@ p { line-height: 1.7; }
 /* Smaller form input variant for inline editors */
 .form-inp.compact { padding: .5rem .75rem; font-size: .82rem; }
 
+/* ── HERO CINEMATIC ANIMATIONS ── */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-orb-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(20px, -15px) scale(1.05); }
+}
+@keyframes hero-orb-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-25px, 20px) scale(1.08); }
+}
+.hero-section { position: relative; }
+.hero-fade-1 { animation: hero-fade-up .8s cubic-bezier(.2,.8,.2,1) .1s both; }
+.hero-fade-2 { animation: hero-fade-up .9s cubic-bezier(.2,.8,.2,1) .25s both; }
+.hero-fade-3 { animation: hero-fade-up .9s cubic-bezier(.2,.8,.2,1) .4s both; }
+.hero-fade-4 { animation: hero-fade-up .9s cubic-bezier(.2,.8,.2,1) .55s both; }
+.hero-fade-5 { animation: hero-fade-up .9s cubic-bezier(.2,.8,.2,1) .7s both; }
+.hero-orb-1  { animation: hero-orb-float-1 14s ease-in-out infinite; }
+.hero-orb-2  { animation: hero-orb-float-2 18s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-1, .hero-fade-2, .hero-fade-3, .hero-fade-4, .hero-fade-5,
+  .hero-orb-1,  .hero-orb-2 { animation: none !important; }
+}
+
+/* ── SCROLL-IN REVEAL (existing .rev variant, plus institutional rhythm) ── */
+@keyframes section-fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+section { animation: section-fade-in .9s ease-out both; }
+section:nth-of-type(odd)  { animation-delay: .05s; }
+section:nth-of-type(even) { animation-delay: .12s; }
+@media (prefers-reduced-motion: reduce) {
+  section { animation: none !important; }
+}
+
+/* Smooth in-page anchors */
+html { scroll-padding-top: 88px; }
+
+/* Premium link hover for in-text anchors */
+a:not(.btn):not([class*="bg-"]) { transition: color .2s ease; }
+
+

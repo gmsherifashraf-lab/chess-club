@@ -1,10 +1,13 @@
 "use client";
 
+const FOUNDED = 1991;
+const YEARS   = new Date().getFullYear() - FOUNDED;
+
 const STATS = [
-  { value: "180+", ar: "لاعبة نشطة",       en: "Active Players",     accent: "bg-red" },
-  { value: "12",   ar: "مدرّبة معتمدة",     en: "Certified Coaches",  accent: "bg-green2" },
-  { value: "8",    ar: "بطولات 2026",      en: "Tournaments 2026",   accent: "bg-ink" },
-  { value: "9",    ar: "سنوات من العطاء",   en: "Years Strong",       accent: "bg-red" },
+  { value: `${YEARS}+`, ar: "سنة من العطاء",       en: "Years of Legacy",      accent: "bg-red" },
+  { value: "180+",       ar: "لاعبة نشطة",          en: "Active Players",       accent: "bg-green2" },
+  { value: "ISO",        ar: "شهادة الجودة",        en: "Quality Certified",    accent: "bg-ink" },
+  { value: "12",         ar: "مدرّبة معتمدة",        en: "Certified Coaches",    accent: "bg-red" },
 ];
 
 export default function Stats() {

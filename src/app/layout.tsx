@@ -33,11 +33,61 @@ const tajawal = Tajawal({
   display: "swap",
 });
 
+const SITE_URL  = "https://project-oimbc.vercel.app";
+const SITE_NAME = "Chess & Culture Club for Women — Sharjah";
+const DESCRIPTION_AR =
+  "نادي الشطرنج والثقافة للفتيات بالشارقة — مؤسسة رائدة منذ 1991 في تطوير لاعبات الشطرنج الإماراتيات وتمكين الفتيات من خلال الرياضة والثقافة والقيادة.";
+const DESCRIPTION_EN =
+  "Chess & Culture Club for Women, Sharjah — a leading UAE institution since 1991 developing female chess champions and empowering girls through sport, culture, and leadership.";
+
 export const metadata: Metadata = {
-  title: "نادي الشطرنج والثقافة للفتيات بالشارقة | Chess & Culture Club Sharjah",
-  description:
-    "نادٍ رائد في الشارقة يُعنى بتطوير مهارات الشطرنج والثقافة للفتيات منذ 2017. " +
-    "Premier chess and culture club developing girls in Sharjah, UAE since 2017.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | نادي الشطرنج والثقافة للفتيات بالشارقة`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: `${DESCRIPTION_EN} ${DESCRIPTION_AR}`,
+  keywords: [
+    "Chess Club", "Sharjah", "UAE", "Women Chess", "Girls Chess",
+    "Ladies Chess Club", "نادي الشطرنج", "الشارقة", "الإمارات",
+    "Chess and Culture", "Chess Championship UAE", "Women Empowerment",
+    "Chess Academy",
+  ],
+  authors: [{ name: "Chess & Culture Club for Women, Sharjah" }],
+  creator: "Chess & Culture Club for Women, Sharjah",
+  publisher: "Chess & Culture Club for Women, Sharjah",
+  category: "Sports & Culture",
+  alternates: {
+    canonical: "/",
+    languages: {
+      "ar-AE": "/",
+      "en-AE": "/",
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_AE",
+    alternateLocale: ["ar_AE"],
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: DESCRIPTION_EN,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: DESCRIPTION_EN,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -48,15 +98,6 @@ export default function RootLayout({
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} ${cairo.variable} ${tajawal.variable}`}>
-        {/*
-         * AuthProvider must wrap everything so any component can call useAuth().
-         * LangProvider is nested inside so its dir/lang attributes only affect
-         * the inner div, not the <html> element (which AuthProvider manages
-         * indirectly via middleware redirects).
-         *
-         * Note: LangContext manages html[dir] via useEffect, so the html element
-         * starts as dir="rtl" (server default) and updates client-side on toggle.
-         */}
         <AuthProvider>
           <LangProvider>{children}</LangProvider>
         </AuthProvider>

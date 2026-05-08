@@ -1,10 +1,22 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+
 import Hero from "@/components/home/Hero";
 import Stats from "@/components/home/Stats";
-import NewsPreview from "@/components/home/NewsPreview";
-import TournamentsPreview from "@/components/home/TournamentsPreview";
 import AboutPreview from "@/components/home/AboutPreview";
+import History from "@/components/home/History";
+import VisionMission from "@/components/home/VisionMission";
+import Achievements from "@/components/home/Achievements";
+import TournamentsPreview from "@/components/home/TournamentsPreview";
+import TrainingPrograms from "@/components/home/TrainingPrograms";
+import BoardOfDirectors from "@/components/home/BoardOfDirectors";
+import Community from "@/components/home/Community";
+import NewsPreview from "@/components/home/NewsPreview";
+import Partners from "@/components/home/Partners";
+import Gallery from "@/components/home/Gallery";
+import Testimonials from "@/components/home/Testimonials";
+import Contact from "@/components/home/Contact";
+
 import { getNews, getTournaments } from "@/lib/queries/home";
 
 export const revalidate = 60;
@@ -19,12 +31,50 @@ export default async function HomePage() {
     <>
       <Navbar />
       <main>
+        {/* Hero — cinematic intro */}
         <Hero />
+
+        {/* Headline metrics */}
         <Stats />
-        <NewsPreview items={news} />
-        <div className="sec-div" />
-        <TournamentsPreview items={tournaments} />
+
+        {/* Institutional narrative */}
         <AboutPreview />
+
+        {/* Three-decade history */}
+        <History />
+
+        {/* Vision, Mission, Core Values */}
+        <VisionMission />
+
+        {/* Awards and recognition */}
+        <Achievements />
+
+        {/* Live tournaments preview */}
+        <TournamentsPreview items={tournaments} />
+
+        {/* Training programmes */}
+        <TrainingPrograms />
+
+        {/* Board + Executive Leadership */}
+        <BoardOfDirectors />
+
+        {/* Cultural & community work */}
+        <Community />
+
+        {/* Live news preview */}
+        <NewsPreview items={news} />
+
+        {/* Institutional partners */}
+        <Partners />
+
+        {/* Visual gallery */}
+        <Gallery />
+
+        {/* Testimonials */}
+        <Testimonials />
+
+        {/* Contact / CTA */}
+        <Contact />
       </main>
       <Footer />
     </>

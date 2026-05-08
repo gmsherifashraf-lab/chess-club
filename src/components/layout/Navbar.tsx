@@ -37,13 +37,13 @@ export default function Navbar() {
               className="h-11 w-auto transition-transform group-hover:scale-105"
             />
             <div className="hidden sm:flex flex-col leading-none min-w-0">
-              <span className="font-disp text-[1.15rem] lg:text-[1.35rem] font-bold text-ink truncate tracking-tight">
-                <span className="ar">نادي الشطرنج والثقافة</span>
-                <span className="en">Chess &amp; Culture Club</span>
+              <span className="font-disp text-[1.05rem] lg:text-[1.22rem] font-bold text-ink truncate tracking-tight">
+                <span className="ar">نادي الشطرنج والثقافة للفتيات</span>
+                <span className="en">Chess &amp; Culture Club for Women</span>
               </span>
-              <span className="text-[0.62rem] uppercase tracking-[0.22em] text-red font-semibold mt-1.5">
-                <span className="ar">الشارقة • منذ 2017</span>
-                <span className="en">Sharjah · Since 2017</span>
+              <span className="text-[0.6rem] uppercase tracking-[0.22em] text-red font-semibold mt-1.5">
+                <span className="ar">الشارقة • تأسس 1991</span>
+                <span className="en">Sharjah · Est. 1991</span>
               </span>
             </div>
           </Link>

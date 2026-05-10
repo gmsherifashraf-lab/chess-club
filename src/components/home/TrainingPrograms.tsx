@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Reveal from "@/components/motion/Reveal";
+import { EASE_EMPHASIS } from "@/lib/motion";
 
 interface Program {
   ageAr:  string;
@@ -14,6 +15,7 @@ interface Program {
   bullets: { ar: string; en: string }[];
   accent: "emerald" | "scarlet";
   glyph:  string;
+  step:   string;
 }
 
 const PROGRAMS: Program[] = [
@@ -31,6 +33,7 @@ const PROGRAMS: Program[] = [
     ],
     accent: "emerald",
     glyph:  "♟",
+    step:   "I",
   },
   {
     ageAr: "8–12 سنة",
@@ -46,6 +49,7 @@ const PROGRAMS: Program[] = [
     ],
     accent: "emerald",
     glyph:  "♞",
+    step:   "II",
   },
   {
     ageAr: "13–16 سنة",
@@ -61,6 +65,7 @@ const PROGRAMS: Program[] = [
     ],
     accent: "emerald",
     glyph:  "♝",
+    step:   "III",
   },
   {
     ageAr: "17 سنة فأكثر",
@@ -76,98 +81,125 @@ const PROGRAMS: Program[] = [
     ],
     accent: "scarlet",
     glyph:  "♛",
+    step:   "IV",
   },
 ];
 
 export default function TrainingPrograms() {
   return (
-    <section className="relative bg-white">
-      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
+    <section className="relative bg-white overflow-hidden">
+      {/* Subtle background grid */}
+      <div aria-hidden className="absolute inset-0 grain-emerald pointer-events-none" />
+
+      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 py-24 sm:py-28">
+        {/* Header — quieter, calmer */}
         <Reveal>
-          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-            <span className="eyebrow-light mb-5">
-              <span className="dot-emerald" />
-              <span className="ar">برامج التدريب</span>
-              <span className="en">Training Programs</span>
-            </span>
-            <h2 className="font-disp t-mega text-ink mb-6 mt-6">
-              <span className="ar">من النقلة الأولى إلى المنصة الدولية.</span>
-              <span className="en">From first move to international stage.</span>
-            </h2>
-            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E]" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 sm:mb-20 items-end">
+            <div className="lg:col-span-7">
+              <div className="text-[0.6rem] uppercase tracking-[0.32em] text-ink3 font-bold mb-5 flex items-center gap-3">
+                <span className="block w-7 h-px bg-ink3" />
+                <span className="ar">برامج التدريب</span>
+                <span className="en">Training programmes</span>
+              </div>
+              <h2 className="font-disp text-[clamp(2.4rem,5vw,4rem)] text-ink leading-[1.06] tracking-tight">
+                <span className="ar">أربع مراحل، من السابعة إلى التمثيل الدولي.</span>
+                <span className="en">Four stages, from age seven to international play.</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-5 lg:pb-2">
+              <p className="text-[0.95rem] sm:text-[1.05rem] leading-[1.85] text-ink2 max-w-md">
+                <span className="ar">
+                  جلسات أسبوعية يقودها مدربات معتمدات، مدعومة ببطولات داخلية ومنهج معدّ على مدار السنة.
+                </span>
+                <span className="en">
+                  Weekly sessions led by certified women coaches, supported by
+                  internal tournaments and a year-round curriculum.
+                </span>
+              </p>
+            </div>
           </div>
         </Reveal>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 mb-14"
-        >
+        {/* Programme list — table-style editorial. Each row: age + name + description + bullets */}
+        <div className="border-t-2 border-ink/85">
           {PROGRAMS.map((p, i) => {
             const isEmerald = p.accent === "emerald";
-            const accentColor = isEmerald ? "#0B3D2E" : "#C8102E";
+            const color = isEmerald ? "#0B3D2E" : "#C8102E";
+
             return (
               <motion.article
                 key={i}
-                variants={{
-                  hidden:  { opacity: 0, y: 30 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.2, 0.8, 0.2, 1] } },
-                }}
-                whileHover={{ y: -6 }}
-                className="group relative bg-ivory2 border border-stone p-7 sm:p-9 overflow-hidden transition-all duration-500 hover:shadow-[0_22px_50px_-25px_rgba(20,20,20,0.25)]"
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.7, ease: EASE_EMPHASIS, delay: i * 0.04 }}
+                className="group relative grid grid-cols-1 lg:grid-cols-12 gap-y-5 gap-x-8 lg:gap-x-12 py-9 sm:py-12 border-b border-stone transition-colors duration-280 ease-standard hover:bg-ivory2/40"
               >
-                <div aria-hidden className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: accentColor }} />
-                <div
-                  aria-hidden
-                  className="absolute -bottom-10 -right-10 text-[14rem] font-disp opacity-[0.05] leading-none select-none transition-opacity duration-500 group-hover:opacity-[0.1]"
-                  style={{ color: accentColor }}
-                >
-                  {p.glyph}
+                {/* Stage marker — left rail, single quiet number */}
+                <div className="lg:col-span-2 flex lg:flex-col items-baseline lg:items-start gap-4 lg:gap-3">
+                  <span
+                    className="font-disp text-2xl sm:text-3xl font-bold leading-none tabular-nums"
+                    style={{ color }}
+                  >
+                    {p.step}
+                  </span>
+                  <span className="text-[0.62rem] uppercase tracking-[0.22em] text-ink3 font-bold">
+                    <span className="ar">{p.ageAr}</span>
+                    <span className="en">{p.ageEn}</span>
+                  </span>
                 </div>
 
-                <div className="relative">
-                  <div className="flex items-baseline justify-between gap-4 mb-4 flex-wrap">
-                    <div>
-                      <div className="text-[0.6rem] uppercase tracking-[0.28em] font-bold mb-2" style={{ color: accentColor }}>
-                        <span className="ar">{p.ageAr}</span>
-                        <span className="en">{p.ageEn}</span>
-                      </div>
-                      <h3 className="font-disp text-2xl sm:text-3xl text-ink leading-tight">
-                        <span className="ar">{p.ar}</span>
-                        <span className="en">{p.en}</span>
-                      </h3>
-                    </div>
-                  </div>
-
-                  <p className="text-[0.92rem] leading-[1.85] text-ink3 mb-6">
+                {/* Title + description */}
+                <div className="lg:col-span-6">
+                  <h3 className="font-disp text-[clamp(1.6rem,2.4vw,2rem)] text-ink leading-[1.18] tracking-tight mb-3">
+                    <span className="ar">{p.ar}</span>
+                    <span className="en">{p.en}</span>
+                  </h3>
+                  <p className="text-[0.95rem] sm:text-[1rem] leading-[1.85] text-ink2 max-w-[58ch]">
                     <span className="ar">{p.arDsc}</span>
                     <span className="en" dangerouslySetInnerHTML={{ __html: p.enDsc }} />
                   </p>
-
-                  <ul className="space-y-2.5 pt-4 border-t border-stone">
-                    {p.bullets.map((b, j) => (
-                      <li key={j} className="flex items-start gap-3 text-[0.88rem] text-ink2">
-                        <span className="mt-1.5 block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: accentColor }} />
-                        <span>
-                          <span className="ar">{b.ar}</span>
-                          <span className="en">{b.en}</span>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
+
+                {/* Curriculum bullets — sparse, no dots */}
+                <ul className="lg:col-span-4 flex flex-col gap-2.5 lg:pl-6 lg:border-l lg:border-stone">
+                  <li className="text-[0.6rem] uppercase tracking-[0.22em] text-ink3 font-bold mb-1">
+                    <span className="ar">المنهج</span>
+                    <span className="en">Curriculum</span>
+                  </li>
+                  {p.bullets.map((b, j) => (
+                    <li key={j} className="text-[0.92rem] text-ink2 leading-[1.65] flex items-start gap-2.5">
+                      <span className="text-ink3/60 select-none">—</span>
+                      <span>
+                        <span className="ar">{b.ar}</span>
+                        <span className="en">{b.en}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </motion.article>
             );
           })}
-        </motion.div>
+        </div>
 
-        <Reveal delay={0.2} className="text-center">
-          <Link href="/register" className="btn-emerald">
-            <span className="ar">انضمي إلى النادي ←</span>
-            <span className="en">Join the Club →</span>
-          </Link>
+        {/* CTA — quiet, single line */}
+        <Reveal delay={0.1}>
+          <div className="mt-14 sm:mt-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+            <p className="text-[0.95rem] text-ink2 max-w-md">
+              <span className="ar">
+                التسجيل مفتوح للموسم الجديد. الأماكن محدودة في كل فئة عمرية.
+              </span>
+              <span className="en">
+                Registration is open for the new season. Places are limited in
+                each age group.
+              </span>
+            </p>
+            <Link href="/register" className="ds-btn ds-btn-primary">
+              <span className="ar">طلب الانضمام</span>
+              <span className="en">Apply to join</span>
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
         </Reveal>
       </div>
     </section>

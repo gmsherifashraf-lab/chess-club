@@ -1,135 +1,121 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Reveal from "@/components/motion/Reveal";
 
 const VALUES = [
-  { icon: "♛", ar: "الريادة",      en: "Leadership"        },
-  { icon: "✦", ar: "التميّز",       en: "Excellence"        },
-  { icon: "✧", ar: "الإبداع",       en: "Creativity"        },
-  { icon: "◈", ar: "الابتكار",      en: "Innovation"        },
-  { icon: "△", ar: "الانضباط",      en: "Discipline"        },
-  { icon: "◯", ar: "المجتمع",       en: "Community"         },
-  { icon: "♕", ar: "تمكين المرأة",  en: "Women Empowerment" },
+  { ar: "الريادة",     en: "Leadership"        },
+  { ar: "التميّز",      en: "Excellence"        },
+  { ar: "الإبداع",      en: "Creativity"        },
+  { ar: "الابتكار",     en: "Innovation"        },
+  { ar: "الانضباط",     en: "Discipline"        },
+  { ar: "المجتمع",      en: "Community"         },
+  { ar: "تمكين المرأة", en: "Women empowerment" },
 ];
 
 export default function VisionMission() {
   return (
     <section className="relative bg-white overflow-hidden">
-      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 section-pad">
+      <div aria-hidden className="absolute inset-0 grain-emerald pointer-events-none" />
+
+      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 py-26 sm:py-30">
+        {/* No eyebrow — open straight with the question (sets a different cadence than other sections) */}
         <Reveal>
-          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-            <span className="eyebrow-light mb-5">
-              <span className="dot-emerald" />
-              <span className="ar">الرؤية والرسالة</span>
-              <span className="en">Vision &amp; Mission</span>
+          <h2 className="font-disp text-[clamp(2.2rem,4.5vw,3.4rem)] text-ink leading-[1.08] tracking-tight max-w-3xl mb-3">
+            <span className="ar">
+              ما الذي يصنع نادياً مستمراً منذ 1991؟
             </span>
-            <h2 className="font-disp t-mega text-ink mb-6 mt-6">
-              <span className="ar">بوصلتنا. مرتكزاتنا.</span>
-              <span className="en">Our compass. Our foundation.</span>
-            </h2>
-            <div className="h-[2px] w-32 mx-auto bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E]" />
-          </div>
+            <span className="en">
+              What keeps a club running since 1991?
+            </span>
+          </h2>
+          <p className="text-[0.95rem] text-ink3 italic max-w-md mb-16 sm:mb-20">
+            <span className="ar">— من الميثاق المؤسسي للنادي</span>
+            <span className="en">— from the club&rsquo;s charter</span>
+          </p>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-20">
-          <Reveal delay={0.1}>
-            <article className="relative bg-ivory2 border border-stone p-8 sm:p-12 overflow-hidden h-full hover:-translate-y-1 hover:shadow-[0_22px_50px_-25px_rgba(11,61,46,0.4)] transition-all duration-500">
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#0B3D2E]" />
-              <div className="absolute -top-10 -right-6 text-[10rem] font-disp opacity-[0.06] text-[#0B3D2E] leading-none select-none">♛</div>
-              <div className="relative">
-                <div className="text-[0.6rem] uppercase tracking-[0.28em] text-[#0B3D2E] font-bold mb-5">
-                  <span className="ar">رؤيتنا</span>
-                  <span className="en">Our Vision</span>
-                </div>
-                <h3 className="font-disp text-3xl sm:text-4xl text-ink leading-tight mb-7">
-                  <span className="ar">من أبرز أندية الشطرنج النسائية في الإمارات.</span>
-                  <span className="en">Among the leading women&rsquo;s chess clubs in the UAE.</span>
-                </h3>
-                <p className="text-base sm:text-lg leading-[1.85] text-ink3">
-                  <span className="ar">
-                    نسعى إلى إلهام الأجيال القادمة من اللاعبات الإماراتيات وترسيخ مكانة
-                    النادي كرمزٍ للتميّز الرياضي والثقافي للمرأة في المنطقة.
-                  </span>
-                  <span className="en">
-                    We aspire to inspire future generations of Emirati players and
-                    to anchor the club as a regional benchmark of sporting and
-                    cultural excellence for women.
-                  </span>
-                </p>
+        {/* Vision + Mission — two columns, baseline-aligned, no roman numerals */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-24">
+          <Reveal delay={0.05} className="lg:col-span-6">
+            <article className="relative">
+              <div className="text-[0.62rem] uppercase tracking-[0.32em] text-[#0B3D2E] font-bold mb-6">
+                <span className="ar">الرؤية</span>
+                <span className="en">Vision</span>
               </div>
+              <h3 className="font-disp text-[clamp(1.8rem,3.2vw,2.4rem)] text-ink leading-[1.18] mb-6 tracking-tight">
+                <span className="ar">أن يكون النادي من أبرز أندية الشطرنج النسائية في الإمارات.</span>
+                <span className="en">To be among the leading women&rsquo;s chess clubs in the UAE.</span>
+              </h3>
+              <p className="text-[1rem] sm:text-[1.05rem] leading-[1.85] text-ink2 max-w-md">
+                <span className="ar">
+                  ترسيخ مكانة النادي كرمزٍ للتميّز الرياضي والثقافي للمرأة في المنطقة،
+                  وإعداد أجيال متعاقبة من اللاعبات والقائدات.
+                </span>
+                <span className="en">
+                  To anchor the club as a regional benchmark of sporting and
+                  cultural excellence for women, and to prepare successive
+                  generations of players and leaders.
+                </span>
+              </p>
             </article>
           </Reveal>
 
-          <Reveal delay={0.2}>
-            <article className="relative bg-ivory2 border border-stone p-8 sm:p-12 overflow-hidden h-full hover:-translate-y-1 hover:shadow-[0_22px_50px_-25px_rgba(200,16,46,0.35)] transition-all duration-500">
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#C8102E]" />
-              <div className="absolute -top-10 -right-6 text-[10rem] font-disp opacity-[0.06] text-[#C8102E] leading-none select-none">✦</div>
-              <div className="relative">
-                <div className="text-[0.6rem] uppercase tracking-[0.28em] text-[#C8102E] font-bold mb-5">
-                  <span className="ar">رسالتنا</span>
-                  <span className="en">Our Mission</span>
-                </div>
-                <h3 className="font-disp text-3xl sm:text-4xl text-ink leading-tight mb-7">
-                  <span className="ar">تنمية الفتيات ذهنياً وتنافسياً.</span>
-                  <span className="en">Developing girls intellectually &amp; competitively.</span>
-                </h3>
-                <p className="text-base sm:text-lg leading-[1.85] text-ink3">
-                  <span className="ar">
-                    نُطوّر اللاعبات من خلال الشطرنج، الثقافة، التعليم، والمشاركة المجتمعية،
-                    في بيئة احترافية ومُلهِمة تليق بمكانة المرأة الإماراتية.
-                  </span>
-                  <span className="en">
-                    We develop players through chess, culture, education, and
-                    community engagement — in a professional, empowering environment
-                    worthy of Emirati women.
-                  </span>
-                </p>
+          <Reveal delay={0.15} className="lg:col-span-6 lg:border-l lg:border-stone lg:pl-12">
+            <article className="relative">
+              <div className="text-[0.62rem] uppercase tracking-[0.32em] text-[#C8102E] font-bold mb-6">
+                <span className="ar">الرسالة</span>
+                <span className="en">Mission</span>
               </div>
+              <h3 className="font-disp text-[clamp(1.8rem,3.2vw,2.4rem)] text-ink leading-[1.18] mb-6 tracking-tight">
+                <span className="ar">تنمية الفتيات ذهنياً وتنافسياً، عبر الشطرنج والثقافة معاً.</span>
+                <span className="en">Developing girls intellectually and competitively, through chess and culture together.</span>
+              </h3>
+              <p className="text-[1rem] sm:text-[1.05rem] leading-[1.85] text-ink2 max-w-md">
+                <span className="ar">
+                  نُطوّر اللاعبات من خلال الشطرنج، الثقافة، التعليم، والمشاركة المجتمعية،
+                  في بيئة احترافية تليق بمكانة المرأة الإماراتية.
+                </span>
+                <span className="en">
+                  Through chess, culture, education and community engagement —
+                  in a professional environment worthy of the Emirati woman.
+                </span>
+              </p>
             </article>
           </Reveal>
         </div>
 
-        <Reveal delay={0.1}>
-          <div className="text-center mb-12">
-            <div className="text-[0.6rem] uppercase tracking-[0.28em] text-[#0B3D2E] font-bold mb-4">
-              <span className="ar">القيم الجوهرية</span>
-              <span className="en">Core Values</span>
+        {/* Core values — editorial inline list, em-dash separated. No grid, no icons. */}
+        <Reveal>
+          <div className="border-t border-stone pt-10 sm:pt-12">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+              <div className="lg:col-span-3">
+                <div className="text-[0.62rem] uppercase tracking-[0.32em] text-ink3 font-bold mb-3">
+                  <span className="ar">القيم الجوهرية</span>
+                  <span className="en">Values, in plain words</span>
+                </div>
+                <p className="text-[0.9rem] leading-[1.7] text-ink3 max-w-[28ch]">
+                  <span className="ar">المرتكزات السبعة التي يُحاسب عليها العمل اليومي للنادي.</span>
+                  <span className="en">The seven words the day-to-day work is held to.</span>
+                </p>
+              </div>
+              <ul className="lg:col-span-9 font-disp text-[clamp(1.4rem,2.4vw,1.95rem)] text-ink leading-[1.42] tracking-tight">
+                {VALUES.map((v, i) => (
+                  <li key={i} className="inline">
+                    <span className="ar">{v.ar}</span>
+                    <span className="en">{v.en}</span>
+                    {i < VALUES.length - 1 && (
+                      <span aria-hidden className="text-[#0B3D2E]/55 mx-3 sm:mx-4">·</span>
+                    )}
+                  </li>
+                ))}
+                <span className="font-body text-[0.62rem] uppercase tracking-[0.22em] text-ink3 not-italic align-baseline ml-4 font-bold">
+                  <span className="ar">— سبعة مرتكزات</span>
+                  <span className="en">— seven principles</span>
+                </span>
+              </ul>
             </div>
-            <h3 className="font-disp text-3xl sm:text-4xl text-ink">
-              <span className="ar">سبعة مرتكزات تُوجِّه عملنا</span>
-              <span className="en">Seven principles that guide our work</span>
-            </h3>
           </div>
         </Reveal>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={{
-            hidden:  {},
-            visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
-          }}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 sm:gap-4"
-        >
-          {VALUES.map((v, i) => (
-            <motion.div
-              key={i}
-              variants={{
-                hidden:  { opacity: 0, y: 24 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.2, 0.8, 0.2, 1] } },
-              }}
-              className="group relative bg-white border border-stone py-8 px-3 text-center transition-all duration-300 hover:border-[#0B3D2E] hover:bg-ivory2 hover:-translate-y-1 hover:shadow-[0_18px_44px_-22px_rgba(11,61,46,0.3)]"
-            >
-              <div className="relative font-disp text-3xl text-[#0B3D2E] mb-3 group-hover:scale-110 transition-transform duration-500">{v.icon}</div>
-              <div className="relative text-[0.7rem] uppercase tracking-[0.16em] font-bold text-ink">
-                <span className="ar">{v.ar}</span>
-                <span className="en">{v.en}</span>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

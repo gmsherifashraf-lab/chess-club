@@ -2,6 +2,7 @@
 
 import { motion, type HTMLMotionProps, type Transition } from "framer-motion";
 import { type ReactNode } from "react";
+import { EASE_EMPHASIS } from "@/lib/motion";
 
 interface RevealProps extends Omit<HTMLMotionProps<"div">, "children" | "initial" | "animate" | "whileInView" | "viewport" | "transition"> {
   children:    ReactNode;
@@ -20,11 +21,9 @@ interface RevealProps extends Omit<HTMLMotionProps<"div">, "children" | "initial
 /**
  * Reveal — fades + lifts children when scrolled into the viewport.
  *
- * Cheap, accessible (respects `prefers-reduced-motion` via Framer's
- * `useReducedMotion` baked into transitions), and reusable in every
- * home section without each one needing to import framer-motion.
- *
- * <Reveal><h2>...</h2></Reveal>
+ * Uses the design system's signature `EASE_EMPHASIS` curve so every
+ * scroll-in feels consistent across the site. Respects
+ * `prefers-reduced-motion` via Framer's built-in handling.
  */
 export default function Reveal({
   children,
@@ -35,7 +34,7 @@ export default function Reveal({
   margin  = "-80px",
   ...rest
 }: RevealProps) {
-  const transition: Transition = { duration, delay, ease: [0.2, 0.8, 0.2, 1] };
+  const transition: Transition = { duration, delay, ease: EASE_EMPHASIS };
   return (
     <motion.div
       initial={{ opacity: 0, y }}
@@ -52,7 +51,7 @@ export default function Reveal({
 /**
  * RevealStagger — wraps a list of items so each child appears with a
  * staggered delay. Use children that are already <Reveal> or
- * <motion.div> blocks — or pass plain elements via the `items` API.
+ * <motion.div> blocks.
  */
 export function RevealStagger({
   children,
@@ -82,5 +81,5 @@ export function RevealStagger({
 
 export const childVariants = {
   hidden:  { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_EMPHASIS } },
 };

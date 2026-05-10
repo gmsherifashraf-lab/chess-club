@@ -70,23 +70,77 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase]);
 
   useEffect(() => {
-    // Hydrate from the existing server-set cookie
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      if (session?.user) await fetchProfile(session.user.id);
-      setLoading(false);
-    });
+    let cancelled = false;
+
+    // Defensive watchdog — guarantees the UI never hangs forever on the
+    // initial auth check. If getSession() stalls (e.g. supabase-js auth
+    // lock deadlock, network blip), this still flips loading=false so
+    // useRequireAuth can do its redirect.
+    const watchdog = setTimeout(() => {
+      if (!cancelled) {
+        console.warn("[AuthContext] auth watchdog fired — forcing loading=false");
+        setLoading(false);
+      }
+    }, 4000);
+
+    supabase.auth.getSession()
+      .then(({ data: { session }, error }) => {
+        if (cancelled) return;
+        if (error) console.error("[AuthContext] getSession error:", error);
+        setSession(session);
+        // Don't await fetchProfile here — see the onAuthStateChange comment
+        // below. The browser auth lock can still be held when this resolves
+        // in certain races, so we defer the profile fetch to a microtask.
+        if (session?.user) {
+          queueMicrotask(() => {
+            if (!cancelled) {
+              fetchProfile(session.user.id).catch((e) =>
+                console.error("[AuthContext] fetchProfile error:", e),
+              );
+            }
+          });
+        }
+      })
+      .catch((e) => {
+        console.error("[AuthContext] getSession threw:", e);
+      })
+      .finally(() => {
+        if (!cancelled) {
+          clearTimeout(watchdog);
+          setLoading(false);
+        }
+      });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      // CRITICAL: this callback must NOT be async / must NOT await any
+      // supabase-js call. The internal auth lock is still held while
+      // this callback runs; any nested supabase request would deadlock
+      // against the lock that getSession()/_initialize() owns until we
+      // return. See https://github.com/supabase/auth-js/issues/888
+      if (cancelled) return;
       setSession(session);
-      if (session?.user) await fetchProfile(session.user.id);
-      else setProfile(null);
       setLoading(false);
+      if (session?.user) {
+        // Fire-and-forget — runs after the auth lock is released.
+        queueMicrotask(() => {
+          if (!cancelled) {
+            fetchProfile(session.user.id).catch((e) =>
+              console.error("[AuthContext] fetchProfile (onAuthStateChange) error:", e),
+            );
+          }
+        });
+      } else {
+        setProfile(null);
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      clearTimeout(watchdog);
+      subscription.unsubscribe();
+    };
   }, [supabase.auth, fetchProfile]);
 
   const signOut = useCallback(async () => {

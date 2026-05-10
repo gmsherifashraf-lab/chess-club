@@ -7,6 +7,10 @@ node_modules/
 .next/
 out/
 dist/
+*.tsbuildinfo
+
+# Claude Code worktrees (managed by git worktree, not committed)
+.claude/worktrees/
 
 # Environment secrets — NEVER commit these
 .env

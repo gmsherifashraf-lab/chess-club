@@ -8,6 +8,7 @@ node_modules/
 out/
 dist/
 *.tsbuildinfo
+next-env.d.ts
 
 # Claude Code worktrees (managed by git worktree, not committed)
 .claude/worktrees/

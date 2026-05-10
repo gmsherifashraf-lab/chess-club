@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Logo from "@/components/brand/Logo";
 import { EASE_EMPHASIS } from "@/lib/motion";
 
@@ -16,11 +16,44 @@ export default function Hero() {
   });
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
 
+  // Hide the video layer if the file fails to load (e.g. not uploaded yet),
+  // so the existing light hero still renders perfectly.
+  const [videoOk, setVideoOk] = useState(true);
+
   return (
     <section
       ref={ref}
       className="relative min-h-[100svh] flex items-center overflow-hidden hero-light"
     >
+      {/* Background video — silent, looping, ~25% so the cream wash and
+          text contrast stay intact. Hidden if file missing or if the user
+          prefers reduced motion (see the CSS rule in globals.css). */}
+      {videoOk && (
+        <video
+          aria-hidden
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onError={() => setVideoOk(false)}
+          className="hero-bg-video absolute inset-0 w-full h-full object-cover opacity-[0.28] pointer-events-none"
+        >
+          <source src="/videos/hero.webm" type="video/webm" />
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+      )}
+
+      {/* Cream wash on top of the video to keep the light-luxury palette */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(237,233,226,0.55) 0%, rgba(237,233,226,0.75) 60%, rgba(237,233,226,0.92) 100%)",
+        }}
+      />
+
       {/* Soft chess texture — single layer, very subtle */}
       <div aria-hidden className="chess-tex absolute inset-0 opacity-[0.45]" />
 

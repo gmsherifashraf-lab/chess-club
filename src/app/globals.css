@@ -2058,6 +2058,8 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .hero-fade-1, .hero-fade-2, .hero-fade-3, .hero-fade-4, .hero-fade-5,
   .hero-orb-1,  .hero-orb-2 { animation: none !important; }
+  /* Hide the autoplaying hero background video for users who opt out. */
+  .hero-bg-video { display: none !important; }
 }
 
 /* Scroll-in motion is owned by the <Reveal> component on a per-block

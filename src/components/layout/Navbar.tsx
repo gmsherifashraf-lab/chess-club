@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { EASE_EMPHASIS } from "@/lib/motion";
 import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LangContext";
 import { ROLE_DASHBOARD, DEFAULT_DASHBOARD } from "@/lib/auth";
@@ -40,9 +41,9 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-480 ease-emphasis ${
         scrolled
-          ? "bg-ivory/95 backdrop-blur-xl border-b border-stone shadow-[0_4px_24px_-12px_rgba(20,20,20,0.18)]"
+          ? "bg-ivory/95 backdrop-blur-xl border-b border-stone shadow-card"
           : "bg-ivory/70 backdrop-blur-md border-b border-stone/40"
       }`}
     >
@@ -84,7 +85,7 @@ export default function Navbar() {
                     layout
                     initial={false}
                     animate={{ scaleX: active ? 1 : 0 }}
-                    transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+                    transition={{ duration: 0.35, ease: EASE_EMPHASIS }}
                     className="absolute -bottom-2 left-0 right-0 h-[2px] origin-left bg-gradient-to-r from-[#1F6B4F] to-[#C8102E]"
                   />
                 </Link>
@@ -108,17 +109,17 @@ export default function Navbar() {
             </button>
 
             {user ? (
-              <Link href={dashboardHref} className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide bg-[#0B3D2E] text-white hover:bg-[#1F6B4F] transition-all hover:shadow-[0_8px_24px_rgba(11,61,46,0.4)]">
+              <Link href={dashboardHref} className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide bg-[#0B3D2E] text-white hover:bg-[#1F6B4F] transition-all duration-280 ease-emphasis hover:shadow-emerald hover:-translate-y-0.5">
                 <span className="ar">حسابي</span>
                 <span className="en">My Account</span>
               </Link>
             ) : (
               <>
-                <Link href="/login" className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide border border-ink/30 text-ink hover:border-ink hover:bg-ink hover:text-ivory transition-colors">
+                <Link href="/login" className="hidden sm:inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide border border-ink/30 text-ink hover:border-ink hover:bg-ink hover:text-ivory transition-colors duration-280 ease-standard">
                   <span className="ar">دخول</span>
                   <span className="en">Login</span>
                 </Link>
-                <Link href="/register" className="inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide bg-[#0B3D2E] text-white hover:bg-[#1F6B4F] transition-all hover:shadow-[0_8px_24px_rgba(11,61,46,0.4)]">
+                <Link href="/register" className="inline-flex items-center gap-1.5 h-10 px-5 text-[0.85rem] font-semibold tracking-wide bg-[#0B3D2E] text-white hover:bg-[#1F6B4F] transition-all duration-280 ease-emphasis hover:shadow-emerald hover:-translate-y-0.5">
                   <span className="ar">انضمي</span>
                   <span className="en">Join Club</span>
                 </Link>
@@ -155,7 +156,7 @@ export default function Navbar() {
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1], delay: 0.05 }}
+              transition={{ duration: 0.35, ease: EASE_EMPHASIS, delay: 0.05 }}
               className="flex flex-col p-6 sm:p-8 gap-1.5 max-w-wrap mx-auto"
             >
               {LINKS.map((l, i) => {

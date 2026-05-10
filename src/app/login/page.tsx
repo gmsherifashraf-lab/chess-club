@@ -4,16 +4,9 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { signIn, type UserRole } from "@/lib/auth";
+import { signIn } from "@/lib/auth";
 import { useLang } from "@/context/LangContext";
 import { LOGO_URI } from "@/lib/logo";
-
-// Three-role visual cards on the login screen.
-const ROLES: { key: UserRole; icon: string; ar: string; en: string; descAr: string; descEn: string }[] = [
-  { key: "admin",  icon: "🛡", ar: "المدير",  en: "Admin",  descAr: "صلاحيات كاملة",  descEn: "Full Access"     },
-  { key: "coach",  icon: "🎓", ar: "المدرب",  en: "Coach",  descAr: "بوابة التدريب",  descEn: "Teaching Portal" },
-  { key: "player", icon: "♟", ar: "اللاعب",  en: "Player", descAr: "المهام والتقدم", descEn: "Tasks & Progress" },
-];
 
 export default function LoginPage() {
   return (
@@ -34,7 +27,6 @@ function LoginInner() {
   const [password, setPassword] = useState("");
   const [error,    setError]    = useState<string | null>(null);
   const [loading,  setLoading]  = useState(false);
-  const [selected, setSelected] = useState<UserRole | null>(null);
 
   useEffect(() => { setError(null); }, [email, password]);
 
@@ -66,14 +58,6 @@ function LoginInner() {
     }
   }
 
-  function handleRoleSelect(role: UserRole) {
-    setSelected(role);
-    // Demo credentials autofill — remove for production.
-    setEmail(`${role}@chesssharjah.ae`);
-    setPassword("Demo1234!");
-    setError(null);
-  }
-
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-16" style={{ background: "linear-gradient(135deg,#EDE9E2 0%,#F8F5F0 60%,#FAF7F2 100%)" }}>
       <div className="w-full max-w-[460px]">
@@ -86,50 +70,9 @@ function LoginInner() {
             <span className="en">Portal Login</span>
           </h2>
           <p className="text-[0.85rem]" style={{ color: "#555", fontFamily: "'Noto Sans Arabic', 'DM Sans', sans-serif" }}>
-            <span className="ar">اختر دورك أو سجّل الدخول مباشرةً</span>
-            <span className="en">Select your role or sign in directly</span>
+            <span className="ar">سجّلي الدخول للوصول إلى لوحة التحكم</span>
+            <span className="en">Sign in to access your dashboard</span>
           </p>
-        </div>
-
-        {/* Role cards (3) */}
-        <div className="grid grid-cols-3 gap-2 mb-7">
-          {ROLES.map((role) => (
-            <button
-              key={role.key}
-              onClick={() => handleRoleSelect(role.key)}
-              className="role-card"
-              style={{
-                background: "#fff",
-                border: selected === role.key ? "2px solid #D42B3C" : "1px solid #D6D0C4",
-                padding: "1rem .75rem",
-                cursor: "pointer",
-                textAlign: "center",
-                transition: "all .2s",
-                transform: selected === role.key ? "translateY(-3px)" : "none",
-                boxShadow: selected === role.key ? "0 14px 40px -18px rgba(212,43,60,.45)" : "none",
-              }}
-            >
-              <div className="text-xl mb-1.5">{role.icon}</div>
-              <div className="font-disp text-[0.85rem] mb-0.5" style={{ color: "#141414" }}>
-                <span className="ar">{role.ar}</span>
-                <span className="en">{role.en}</span>
-              </div>
-              <div className="label-xs" style={{ opacity: .5, fontSize: ".5rem" }}>
-                <span className="ar">{role.descAr}</span>
-                <span className="en">{role.descEn}</span>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {/* Divider */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="flex-1 h-px" style={{ background: "#D6D0C4" }} />
-          <span className="label-xs" style={{ opacity: .4 }}>
-            <span className="ar">أو</span>
-            <span className="en">or</span>
-          </span>
-          <div className="flex-1 h-px" style={{ background: "#D6D0C4" }} />
         </div>
 
         {/* Sign-in form */}

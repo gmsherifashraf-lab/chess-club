@@ -39,7 +39,6 @@ export default function Hero() {
           onError={() => setVideoOk(false)}
           className="hero-bg-video absolute inset-0 w-full h-full object-cover opacity-[0.7] pointer-events-none"
         >
-          <source src="/videos/hero.webm" type="video/webm" />
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
       )}

@@ -37,20 +37,22 @@ export default function Hero() {
           playsInline
           preload="metadata"
           onError={() => setVideoOk(false)}
-          className="hero-bg-video absolute inset-0 w-full h-full object-cover opacity-[0.28] pointer-events-none"
+          className="hero-bg-video absolute inset-0 w-full h-full object-cover opacity-[0.7] pointer-events-none"
         >
           <source src="/videos/hero.webm" type="video/webm" />
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
       )}
 
-      {/* Cream wash on top of the video to keep the light-luxury palette */}
+      {/* Cream wash on top of the video — lighter than before so the video
+          is actually visible, but heavier on the left/top where the
+          hero text sits so dark copy stays legible. */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(180deg, rgba(237,233,226,0.55) 0%, rgba(237,233,226,0.75) 60%, rgba(237,233,226,0.92) 100%)",
+            "linear-gradient(115deg, rgba(237,233,226,0.78) 0%, rgba(237,233,226,0.55) 40%, rgba(237,233,226,0.30) 100%)",
         }}
       />
 

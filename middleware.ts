@@ -20,9 +20,27 @@ export async function middleware(request: NextRequest) {
   // pattern; getSession() can return stale data and won't trigger cookie
   // rotation.
   const supabase = createMiddlewareClient(request, response);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user: Awaited<ReturnType<typeof supabase.auth.getUser>>["data"]["user"] = null;
+  try {
+    const result = await supabase.auth.getUser();
+    user = result.data.user;
+  } catch (err) {
+    // Stale refresh token in the browser (signed out elsewhere, project key
+    // rotated, etc.) — wipe the sb-* cookies on BOTH request and response so
+    // downstream Server Components see a clean cookie jar in this same
+    // request, and the browser stops sending the bad cookie afterwards.
+    const msg = err instanceof Error ? err.message : String(err);
+    if (/refresh.*token/i.test(msg) || /invalid.*token/i.test(msg)) {
+      for (const c of request.cookies.getAll()) {
+        if (c.name.startsWith("sb-")) {
+          request.cookies.delete(c.name);
+          response.cookies.delete(c.name);
+        }
+      }
+    } else {
+      console.error("middleware getUser:", msg);
+    }
+  }
 
   const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
   const isAuthRoute = AUTH_ROUTES.some((p) => pathname.startsWith(p));

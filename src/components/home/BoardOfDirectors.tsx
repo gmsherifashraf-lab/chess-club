@@ -48,6 +48,7 @@ const EXECUTIVE: Member = {
   en: "Amna Al Mulla",
   arRole: "المدير التنفيذي",
   enRole: "Executive Director",
+  photo: "/images/board/amna.jpg",
 };
 
 function initials(name: string): string {
@@ -122,9 +123,12 @@ export default function BoardOfDirectors() {
           </div>
         </Reveal>
 
-        {/* Anchor pair — chair + secretary, side by side, no numbered labels */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-16 sm:mb-20">
+        {/* Chair — standalone row, no card beside her. The secretary follows
+            in her own row below so the chairperson holds the spotlight. */}
+        <div className="max-w-2xl mx-auto mb-10 sm:mb-12">
           <FeatureCard m={CHAIR} />
+        </div>
+        <div className="max-w-2xl mx-auto mb-16 sm:mb-20">
           <FeatureCard m={SECRETARY} />
         </div>
 
@@ -195,8 +199,12 @@ export default function BoardOfDirectors() {
 
             <div className="relative grid grid-cols-1 md:grid-cols-12 gap-8 p-8 sm:p-12 lg:p-14 items-center">
               <div className="md:col-span-4 flex md:justify-start">
-                <div className="relative w-32 h-40 sm:w-40 sm:h-48 roster-avatar">
-                  <div className="ini text-[2.6rem]">{initials(EXECUTIVE.en)}</div>
+                <div className="relative w-32 h-40 sm:w-40 sm:h-48 roster-avatar overflow-hidden">
+                  {EXECUTIVE.photo ? (
+                    <Portrait src={EXECUTIVE.photo} alt={EXECUTIVE.en} />
+                  ) : (
+                    <div className="ini text-[2.6rem]">{initials(EXECUTIVE.en)}</div>
+                  )}
                   <div className="veil" />
                 </div>
               </div>

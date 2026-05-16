@@ -180,7 +180,7 @@ export default function SubmissionsReviewer({ scopeToOwn }: Props) {
                 )}
                 {s.file_url && (
                   <div style={{ marginBottom: ".75rem" }}>
-                    <a href={s.file_url} target="_blank" rel="noopener" style={{ color: "#1E5BAA", fontSize: ".82rem" }}>📎 attached file</a>
+                    <a href={s.file_url} target="_blank" rel="noopener" style={{ color: "var(--ds-emerald-700)", fontSize: ".82rem" }}>📎 attached file</a>
                   </div>
                 )}
 

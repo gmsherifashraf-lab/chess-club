@@ -180,7 +180,7 @@ export default function TasksManager({ scopeToOwn }: Props) {
                       {dueStr}{overdue && " (overdue)"}
                     </span>
                   )}
-                  {t.attachment_url && <a href={t.attachment_url} target="_blank" rel="noopener" style={{ color: "#1E5BAA" }}>🔗 file</a>}
+                  {t.attachment_url && <a href={t.attachment_url} target="_blank" rel="noopener" style={{ color: "var(--ds-emerald-700)" }}>🔗 file</a>}
                 </div>
 
                 <div style={{ display: "flex", gap: ".5rem", marginTop: "auto", paddingTop: ".5rem", borderTop: "1px solid #F1ECE2" }}>

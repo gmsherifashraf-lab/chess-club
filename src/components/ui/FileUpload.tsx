@@ -56,7 +56,7 @@ export default function FileUpload({
       )}
       {value && !busy && (
         <div style={{ display: "flex", alignItems: "center", gap: ".6rem", fontSize: ".8rem" }}>
-          <a href={value} target="_blank" rel="noopener" style={{ color: "#1E5BAA" }}>
+          <a href={value} target="_blank" rel="noopener" style={{ color: "var(--ds-emerald-700)" }}>
             📎 <span className="ar">الملف المرفوع</span><span className="en">Uploaded file</span>
           </a>
           {!disabled && (

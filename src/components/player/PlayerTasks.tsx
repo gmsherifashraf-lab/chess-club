@@ -169,7 +169,7 @@ export default function PlayerTasks() {
 
             {t.attachment_url && (
               <div style={{ marginBottom: ".75rem" }}>
-                <a href={t.attachment_url} target="_blank" rel="noopener" style={{ color: "#1E5BAA", fontSize: ".82rem" }}>
+                <a href={t.attachment_url} target="_blank" rel="noopener" style={{ color: "var(--ds-emerald-700)", fontSize: ".82rem" }}>
                   📎 <span className="ar">المرفق</span><span className="en">Attachment</span>
                 </a>
               </div>
@@ -183,7 +183,7 @@ export default function PlayerTasks() {
                 {sub.content && <div style={{ fontSize: ".85rem", color: "#444", whiteSpace: "pre-wrap" }}>{sub.content}</div>}
                 {sub.file_url && (
                   <div style={{ marginTop: ".4rem" }}>
-                    <a href={sub.file_url} target="_blank" rel="noopener" style={{ color: "#1E5BAA", fontSize: ".82rem" }}>📎 file</a>
+                    <a href={sub.file_url} target="_blank" rel="noopener" style={{ color: "var(--ds-emerald-700)", fontSize: ".82rem" }}>📎 file</a>
                   </div>
                 )}
                 <div style={{ fontSize: ".72rem", opacity: .55, marginTop: ".4rem" }}>

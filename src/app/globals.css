@@ -365,7 +365,7 @@ p { line-height: var(--ds-lh-body); }
 .badge-red   { background: rgba(200,16,46,.07);  color: var(--ds-scarlet-600); border-color: rgba(200,16,46,.18); }
 .badge-green { background: rgba(10,82,52,.07);   color: var(--ds-emerald-700); border-color: rgba(10,82,52,.18); }
 .badge-ink   { background: rgba(17,17,17,.05);   color: var(--ds-text-2); border-color: rgba(17,17,17,.12); }
-.badge-gold  { background: rgba(10,82,52,.07);   color: var(--ds-emerald-700); border-color: rgba(10,82,52,.18); }
+.badge-gold  { background: rgba(94,94,94,.10);   color: var(--ds-text-3); border-color: rgba(94,94,94,.24); }
 .badge-ivory { background: rgba(255,255,255,.12);color: var(--ds-text-inv); border-color: rgba(255,255,255,.22); }
 
 /* ── BUTTON ── */

@@ -32,19 +32,11 @@ const ITEMS: ContactItem[] = [
     noteEn:  "for official correspondence",
   },
   {
-    labelAr: "الهاتف",          labelEn: "Telephone",
-    valueAr: "‎+971 6 000 0000",
-    valueEn: "+971 6 000 0000",
-    href:    "tel:+971600000000",
-    noteAr:  "الأحد إلى الخميس",
-    noteEn:  "Sunday — Thursday",
-  },
-  {
     labelAr: "ساعات العمل",     labelEn: "Office hours",
     valueAr: "9 صباحاً — 6 مساءً",
     valueEn: "9:00 — 18:00",
-    noteAr:  "بتوقيت الإمارات (GMT+4)",
-    noteEn:  "Gulf Standard Time (GMT+4)",
+    noteAr:  "الأحد إلى الخميس · بتوقيت الإمارات (GMT+4)",
+    noteEn:  "Sunday — Thursday · Gulf Standard Time (GMT+4)",
   },
 ];
 

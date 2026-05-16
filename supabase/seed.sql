@@ -158,7 +158,7 @@ insert into public.news (id, title, category, excerpt, body, image_url, publishe
    'Summer Intensive Camp 2026 — Registration Open',
    'Program',
    'Two weeks of focused training for ages 8–16. Limited spots — early-bird discount until May 30.',
-   'The annual summer intensive returns July 6–17 with three program tiers (Little Queens, Rising Stars, Competitive Juniors) and daily endgame, tactics, and game-review sessions. Registration is open via the Academy enrollment form.',
+   'The annual summer intensive returns July 6–17 with three program tiers (Little Queens, Rising Stars, Competitive Juniors) and daily endgame, tactics, and game-review sessions. Contact the club to register.',
    null,
    '2026-04-15 12:00:00+00'),
   ('44444444-4444-4444-4444-000000000003',

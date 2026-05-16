@@ -74,11 +74,11 @@ export default function TournamentsPreview({ items }: { items: Tournament[] }) {
               </div>
 
               {rest.length === 0 ? (
-                <div className="border border-dashed border-stone p-8 text-center">
-                  <div className="text-3xl mb-3 opacity-40">♟</div>
-                  <p className="text-sm text-ink3 italic">
-                    <span className="ar">سيُعلن قريباً.</span>
-                    <span className="en">More fixtures coming soon.</span>
+                <div className="flex-1 flex flex-col justify-center py-10">
+                  <div aria-hidden className="w-10 h-px bg-ink3/50 mb-5" />
+                  <p className="text-[0.95rem] text-ink2 leading-[1.85] max-w-xs">
+                    <span className="ar">لا توجد مباريات أخرى مجدولة بعد. يُحدَّث الجدول الكامل فور اعتماد المجلس للمواعيد.</span>
+                    <span className="en">No further fixtures are scheduled yet. The full calendar updates once the board confirms dates.</span>
                   </p>
                 </div>
               ) : (

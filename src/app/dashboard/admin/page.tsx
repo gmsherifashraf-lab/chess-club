@@ -7,7 +7,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 
 import CrudShell        from "@/components/admin/CrudShell";
-import EnrollmentsList  from "@/components/admin/EnrollmentsList";
 import CoachAssignments from "@/components/admin/CoachAssignments";
 import UsersManager     from "@/components/admin/UsersManager";
 import TasksManager     from "@/components/tasks/TasksManager";
@@ -29,7 +28,6 @@ const NAV: NavItem[] = [
   { key: "coaches",     icon: "🎓", ar: "المدربون",      en: "Coaches"       },
   { key: "assignments", icon: "🔗", ar: "التعيينات",     en: "Assignments"   },
   { key: "tournaments", icon: "🏆", ar: "البطولات",      en: "Tournaments"   },
-  { key: "regs",        icon: "📋", ar: "طلبات الانضمام", en: "Applications" },
   { key: "news",        icon: "📰", ar: "الأخبار",        en: "News"          },
   { key: "gallery",     icon: "🖼", ar: "معرض الصور",    en: "Gallery"       },
   { key: "settings",    icon: "⚙", ar: "الإعدادات",      en: "Settings"      },
@@ -104,7 +102,6 @@ export default function AdminDashboard() {
                 </div>
               </div>
               <div className="panel-pad" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                <Stat ar="الطلبات المعلّقة"  en="Pending Applications" value={counts.pendingEnrollments} max={Math.max(counts.totalEnrollments, 1)} color="#D42B3C" />
                 <Stat ar="بطولات السنة"       en={`Tournaments ${counts.currentYear}`}  value={counts.tournamentsThisYear} max={Math.max(counts.tournamentsThisYear, 1)} color="#007A38" />
                 <Stat ar="الأخبار المنشورة"  en="Published News"       value={counts.publishedNews} max={Math.max(counts.publishedNews, 1)} color="#A07820" />
                 <Stat ar="المسلَّمات"         en="Submissions"          value={counts.submissions}  max={Math.max(counts.submissions, 1)} color="#141414" />
@@ -153,8 +150,6 @@ export default function AdminDashboard() {
           orderBy={{ column: "date", ascending: false }}
         />
       )}
-
-      {tab === "regs" && <EnrollmentsList />}
 
       {tab === "news" && (
         <CrudShell<NewsRow>
@@ -208,8 +203,6 @@ function useAdminCounts() {
     admins: 0,
     openTasks: 0,
     submissions: 0,
-    pendingEnrollments: 0,
-    totalEnrollments: 0,
     tournamentsThisYear: 0,
     publishedNews: 0,
   });
@@ -221,15 +214,13 @@ function useAdminCounts() {
       const yearStart = `${currentYear}-01-01`;
       const yearEnd   = `${currentYear + 1}-01-01`;
 
-      const [u, p, c, a, t, s, eAll, ePend, ty, n] = await Promise.all([
+      const [u, p, c, a, t, s, ty, n] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }),
         supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "player"),
         supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "coach"),
         supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "admin"),
         supabase.from("tasks").select("*",    { count: "exact", head: true }).in("status", ["open", "in_progress", "submitted"]),
         supabase.from("submissions").select("*", { count: "exact", head: true }),
-        supabase.from("enrollments").select("*", { count: "exact", head: true }),
-        supabase.from("enrollments").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("tournaments").select("*",  { count: "exact", head: true }).gte("date", yearStart).lt("date", yearEnd),
         supabase.from("news").select("*", { count: "exact", head: true }).not("published_at", "is", null),
       ]);
@@ -242,8 +233,6 @@ function useAdminCounts() {
         admins:              a.count ?? 0,
         openTasks:           t.count ?? 0,
         submissions:         s.count ?? 0,
-        totalEnrollments:    eAll.count ?? 0,
-        pendingEnrollments:  ePend.count ?? 0,
         tournamentsThisYear: ty.count ?? 0,
         publishedNews:       n.count ?? 0,
       });

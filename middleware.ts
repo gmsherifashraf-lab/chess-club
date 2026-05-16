@@ -53,13 +53,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Treat /register/academy (public enrollment) as NOT an auth route — anyone
-  // can submit it without an account.
-  const isPureAuthRoute =
-    isAuthRoute && !pathname.startsWith("/register/academy");
-
   // ── Logged in → don't show /login or /register ──────────────────────────
-  if (isPureAuthRoute && user) {
+  if (isAuthRoute && user) {
     const role = normaliseRole(user.user_metadata?.role);
     const dashboard = ROLE_DASHBOARD[role] ?? DEFAULT_DASHBOARD;
     const url = request.nextUrl.clone();

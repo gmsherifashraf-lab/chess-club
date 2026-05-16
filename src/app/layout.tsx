@@ -51,7 +51,6 @@ export const metadata: Metadata = {
     "Chess Club", "Sharjah", "UAE", "Women Chess", "Girls Chess",
     "Ladies Chess Club", "نادي الشطرنج", "الشارقة", "الإمارات",
     "Chess and Culture", "Chess Championship UAE", "Women Empowerment",
-    "Chess Academy",
   ],
   authors: [{ name: "Chess & Culture Club for Women, Sharjah" }],
   creator: "Chess & Culture Club for Women, Sharjah",

@@ -82,7 +82,7 @@ Defined in `src/lib/auth.ts`. Old code referenced `parent` / `board` — these a
 
 ### DB tables (Supabase)
 
-`profiles`, `players`, `coaches`, `coach_assignments`, `tournaments`, `participations`, `attendance`, `enrollments`, `tasks`, `submissions`, `news`, `gallery_images`. RLS policies in `supabase/migrations/0005_role_system_refactor.sql`.
+`profiles`, `players`, `coaches`, `coach_assignments`, `tournaments`, `participations`, `attendance`, `tasks`, `submissions`, `news`, `gallery_images`. RLS policies in `supabase/migrations/0005_role_system_refactor.sql`. (The `enrollments` table / academy flow was removed in `0007_drop_enrollments.sql`.)
 
 ---
 

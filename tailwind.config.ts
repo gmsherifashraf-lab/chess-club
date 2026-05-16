@@ -20,94 +20,95 @@ const config: Config = {
       //  existing dashboard pages and admin tooling don't break.
       // ────────────────────────────────────────────────────────────────
       colors: {
-        // Legacy aliases (kept)
-        ivory:   "#F8F5F0",
-        ivory2:  "#EDE9E2",
-        stone:   "#D6D0C4",
-        ink:     "#000000",
-        ink2:    "#0A0A0A",
-        ink3:    "#1A1A1A",
-        emerald: "#0B3D2E",
-        emerald2:"#1F6B4F",
-        emerald3:"#0E5236",
+        // Legacy aliases (kept, re-pointed to the federation palette so
+        // every existing utility class re-skins with zero file churn).
+        ivory:   "#FCFCFB",
+        ivory2:  "#F6F6F4",
+        stone:   "#E6E6E2",
+        ink:     "#111111",
+        ink2:    "#1A1A1A",
+        ink3:    "#363636",
+        emerald: "#0A5234",
+        emerald2:"#117A4F",
+        emerald3:"#0C6340",
         red:     "#C8102E",
-        "red-dk":"#9D0C24",
+        "red-dk":"#A50D26",
         white:   "#FFFFFF",
-        green:   "#0B3D2E",
-        green2:  "#1F6B4F",
-        gold:    "#A07820",
+        green:   "#0A5234",
+        green2:  "#117A4F",
+        gold:    "#0A5234",
 
         // ── New semantic / scaled palette ──
-        // Cream — warm light surface scale
+        // Neutral surface scale (was "cream" — now clean federation greys)
         cream: {
           50:  "#FFFFFF",
-          100: "#FBF8F3",
-          200: "#F8F5F0", // = ivory
-          300: "#F1ECE2",
-          400: "#EDE9E2", // = ivory2
-          500: "#E5DFD2",
-          600: "#D6D0C4", // = stone
-          700: "#BFB6A3",
-          800: "#9C9381",
+          100: "#FCFCFB",
+          200: "#F6F6F4", // = ivory2
+          300: "#F0F0EC",
+          400: "#E9E9E5",
+          500: "#E0E0DB",
+          600: "#D2D2CC", // = stone-ish
+          700: "#B6B6AF",
+          800: "#8E8E88",
         },
-        // Onyx — refined dark tones for text & dark surfaces
+        // Onyx — refined near-black tones (tinted, never pure)
         onyx: {
-          50:  "#3a3a3a",
-          100: "#2a2a2a",
-          200: "#1f1f1f",
+          50:  "#363636",
+          100: "#2A2A2A",
+          200: "#1F1F1F",
           300: "#161616",
-          400: "#0E0E0E",
-          500: "#080808",
-          600: "#020202",
+          400: "#111111",
+          500: "#0C0C0C",
+          600: "#070707",
         },
         // Text scale — semantic
         text: {
-          DEFAULT: "#141414",
-          1:       "#141414",
-          2:       "#3A3A3A",
-          3:       "#646464",
-          4:       "#8A8579",
-          inverse: "#F8F5F0",
+          DEFAULT: "#111111",
+          1:       "#111111",
+          2:       "#363636",
+          3:       "#5E5E5E",
+          4:       "#8C8C8A",
+          inverse: "#F4F6F4",
         },
         // Border scale — semantic
         line: {
-          DEFAULT: "#E5DFD2",
-          soft:    "rgba(20,20,20,0.06)",
-          mid:     "#D6D0C4",
-          strong:  "#BFB6A3",
-          dark:    "rgba(255,255,255,0.10)",
+          DEFAULT: "#E6E6E2",
+          soft:    "rgba(17,17,17,0.06)",
+          mid:     "#DADAD5",
+          strong:  "#C2C2BC",
+          dark:    "rgba(255,255,255,0.12)",
         },
-        // Brand emerald scale
+        // Brand green scale (primary identity)
         forest: {
-          50:  "#E8F1ED",
-          100: "#C8DDD0",
-          200: "#92BBA1",
-          300: "#5C9974",
-          400: "#3FAA62",
-          500: "#1F6B4F", // = emerald2
-          600: "#0E5236", // = emerald3
-          700: "#0B3D2E", // = emerald (primary)
-          800: "#073023",
-          900: "#04201A",
+          50:  "#E9F3EE",
+          100: "#D6EADF",
+          200: "#A9CFBC",
+          300: "#6FB191",
+          400: "#2C9A6A",
+          500: "#117A4F", // = emerald2 (hover)
+          600: "#0C6340", // = emerald3
+          700: "#0A5234", // = emerald (primary)
+          800: "#073F28",
+          900: "#052B1C",
         },
-        // Brand scarlet scale
+        // Brand red scale (UAE accent — sparing)
         scarlet: {
-          50:  "#FCE9EC",
-          100: "#F5C2C9",
-          200: "#EB8794",
-          300: "#E0364C",
+          50:  "#FBE9EC",
+          100: "#F4C4CC",
+          200: "#E88A98",
+          300: "#DC4259",
           400: "#C8102E", // = red
-          500: "#9D0C24", // = red-dk
-          600: "#7E0B22",
-          700: "#5C081A",
+          500: "#A50D26", // = red-dk
+          600: "#800A1D",
+          700: "#5C0715",
         },
-        // Honour gold (used sparingly for medals / accolades)
+        // Honour — folded to brand green (4-colour brief, no gold)
         honor: {
-          200: "#EBD394",
-          300: "#D9B65A",
-          400: "#A07820", // = gold
-          500: "#8E661A",
-          600: "#56400F",
+          200: "#A9CFBC",
+          300: "#2C9A6A",
+          400: "#0A5234", // = gold alias
+          500: "#073F28",
+          600: "#052B1C",
         },
       },
 
@@ -115,21 +116,26 @@ const config: Config = {
       //  TYPOGRAPHY
       // ────────────────────────────────────────────────────────────────
       fontFamily: {
-        // Existing aliases (kept)
-        "noto-ar":  ['"Noto Sans Arabic"', "sans-serif"],
-        "noto-ser": ['"Noto Serif Arabic"', "serif"],
-        "playfair": ['"Playfair Display"', "Georgia", "serif"],
-        "dm":       ['"DM Sans"', "sans-serif"],
+        // Legacy aliases (kept, re-pointed to the federation fonts)
+        "noto-ar":  ['var(--font-cairo)', '"Noto Sans Arabic"', "sans-serif"],
+        "noto-ser": ['var(--font-cairo)', '"Noto Sans Arabic"', "sans-serif"],
+        "playfair": ['var(--font-playfair)', '"IBM Plex Sans"', "system-ui", "sans-serif"],
+        "dm":       ['var(--font-inter)', "system-ui", "sans-serif"],
         // Semantic aliases that resolve to the next/font CSS vars set
-        // in src/app/layout.tsx
-        disp: ['var(--font-playfair)', "Georgia", "serif"],
+        // in src/app/layout.tsx (Latin → IBM Plex Sans, Arabic → Cairo)
+        disp: ['var(--font-playfair)', '"IBM Plex Sans"', "system-ui", "sans-serif"],
         body: ['var(--font-inter)',    "system-ui", "sans-serif"],
         ar:   ['var(--font-cairo)',    '"Noto Sans Arabic"', "sans-serif"],
       },
       fontSize: {
-        "micro":   ["0.6rem",   { lineHeight: "1.4",  letterSpacing: "0.22em" }],
-        "eyebrow": ["0.66rem",  { lineHeight: "1.4",  letterSpacing: "0.28em" }],
-        "caption": ["0.78rem",  { lineHeight: "1.5",  letterSpacing: "0.01em" }],
+        "micro":   ["0.6875rem", { lineHeight: "1.4",  letterSpacing: "0.16em" }],
+        "eyebrow": ["0.8125rem", { lineHeight: "1.4",  letterSpacing: "0.2em"  }],
+        "caption": ["0.875rem",  { lineHeight: "1.5",  letterSpacing: "0.005em" }],
+        // Federation display scale (fluid, ratio >= 1.25)
+        "d-sm":  ["clamp(1.5rem, 2.4vw, 2rem)",      { lineHeight: "1.2",  letterSpacing: "-0.018em" }],
+        "d-md":  ["clamp(2.125rem, 3.6vw, 3.25rem)", { lineHeight: "1.12", letterSpacing: "-0.022em" }],
+        "d-lg":  ["clamp(2.75rem, 5vw, 4.5rem)",     { lineHeight: "1.06", letterSpacing: "-0.028em" }],
+        "d-xl":  ["clamp(3.4rem, 7.4vw, 7rem)",      { lineHeight: "1.02", letterSpacing: "-0.03em"  }],
       },
       letterSpacing: {
         "tightest": "-0.04em",
@@ -151,6 +157,10 @@ const config: Config = {
       // ────────────────────────────────────────────────────────────────
       //  LAYOUT
       // ────────────────────────────────────────────────────────────────
+      zIndex: {
+        "-10": "-10",
+        "-20": "-20",
+      },
       maxWidth: {
         wrap:      "1320px",
         "wrap-md": "1040px",
@@ -260,13 +270,19 @@ const config: Config = {
         "glow-pulse": "glow-pulse 4s ease-in-out infinite",
       },
       backgroundImage: {
-        "emerald-glow": "radial-gradient(circle at 50% 50%, rgba(31,107,79,0.4) 0%, transparent 60%)",
-        "red-glow":     "radial-gradient(circle at 50% 50%, rgba(200,16,46,0.35) 0%, transparent 60%)",
-        "warm-card":    "linear-gradient(180deg, #FFFFFF 0%, #FBF8F3 100%)",
-        "ink-card":     "linear-gradient(180deg, #1A1A1A 0%, #060606 100%)",
-        "rule-h":       "linear-gradient(90deg, transparent, #D6D0C4 8%, #D6D0C4 92%, transparent)",
-        "rule-v":       "linear-gradient(180deg, transparent, #D6D0C4 8%, #D6D0C4 92%, transparent)",
+        // Glow removed (no neon). Soft neutral wash only.
+        "emerald-glow": "radial-gradient(circle at 50% 50%, rgba(10,82,52,0.06) 0%, transparent 65%)",
+        "red-glow":     "radial-gradient(circle at 50% 50%, rgba(200,16,46,0.05) 0%, transparent 65%)",
+        "warm-card":    "linear-gradient(180deg, #FFFFFF 0%, #FCFCFB 100%)",
+        "ink-card":     "linear-gradient(180deg, #11201A 0%, #0C1310 100%)",
+        "rule-h":       "linear-gradient(90deg, transparent, #DADAD5 8%, #DADAD5 92%, transparent)",
+        "rule-v":       "linear-gradient(180deg, transparent, #DADAD5 8%, #DADAD5 92%, transparent)",
       },
+    },
+    container: {
+      center: true,
+      padding: { DEFAULT: "1.25rem", sm: "1.5rem", lg: "2.5rem", xl: "3rem" },
+      screens: { sm: "640px", md: "768px", lg: "1024px", xl: "1280px", "2xl": "1320px" },
     },
   },
   plugins: [],

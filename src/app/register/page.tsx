@@ -3,53 +3,84 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { signUp } from "@/lib/auth";
 import { useLang } from "@/context/LangContext";
-import { LOGO_URI } from "@/lib/logo";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
+import { buttonVariants } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
+
+const FIELD =
+  "w-full rounded-[2px] border border-line bg-white px-4 py-3 text-[0.95rem] text-text-1 outline-none transition-colors placeholder:text-text-4 focus:border-forest-700 focus:ring-2 focus:ring-forest-700/20 disabled:opacity-60";
+const LABEL =
+  "mb-2 block text-[0.7rem] font-bold uppercase tracking-[0.16em] text-text-3";
 
 /**
- * Public player signup. Coach and admin accounts are created from the
- * admin dashboard — this page only ever creates `role = 'player'` rows.
+ * Public club registration. No account is created — the form is
+ * submitted to the club (enrollments table) and staff follow up by
+ * email. Membership accounts/portals are staff-managed.
  */
 export default function RegisterPage() {
   const { lang } = useLang();
   const supabase = createClient();
 
-  const [fullName, setFullName] = useState("");
-  const [email,    setEmail]    = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm,  setConfirm]  = useState("");
-  const [error,    setError]    = useState<string | null>(null);
-  const [loading,  setLoading]  = useState(false);
-  const [success,  setSuccess]  = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dob, setDob] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [school, setSchool] = useState("");
+  const [chessLevel, setChessLevel] = useState("beginner");
+  const [program, setProgram] = useState("rising-stars");
+
+  const [motherName, setMotherName] = useState("");
+  const [fatherName, setFatherName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
+
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
 
-    if (!fullName || !email || !password) {
-      setError(lang === "ar" ? "يرجى ملء جميع الحقول" : "Please fill in all fields");
+    if (!firstName || !lastName || !email) {
+      setError(
+        lang === "ar"
+          ? "يرجى ملء الحقول الإلزامية: الاسم الأول واسم العائلة والبريد الإلكتروني"
+          : "Please fill the required fields: first name, last name, and email",
+      );
       return;
     }
-    if (password.length < 8) {
-      setError(lang === "ar" ? "كلمة المرور يجب ألا تقل عن 8 أحرف" : "Password must be at least 8 characters");
-      return;
-    }
-    if (password !== confirm) {
-      setError(lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError(
+        lang === "ar"
+          ? "صيغة البريد الإلكتروني غير صحيحة"
+          : "Invalid email address",
+      );
       return;
     }
 
     setLoading(true);
-    const { error: authError } = await signUp(supabase, {
-      email,
-      password,
-      role: "player",
-      fullName,
+    const { error: insErr } = await supabase.from("enrollments").insert({
+      child_first_name: firstName,
+      child_last_name: lastName,
+      child_dob: dob || null,
+      nationality: nationality || null,
+      school: school || null,
+      chess_level: chessLevel,
+      program,
+      mother_name: motherName || null,
+      father_name: fatherName || null,
+      guardian_email: email,
+      guardian_phone: phone || null,
+      notes: notes || null,
     });
 
-    if (authError) {
-      setError(authError);
+    if (insErr) {
+      setError(friendlyError(insErr.message, lang));
       setLoading(false);
       return;
     }
@@ -58,104 +89,232 @@ export default function RegisterPage() {
     setLoading(false);
   }
 
-  if (success) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-16" style={{ background: "linear-gradient(135deg,#EDE9E2 0%,#F8F5F0 60%,#FAF7F2 100%)" }}>
-        <div className="max-w-[460px] text-center">
-          <div className="text-6xl mb-4">📨</div>
-          <h2 className="font-disp t-h3 mb-3" style={{ color: "#141414" }}>
-            <span className="ar">تحقق من بريدك الإلكتروني</span>
-            <span className="en">Check your email</span>
-          </h2>
-          <p style={{ fontSize: ".9rem", color: "#555", lineHeight: 1.85, fontFamily: "'Noto Sans Arabic','DM Sans',sans-serif" }}>
-            <span className="ar">لقد أرسلنا رابط التأكيد إلى {email}. اضغط الرابط لتفعيل حسابك ثم سجّل الدخول.</span>
-            <span className="en">We&apos;ve sent a confirmation link to {email}. Click it to activate your account, then sign in.</span>
-          </p>
-          <div className="flag-h mx-auto my-6" style={{ width: 72 }} />
-          <Link href="/login" className="btn btn-primary" style={{ justifyContent: "center" }}>
-            <span className="ar">الذهاب لتسجيل الدخول</span>
-            <span className="en">Go to login</span>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16" style={{ background: "linear-gradient(135deg,#EDE9E2 0%,#F8F5F0 60%,#FAF7F2 100%)" }}>
-      <div className="w-full max-w-[460px]">
-        <div className="text-center mb-8">
-          <img src={LOGO_URI} alt="Logo" className="mx-auto mb-4" style={{ height: 72 }} />
-          <div className="flag-h mx-auto mb-4" style={{ width: 60 }} />
-          <h2 className="font-disp t-h3 mb-1" style={{ color: "#141414" }}>
-            <span className="ar">إنشاء حساب لاعب</span>
-            <span className="en">Create a Player Account</span>
-          </h2>
-          <p className="text-[0.85rem]" style={{ color: "#555", fontFamily: "'Noto Sans Arabic','DM Sans',sans-serif" }}>
-            <span className="ar">لتلقي المهام ومتابعة تقدمك في النادي</span>
-            <span className="en">To receive tasks and track your progress at the club</span>
-          </p>
-        </div>
+    <>
+      <Navbar />
+      <main id="main">
+        <PageHeader
+          kickerAr="الانضمام"
+          kickerEn="Membership"
+          titleAr="التسجيل في النادي"
+          titleEn="Register with the Club"
+          leadAr="لا حاجة لإنشاء حساب — قدّمي الطلب وستتواصل معك إدارة النادي."
+          leadEn="No account needed — submit the form and the club administration will be in touch."
+          crumbs={[{ href: "/register", ar: "التسجيل", en: "Register" }]}
+        />
 
-        <form onSubmit={handleSubmit} noValidate>
-          <div className="bg-white border" style={{ borderColor: "#D6D0C4", padding: "1.75rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
-            {error && (
-              <div className="text-[0.82rem]" style={{ background: "rgba(212,43,60,.08)", border: "1px solid rgba(212,43,60,.25)", padding: ".75rem 1rem", color: "#B02030", fontFamily: "'Noto Sans Arabic','DM Sans',sans-serif" }}>
-                {error}
+        <section className="border-t border-line bg-cream-100">
+          <div className="mx-auto max-w-3xl px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
+            {success ? (
+              <div className="rounded-[4px] border border-line bg-white p-10 text-center shadow-card sm:p-14">
+                <span className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-forest-700/20 bg-forest-700/[0.07] text-forest-700">
+                  <svg viewBox="0 0 24 24" className="h-7 w-7">
+                    <path
+                      d="M5 13l4 4L19 7"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <h2 className="font-disp t-h3 text-text-1">
+                  <span className="ar">تم استلام طلبك</span>
+                  <span className="en">Application received</span>
+                </h2>
+                <p className="mx-auto mt-3 max-w-md text-[0.95rem] leading-relaxed text-text-3">
+                  <span className="ar">
+                    شكراً لتسجيلك في نادي الشطرنج والثقافة للفتيات. ستتواصل
+                    معك إدارة النادي قريباً عبر البريد الإلكتروني للخطوات
+                    التالية.
+                  </span>
+                  <span className="en">
+                    Thank you for registering with the Chess &amp; Culture
+                    Club for Women. The club administration will contact you
+                    shortly by email with the next steps.
+                  </span>
+                </p>
+                <div
+                  aria-hidden
+                  className="mx-auto my-7 h-[3px] w-[72px] bg-[linear-gradient(90deg,#C8102E_33.3%,#fff_33.3%_66.6%,#117A4F_66.6%)]"
+                />
+                <Link
+                  href="/"
+                  className={cn(buttonVariants({ variant: "primary", size: "md" }))}
+                >
+                  <span className="ar">العودة إلى الرئيسية</span>
+                  <span className="en">Back to Home</span>
+                </Link>
               </div>
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                noValidate
+                className="overflow-hidden rounded-[4px] border border-line bg-white shadow-card"
+              >
+                <div className="border-b border-line p-7 sm:p-9">
+                  <div
+                    aria-hidden
+                    className="mb-5 h-[3px] w-16 bg-[linear-gradient(90deg,#C8102E_33.3%,#fff_33.3%_66.6%,#117A4F_66.6%)]"
+                  />
+                  <h2 className="font-disp t-h4 text-text-1">
+                    <span className="ar">نموذج التسجيل في النادي</span>
+                    <span className="en">Club Registration Form</span>
+                  </h2>
+                  <p className="mt-2 text-[0.88rem] text-text-3">
+                    <span className="ar">
+                      لا حاجة لإنشاء حساب — ستتواصل إدارة النادي بعد مراجعة
+                      الطلب.
+                    </span>
+                    <span className="en">
+                      No account needed — club staff will contact you after
+                      reviewing your application.
+                    </span>
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-5 p-7 sm:p-9">
+                  {error && (
+                    <div
+                      role="alert"
+                      className="rounded-[2px] border border-scarlet-400/25 bg-scarlet-400/[0.07] px-4 py-3 text-[0.85rem] text-scarlet-600"
+                    >
+                      {error}
+                    </div>
+                  )}
+
+                  <div className="border-b border-line pb-2 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-scarlet-500">
+                    <span className="ar">بيانات اللاعبة *</span>
+                    <span className="en">Applicant Details *</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Field labelAr="الاسم الأول *" labelEn="First Name *">
+                      <input className={FIELD} type="text" required value={firstName} onChange={(e) => setFirstName(e.target.value)} disabled={loading} />
+                    </Field>
+                    <Field labelAr="اسم العائلة *" labelEn="Last Name *">
+                      <input className={FIELD} type="text" required value={lastName} onChange={(e) => setLastName(e.target.value)} disabled={loading} />
+                    </Field>
+                    <Field labelAr="تاريخ الميلاد" labelEn="Date of Birth">
+                      <input className={FIELD} type="date" value={dob} onChange={(e) => setDob(e.target.value)} disabled={loading} />
+                    </Field>
+                    <Field labelAr="الجنسية" labelEn="Nationality">
+                      <input className={FIELD} type="text" value={nationality} onChange={(e) => setNationality(e.target.value)} disabled={loading} />
+                    </Field>
+                  </div>
+
+                  <Field labelAr="المدرسة / جهة العمل" labelEn="School / Employer">
+                    <input className={FIELD} type="text" value={school} onChange={(e) => setSchool(e.target.value)} disabled={loading} />
+                  </Field>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Field labelAr="مستوى الشطرنج" labelEn="Chess Level">
+                      <select className={FIELD} value={chessLevel} onChange={(e) => setChessLevel(e.target.value)} disabled={loading}>
+                        <option value="beginner">مبتدئة تماماً / Complete Beginner</option>
+                        <option value="knows-rules">تعرف القواعد / Knows Rules</option>
+                        <option value="club-player">لاعبة نادٍ / Club Player</option>
+                        <option value="rated">مصنّفة / Rated Player</option>
+                      </select>
+                    </Field>
+                    <Field labelAr="البرنامج" labelEn="Program">
+                      <select className={FIELD} value={program} onChange={(e) => setProgram(e.target.value)} disabled={loading}>
+                        <option value="little-queens">الملكات الصغيرات (5–7)</option>
+                        <option value="rising-stars">النجوم الصاعدات (8–12)</option>
+                        <option value="competitive">الجيل التنافسي (13–16)</option>
+                        <option value="elite">فريق النخبة (17+)</option>
+                      </select>
+                    </Field>
+                  </div>
+
+                  <div className="mt-1 border-b border-line pb-2 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-forest-700">
+                    <span className="ar">بيانات التواصل / ولي الأمر *</span>
+                    <span className="en">Contact / Guardian *</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Field labelAr="اسم الأم" labelEn="Mother's Name">
+                      <input className={FIELD} type="text" value={motherName} onChange={(e) => setMotherName(e.target.value)} disabled={loading} />
+                    </Field>
+                    <Field labelAr="اسم الأب" labelEn="Father's Name">
+                      <input className={FIELD} type="text" value={fatherName} onChange={(e) => setFatherName(e.target.value)} disabled={loading} />
+                    </Field>
+                    <Field labelAr="البريد الإلكتروني *" labelEn="Email Address *">
+                      <input className={FIELD} type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} />
+                    </Field>
+                    <Field labelAr="رقم الهاتف" labelEn="Phone Number">
+                      <input className={FIELD} type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={loading} />
+                    </Field>
+                  </div>
+
+                  <Field labelAr="ملاحظات إضافية" labelEn="Additional Notes">
+                    <textarea className={cn(FIELD, "resize-y")} rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} disabled={loading} />
+                  </Field>
+
+                  <div className="mt-1 flex flex-col gap-3 sm:flex-row">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className={cn(
+                        buttonVariants({ variant: "primary", size: "md", block: true }),
+                        "sm:flex-1",
+                      )}
+                    >
+                      <span className="ar">{loading ? "جاري الإرسال…" : "تقديم الطلب"}</span>
+                      <span className="en">{loading ? "Submitting…" : "Submit Application"}</span>
+                    </button>
+                    <Link
+                      href="/"
+                      className={cn(buttonVariants({ variant: "secondary", size: "md" }))}
+                    >
+                      <span className="ar">إلغاء</span>
+                      <span className="en">Cancel</span>
+                    </Link>
+                  </div>
+                </div>
+              </form>
             )}
-
-            <div>
-              <label className="form-lbl">
-                <span className="ar">الاسم الكامل</span>
-                <span className="en">Full Name</span>
-              </label>
-              <input className="form-inp" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} disabled={loading} required />
-            </div>
-
-            <div>
-              <label className="form-lbl">
-                <span className="ar">البريد الإلكتروني</span>
-                <span className="en">Email</span>
-              </label>
-              <input className="form-inp" type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} required />
-            </div>
-
-            <div>
-              <label className="form-lbl">
-                <span className="ar">كلمة المرور (8 أحرف على الأقل)</span>
-                <span className="en">Password (min. 8 chars)</span>
-              </label>
-              <input className="form-inp" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} required />
-            </div>
-
-            <div>
-              <label className="form-lbl">
-                <span className="ar">تأكيد كلمة المرور</span>
-                <span className="en">Confirm Password</span>
-              </label>
-              <input className="form-inp" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} disabled={loading} required />
-            </div>
-
-            <button type="submit" disabled={loading} className="btn btn-primary w-full" style={{ justifyContent: "center", opacity: loading ? .7 : 1 }}>
-              <span className="ar">{loading ? "جاري الإنشاء…" : "إنشاء حساب"}</span>
-              <span className="en">{loading ? "Creating…"      : "Create Account"}</span>
-            </button>
-
-            <p className="text-center text-[0.78rem]" style={{ color: "#555", fontFamily: "'Noto Sans Arabic','DM Sans',sans-serif" }}>
-              <span className="ar">لديك حساب بالفعل؟ <Link href="/login" style={{ color: "#D42B3C", textDecoration: "none" }}>سجّل الدخول</Link></span>
-              <span className="en">Already have an account? <Link href="/login" style={{ color: "#D42B3C", textDecoration: "none" }}>Sign in</Link></span>
-            </p>
           </div>
-        </form>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
 
-        <div className="text-center mt-5">
-          <Link href="/" className="text-[0.78rem]" style={{ color: "rgba(85,85,85,.45)", fontFamily: "'DM Sans',sans-serif", textDecoration: "none" }}>
-            <span className="ar">← العودة للموقع</span>
-            <span className="en">← Back to website</span>
-          </Link>
-        </div>
-      </div>
+function Field({
+  labelAr,
+  labelEn,
+  children,
+}: {
+  labelAr: string;
+  labelEn: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label className={LABEL}>
+        <span className="ar">{labelAr}</span>
+        <span className="en">{labelEn}</span>
+      </label>
+      {children}
     </div>
   );
+}
+
+function friendlyError(msg: string, lang: string): string {
+  const m = msg.toLowerCase();
+  const isAr = lang === "ar";
+
+  if (m.includes("network") || m.includes("fetch") || m.includes("failed to fetch"))
+    return isAr
+      ? "خطأ في الاتصال. تحقق من الإنترنت وحاول مجدداً"
+      : "Connection error. Check your internet and retry";
+
+  if (m.includes("violates row-level security"))
+    return isAr
+      ? "تعذّر تقديم الطلب. يرجى المحاولة لاحقاً أو التواصل مع النادي مباشرة"
+      : "Could not submit your application. Please try again later or contact the club directly";
+
+  return isAr ? `خطأ: ${msg}` : `Error: ${msg}`;
 }

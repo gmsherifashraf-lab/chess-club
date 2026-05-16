@@ -5,6 +5,7 @@ import DashboardShell, { type NavItem } from "@/components/dashboard/DashboardSh
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { ROLE_COLOR } from "@/lib/auth";
 
 import CrudShell        from "@/components/admin/CrudShell";
 import UsersManager     from "@/components/admin/UsersManager";
@@ -46,7 +47,7 @@ export default function AdminDashboard() {
   return (
     <DashboardShell
       roleAr="مدير النظام" roleEn="Administrator"
-      roleColor="#D42B3C"
+      roleColor={ROLE_COLOR.admin}
       userInitial={initial}
       navItems={NAV}
       activeTab={tab}

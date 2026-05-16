@@ -5,6 +5,7 @@ import DashboardShell, { type NavItem } from "@/components/dashboard/DashboardSh
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { ROLE_COLOR } from "@/lib/auth";
 
 import TasksManager        from "@/components/tasks/TasksManager";
 import SubmissionsReviewer from "@/components/tasks/SubmissionsReviewer";
@@ -34,7 +35,7 @@ export default function CoachDashboard() {
   return (
     <DashboardShell
       roleAr="المدرب" roleEn="Coach"
-      roleColor="#007A38"
+      roleColor={ROLE_COLOR.coach}
       userInitial={initial}
       navItems={NAV}
       activeTab={tab}

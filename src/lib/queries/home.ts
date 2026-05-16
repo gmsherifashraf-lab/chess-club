@@ -14,6 +14,14 @@ export interface NewsItem {
   category:     string | null;
   published_at: string | null;
   excerpt:      string | null;
+  /**
+   * CMS-ready optional fields. Not yet in the `news` select (adding a
+   * non-existent column to .select() would fail the whole query). When
+   * the columns exist, add them to getNews() below and the news
+   * section will use them automatically.
+   */
+  image_url?:   string | null;
+  slug?:        string | null;
 }
 
 export interface GalleryImage {

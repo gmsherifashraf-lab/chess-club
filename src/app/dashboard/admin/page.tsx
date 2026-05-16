@@ -10,6 +10,7 @@ import CrudShell        from "@/components/admin/CrudShell";
 import EnrollmentsList  from "@/components/admin/EnrollmentsList";
 import CoachAssignments from "@/components/admin/CoachAssignments";
 import UsersManager     from "@/components/admin/UsersManager";
+import LinksManager     from "@/components/admin/LinksManager";
 import TasksManager     from "@/components/tasks/TasksManager";
 import SubmissionsReviewer from "@/components/tasks/SubmissionsReviewer";
 import {
@@ -23,6 +24,7 @@ import {
 const NAV: NavItem[] = [
   { key: "overview",    icon: "⊞", ar: "نظرة عامة",      en: "Overview"      },
   { key: "users",       icon: "👥", ar: "المستخدمون",   en: "Users"         },
+  { key: "links",       icon: "🔗", ar: "الربط",         en: "Links"         },
   { key: "tasks",       icon: "📝", ar: "المهام",        en: "Tasks"         },
   { key: "submissions", icon: "📥", ar: "المُسلَّمات",   en: "Submissions"   },
   { key: "players",     icon: "♟", ar: "اللاعبون",      en: "Players"       },
@@ -115,6 +117,8 @@ export default function AdminDashboard() {
       )}
 
       {tab === "users"       && <UsersManager />}
+
+      {tab === "links"       && <LinksManager />}
 
       {tab === "tasks"       && <TasksManager scopeToOwn={false} />}
 

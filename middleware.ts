@@ -5,8 +5,10 @@ import { ROLE_DASHBOARD, DEFAULT_DASHBOARD, type UserRole } from "@/lib/auth";
 // Routes that require the user to be logged in
 const PROTECTED_PREFIXES = ["/dashboard"];
 
-// Routes the logged-in user should not see (auth pages)
-const AUTH_ROUTES = ["/login", "/register"];
+// Routes the logged-in user should not see (auth pages).
+// /register is a public club-registration form (no account), so it is
+// intentionally NOT listed — anyone, signed in or not, may open it.
+const AUTH_ROUTES = ["/login"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -53,13 +55,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Treat /register/academy (public enrollment) as NOT an auth route — anyone
-  // can submit it without an account.
-  const isPureAuthRoute =
-    isAuthRoute && !pathname.startsWith("/register/academy");
-
-  // ── Logged in → don't show /login or /register ──────────────────────────
-  if (isPureAuthRoute && user) {
+  // ── Logged in → don't show /login ───────────────────────────────────────
+  if (isAuthRoute && user) {
     const role = normaliseRole(user.user_metadata?.role);
     const dashboard = ROLE_DASHBOARD[role] ?? DEFAULT_DASHBOARD;
     const url = request.nextUrl.clone();
@@ -86,10 +83,17 @@ export async function middleware(request: NextRequest) {
 }
 
 // Map any legacy / unknown role value to a valid UserRole. Old accounts
-// still have role='parent' or 'board' in their JWT until profile sync
-// runs; treat them as 'player' so they don't get stuck on the wrong page.
+// may still carry role='player' or 'board' in their JWT until profile
+// sync runs; treat them as 'parent' so they land on a valid dashboard.
 function normaliseRole(raw: unknown): UserRole {
-  if (raw === "admin" || raw === "coach" || raw === "player") return raw;
+  if (
+    raw === "admin" ||
+    raw === "editor" ||
+    raw === "coach" ||
+    raw === "player" ||
+    raw === "parent"
+  )
+    return raw;
   return "player";
 }
 

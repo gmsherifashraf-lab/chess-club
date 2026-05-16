@@ -1,241 +1,273 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type { NewsItem } from "@/lib/queries/home";
-import Reveal from "@/components/motion/Reveal";
-import { EASE_EMPHASIS } from "@/lib/motion";
+import { useLang } from "@/context/LangContext";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { cn } from "@/lib/utils";
 
-function formatDate(d: string | null): string {
-  if (!d) return "—";
-  try {
-    return new Date(d).toLocaleDateString(undefined, {
-      year: "numeric", month: "short", day: "2-digit",
-    });
-  } catch {
-    return d;
-  }
+/* Per-article route is CMS-ready (plan: /news/[slug]); until it exists
+   every link safely resolves to the news archive. */
+function href(n: NewsItem) {
+  return n.slug ? `/news/${n.slug}` : "/news";
 }
 
-function dayMonth(d: string | null): { day: string; month: string } {
-  if (!d) return { day: "—", month: "—" };
-  try {
-    const dt = new Date(d);
-    if (isNaN(dt.getTime())) return { day: "—", month: "—" };
-    return {
-      day:   String(dt.getDate()).padStart(2, "0"),
-      month: dt.toLocaleDateString("en-US", { month: "short" }).toUpperCase(),
-    };
-  } catch {
-    return { day: "—", month: "—" };
-  }
+function useDate() {
+  const { lang } = useLang();
+  const locale = lang === "ar" ? "ar-AE" : "en-GB";
+  return {
+    full: (d: string | null) =>
+      d
+        ? new Date(d).toLocaleDateString(locale, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        : "",
+    stamp: (d: string | null) => {
+      if (!d) return { day: "—", month: "" };
+      const dt = new Date(d);
+      if (isNaN(dt.getTime())) return { day: "—", month: "" };
+      return {
+        day: String(dt.getDate()).padStart(2, "0"),
+        month: dt
+          .toLocaleDateString(locale, { month: "short" })
+          .toUpperCase(),
+      };
+    },
+  };
 }
 
-const ACCENTS = ["#0B3D2E", "#C8102E", "#141414"];
+/* Premium branded cover when an article has no image yet. Deterministic
+   per id so the layout is stable across renders. */
+function Cover({
+  item,
+  className,
+  glyphClass,
+}: {
+  item: NewsItem;
+  className?: string;
+  glyphClass?: string;
+}) {
+  const glyphs = ["♛", "♞", "♚", "♜", "♝"];
+  const g = glyphs[Number(String(item.id).replace(/\D/g, "") || 0) % glyphs.length];
 
-export default function NewsPreview({ items }: { items: NewsItem[] }) {
-  const feature = items[0];
-  const rest    = items.slice(1, 3);
-
-  return (
-    <section className="relative bg-ivory2 overflow-hidden">
-      <div aria-hidden className="absolute inset-0 grain-emerald pointer-events-none" />
-
-      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 py-20 sm:py-24">
-        {/* Header — quieter, single-line */}
-        <Reveal>
-          <div className="flex flex-wrap items-end justify-between gap-6 mb-10 sm:mb-14 pb-6 border-b-2 border-ink/85">
-            <div>
-              <div className="text-[0.6rem] uppercase tracking-[0.32em] text-ink3 font-bold mb-3 flex items-center gap-3">
-                <span className="block w-7 h-px bg-ink3" />
-                <span className="ar">الأخبار</span>
-                <span className="en">News &amp; updates</span>
-              </div>
-              <h2 className="font-disp text-[clamp(2rem,3.6vw,2.8rem)] text-ink leading-[1.1] tracking-tight">
-                <span className="ar">آخر ما نُشر عن النادي.</span>
-                <span className="en">Recent reporting from the club.</span>
-              </h2>
-            </div>
-            <Link
-              href="/news"
-              className="inline-flex items-center gap-2 text-[0.78rem] uppercase tracking-[0.22em] font-bold text-ink2 hover:text-[#0B3D2E] border-b border-ink/40 hover:border-[#0B3D2E] pb-1 transition-colors duration-280"
-            >
-              <span className="ar">الأرشيف الكامل</span>
-              <span className="en">Full archive</span>
-              <span aria-hidden>→</span>
-            </Link>
-          </div>
-        </Reveal>
-
-        {!feature ? (
-          <p className="text-sm text-ink3/70 italic">
-            <span className="ar">لا توجد أخبار حالياً.</span>
-            <span className="en">No news yet.</span>
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
-            {/* Cover feature */}
-            <FeatureArticle item={feature} />
-
-            {/* Stacked side reading */}
-            <div className="lg:col-span-5 flex flex-col">
-              <div className="text-[0.6rem] uppercase tracking-[0.32em] text-ink3 font-bold mb-5">
-                <span className="ar">قراءات أخرى</span>
-                <span className="en">More from the desk</span>
-              </div>
-
-              {rest.length === 0 ? (
-                <div className="border border-dashed border-stone p-8 text-center">
-                  <div className="text-3xl mb-3 opacity-40">📰</div>
-                  <p className="text-sm text-ink3 italic">
-                    <span className="ar">قريباً.</span>
-                    <span className="en">More coming soon.</span>
-                  </p>
-                </div>
-              ) : (
-                <motion.ul
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-50px" }}
-                  variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } } }}
-                  className="flex flex-col flex-1"
-                >
-                  {rest.map((n, i) => {
-                    const accent = ACCENTS[(i + 1) % ACCENTS.length];
-                    const dm = dayMonth(n.published_at);
-                    return (
-                      <motion.li
-                        key={n.id}
-                        variants={{
-                          hidden:  { opacity: 0, x: 24 },
-                          visible: { opacity: 1, x: 0, transition: { duration: 0.65, ease: EASE_EMPHASIS } },
-                        }}
-                        className="group relative grid grid-cols-[auto_1fr] gap-5 sm:gap-6 py-7 first:pt-0 border-b border-stone last:border-b-0 hover:bg-white/60 transition-colors"
-                      >
-                        {/* Date stamp */}
-                        <div className="text-center pr-5 border-r border-stone min-w-[4rem]">
-                          <div className="text-[0.58rem] uppercase tracking-[0.18em] text-ink3 font-bold">
-                            {dm.month}
-                          </div>
-                          <div
-                            className="font-disp text-3xl font-bold leading-none mt-1"
-                            style={{ color: accent }}
-                          >
-                            {dm.day}
-                          </div>
-                        </div>
-
-                        <div className="min-w-0">
-                          {n.category && (
-                            <div
-                              className="inline-block text-[0.58rem] uppercase tracking-[0.22em] font-bold mb-2"
-                              style={{ color: accent }}
-                            >
-                              {n.category}
-                            </div>
-                          )}
-                          <h3 className="font-disp text-lg sm:text-xl text-ink leading-tight mb-2 group-hover:text-[#0B3D2E] transition-colors">
-                            {n.title}
-                          </h3>
-                          {n.excerpt && (
-                            <p className="text-[0.88rem] text-ink3 leading-[1.7] line-clamp-2">
-                              {n.excerpt}
-                            </p>
-                          )}
-                        </div>
-                      </motion.li>
-                    );
-                  })}
-                </motion.ul>
-              )}
-
-              {/* Bottom small CTA */}
-              <Link
-                href="/news"
-                className="mt-7 in-link self-start"
-              >
-                <span className="ar">المزيد من الأخبار</span>
-                <span className="en">More stories</span>
-                <span aria-hidden>→</span>
-              </Link>
-            </div>
-          </div>
+  if (item.image_url) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={item.image_url}
+        alt=""
+        className={cn(
+          "h-full w-full object-cover transition-transform duration-[900ms] ease-emphasis group-hover:scale-105",
+          className,
         )}
-      </div>
-    </section>
+      />
+    );
+  }
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        "relative h-full w-full bg-[linear-gradient(135deg,#0A5234_0%,#0C1310_70%)] transition-transform duration-[900ms] ease-emphasis group-hover:scale-105",
+        className,
+      )}
+    >
+      <div className="chess-tex-lt absolute inset-0 opacity-40" />
+      <span
+        className={cn(
+          "absolute -bottom-6 end-0 select-none font-serif leading-none text-white/[0.07]",
+          glyphClass ?? "text-[12rem]",
+        )}
+      >
+        {g}
+      </span>
+    </div>
   );
 }
 
-function FeatureArticle({ item }: { item: NewsItem }) {
-  const accent = ACCENTS[0];
-  const dm = dayMonth(item.published_at);
+function Category({
+  value,
+  variant = "solid",
+}: {
+  value: string | null;
+  variant?: "solid" | "ghost";
+}) {
+  if (!value) return null;
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-[2px] px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.18em]",
+        variant === "solid"
+          ? "bg-forest-700 text-white"
+          : "border border-forest-700/25 text-forest-700",
+      )}
+    >
+      {value}
+    </span>
+  );
+}
+
+function makeVariants(reduce: boolean | null): {
+  grid: Variants;
+  rise: Variants;
+} {
+  return {
+    grid: {
+      hidden: {},
+      show: {
+        transition: reduce
+          ? {}
+          : { staggerChildren: 0.12, delayChildren: 0.1 },
+      },
+    },
+    rise: {
+      hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 26 },
+      show: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: reduce ? 0 : 0.7, ease: [0.16, 1, 0.3, 1] },
+      },
+    },
+  };
+}
+
+export default function NewsPreview({ items }: { items: NewsItem[] }) {
+  const reduce = useReducedMotion();
+  const date = useDate();
+  const { grid, rise } = makeVariants(reduce);
+  const feature = items[0];
+  const secondary = items.slice(1, 3);
 
   return (
-    <Reveal delay={0.08} className="lg:col-span-7">
-      <article className="group relative h-full bg-white border border-stone overflow-hidden">
-        {/* Hero "image" area — gradient + glyph since news has no images */}
-        <div className="relative aspect-[16/9] sm:aspect-[16/8] overflow-hidden">
-          <div
-            aria-hidden
-            className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105"
-            style={{
-              background:
-                "linear-gradient(135deg, #0B3D2E 0%, #163d2e 60%, #050a08 100%)",
-            }}
+    <section className="relative border-t border-line bg-white">
+      <div className="mx-auto max-w-wrap px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
+        <div className="mb-12 flex flex-col gap-5 border-b border-line pb-7 sm:mb-16 sm:flex-row sm:items-end sm:justify-between">
+          <SectionTitle
+            eyebrowAr="غرفة الأخبار"
+            eyebrowEn="Newsroom"
+            titleAr="آخر الأخبار"
+            titleEn="Latest News"
+            size="h2"
           />
-          <div aria-hidden className="absolute inset-0 chess-tex-lt opacity-50" />
-          <span
-            aria-hidden
-            className="absolute -bottom-8 -right-4 text-[16rem] leading-none select-none"
-            style={{ color: "rgba(255,255,255,0.07)", fontFamily: "'Noto Sans Symbols', serif" }}
+          <Link
+            href="/news"
+            className="group inline-flex items-center gap-2 self-start border-b-2 border-line pb-1 text-[0.8rem] font-bold uppercase tracking-[0.2em] text-text-2 transition-colors hover:border-forest-700 hover:text-forest-700"
           >
-            ♛
-          </span>
-
-          {/* Date stamp on hero — bottom-left, no Lead Story label */}
-          <div className="absolute bottom-5 left-5 text-white">
-            <div className="text-[0.6rem] uppercase tracking-[0.22em] font-bold opacity-70 mb-1">{dm.month}</div>
-            <div className="font-disp text-5xl font-bold leading-none">{dm.day}</div>
-          </div>
-        </div>
-
-        {/* Article body */}
-        <div className="relative p-7 sm:p-9 lg:p-10">
-          <div
-            aria-hidden
-            className="absolute top-0 left-0 right-0 h-[3px]"
-            style={{ background: accent }}
-          />
-
-          {item.category && (
+            <span className="ar">الأرشيف الكامل</span>
+            <span className="en">Full archive</span>
             <span
-              className="inline-flex items-center px-3 py-1 mb-5 text-[0.62rem] font-bold tracking-[0.22em] uppercase"
-              style={{ background: `${accent}1A`, color: accent }}
+              aria-hidden
+              className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1"
             >
-              {item.category}
+              →
             </span>
-          )}
-          <h3 className="font-disp text-3xl sm:text-4xl lg:text-[2.6rem] text-ink leading-[1.06] tracking-tight mb-6 group-hover:text-[#0B3D2E] transition-colors">
-            {item.title}
-          </h3>
-          {item.excerpt && (
-            <p className="text-base sm:text-[1.05rem] leading-[1.85] text-ink2 mb-7 max-w-2xl">
-              {item.excerpt}
-            </p>
-          )}
-
-          <div className="flex items-center justify-between gap-4 pt-6 border-t border-stone">
-            <div className="text-[0.7rem] uppercase tracking-[0.18em] text-ink3 font-bold">
-              {formatDate(item.published_at)}
-            </div>
-            <Link href="/news" className="in-link">
-              <span className="ar">اقرئي المقال</span>
-              <span className="en">Read story</span>
-              <span aria-hidden>→</span>
-            </Link>
-          </div>
+          </Link>
         </div>
-      </article>
-    </Reveal>
+
+        {!feature ? (
+          <p className="py-16 text-center text-text-3">
+            <span className="ar">لا توجد أخبار منشورة حالياً.</span>
+            <span className="en">No news published yet.</span>
+          </p>
+        ) : (
+          <motion.div
+            variants={grid}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-70px" }}
+            className="grid grid-cols-1 gap-7 lg:grid-cols-12 lg:gap-10"
+          >
+            {/* ── Featured article ─────────────────────────────────── */}
+            <motion.article
+              variants={rise}
+              className="group lg:col-span-7"
+            >
+              <Link href={href(feature)} className="block">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-t-[3px] sm:aspect-[16/9]">
+                  <Cover item={feature} glyphClass="text-[15rem]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(7,11,9,0.62)_100%)]" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6">
+                    <Category value={feature.category} />
+                    <span className="text-right font-disp leading-none text-white">
+                      <span className="block text-[0.65rem] font-bold uppercase tracking-[0.2em] opacity-75">
+                        {date.stamp(feature.published_at).month}
+                      </span>
+                      <span className="text-4xl font-bold">
+                        {date.stamp(feature.published_at).day}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div className="border border-t-0 border-line bg-white p-7 sm:p-9 lg:p-10">
+                  <h3 className="font-disp text-[clamp(1.6rem,2.6vw,2.4rem)] font-bold leading-[1.12] tracking-tight text-text-1 transition-colors duration-300 group-hover:text-forest-700">
+                    {feature.title}
+                  </h3>
+                  {feature.excerpt && (
+                    <p className="mt-5 line-clamp-3 max-w-2xl text-[1.0625rem] leading-relaxed text-text-3">
+                      {feature.excerpt}
+                    </p>
+                  )}
+                  <div className="mt-7 flex items-center justify-between gap-4 border-t border-line pt-5">
+                    <span className="text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-text-4">
+                      {date.full(feature.published_at)}
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-[0.82rem] font-bold uppercase tracking-[0.16em] text-forest-700">
+                      <span className="ar">اقرئي المقال</span>
+                      <span className="en">Read story</span>
+                      <span aria-hidden className="rtl:rotate-180">→</span>
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.article>
+
+            {/* ── Secondary grid ───────────────────────────────────── */}
+            <div className="flex flex-col gap-7 lg:col-span-5">
+              {secondary.length === 0 ? (
+                <div className="flex flex-1 items-center justify-center rounded-[3px] border border-dashed border-line p-10 text-center text-sm text-text-4">
+                  <span className="ar">المزيد من الأخبار قريباً.</span>
+                  <span className="en">More stories coming soon.</span>
+                </div>
+              ) : (
+                secondary.map((n) => (
+                  <motion.article
+                    key={n.id}
+                    variants={rise}
+                    className="group flex-1"
+                  >
+                    <Link
+                      href={href(n)}
+                      className="flex h-full gap-5 overflow-hidden rounded-[3px] border border-line bg-white transition-all duration-300 ease-emphasis hover:-translate-y-1 hover:border-line-strong hover:shadow-card"
+                    >
+                      <div className="relative aspect-square w-28 shrink-0 overflow-hidden sm:w-36">
+                        <Cover item={n} glyphClass="text-[6rem]" />
+                      </div>
+                      <div className="min-w-0 flex-1 py-5 pe-5">
+                        <div className="mb-2 flex items-center gap-3">
+                          <Category value={n.category} variant="ghost" />
+                          <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-text-4">
+                            {date.full(n.published_at)}
+                          </span>
+                        </div>
+                        <h3 className="line-clamp-2 font-disp text-[1.15rem] font-bold leading-snug text-text-1 transition-colors duration-300 group-hover:text-forest-700">
+                          {n.title}
+                        </h3>
+                        {n.excerpt && (
+                          <p className="mt-2 line-clamp-2 text-[0.9rem] leading-relaxed text-text-3">
+                            {n.excerpt}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  </motion.article>
+                ))
+              )}
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </section>
   );
 }

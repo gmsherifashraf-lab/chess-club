@@ -1,123 +1,185 @@
 "use client";
 
-import { motion, useMotionValue, useTransform, animate, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  animate,
+  useInView,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
 import { EASE_EMPHASIS } from "@/lib/motion";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { cn } from "@/lib/utils";
 
-const FOUNDED = 1991;
-const YEARS   = new Date().getFullYear() - FOUNDED;
-
-function CountUp({ to, suffix = "", className = "" }: { to: number; suffix?: string; className?: string }) {
+/* ── Animated counter ──────────────────────────────────────────────
+   Counts up once on enter. Honours reduced motion (snaps to final).
+   Supports prefix/suffix and grouped thousands. */
+function CountUp({
+  to,
+  prefix = "",
+  suffix = "",
+  group = false,
+}: {
+  to: number;
+  prefix?: string;
+  suffix?: string;
+  group?: boolean;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const motionVal = useMotionValue(0);
-  const rounded   = useTransform(motionVal, (v) => Math.round(v).toString() + suffix);
-  const [text, setText] = useState("0" + suffix);
-
-  useEffect(() => {
-    const unsub = rounded.on("change", setText);
-    return unsub;
-  }, [rounded]);
+  const reduce = useReducedMotion();
+  const mv = useMotionValue(0);
+  const fmt = (n: number) =>
+    prefix +
+    (group ? Math.round(n).toLocaleString("en-US") : String(Math.round(n))) +
+    suffix;
+  const [text, setText] = useState(reduce ? fmt(to) : fmt(0));
 
   useEffect(() => {
     if (!inView) return;
-    const controls = animate(motionVal, to, {
-      duration: 1.8,
+    if (reduce) {
+      setText(fmt(to));
+      return;
+    }
+    const controls = animate(mv, to, {
+      duration: 2,
       ease: EASE_EMPHASIS,
+      onUpdate: (v) => setText(fmt(v)),
     });
     return () => controls.stop();
-  }, [inView, motionVal, to]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, to, reduce]);
 
-  return <span ref={ref} className={className}>{text}</span>;
+  return (
+    <span ref={ref} className="tabular-nums">
+      {text}
+    </span>
+  );
 }
 
-const SUB_STATS: { ar: string; en: string; valueAr: string; valueEn: string }[] = [
-  { ar: "لاعبة في برامج النادي", en: "active players across all programmes", valueAr: "180", valueEn: "180" },
-  { ar: "مدرّبة معتمدة",          en: "certified coaches on staff",          valueAr: "12",  valueEn: "12"  },
-  { ar: "اعتماد جودة",            en: "ISO 9001:2015 certified since 2018",  valueAr: "ISO", valueEn: "ISO" },
+type Stat = {
+  to: number;
+  prefix?: string;
+  suffix?: string;
+  group?: boolean;
+  ar: string;
+  en: string;
+  accent?: "green" | "red";
+};
+
+const STATS: Stat[] = [
+  { to: 180, suffix: "+", ar: "لاعبة مسجّلة", en: "Registered players", accent: "green" },
+  { to: 120, suffix: "+", ar: "ألقاب في البطولات", en: "Tournament wins" },
+  { to: 40, suffix: "+", ar: "بطولة وطنية", en: "National championships" },
+  { to: 90, suffix: "+", ar: "مشاركة دولية", en: "International appearances" },
+  { to: 2150, group: true, ar: "أعلى تصنيف للاعبة", en: "Peak player rating", accent: "red" },
 ];
 
+const grid: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+};
+const cell: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE_EMPHASIS } },
+};
+
 export default function Stats() {
+  const year = new Date().getFullYear();
+
   return (
-    <section className="relative bg-white overflow-hidden border-t border-stone">
-      <div aria-hidden className="absolute inset-0 grain-emerald pointer-events-none" />
+    <section className="relative overflow-hidden border-t border-line bg-cream-100">
+      {/* Restrained brand ground so the subtle glass reads on light */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(10,82,52,0.05)_0%,transparent_60%),radial-gradient(ellipse_50%_60%_at_100%_100%,rgba(200,16,46,0.035)_0%,transparent_70%)]"
+      />
 
-      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 py-18 sm:py-22">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-end">
-          {/* Mega editorial stat — no eyebrow at all. The number IS the heading. */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.85, ease: EASE_EMPHASIS }}
-            className="lg:col-span-6 relative"
-          >
-            <div className="relative leading-none">
-              <span className="mega-num">
-                <CountUp to={YEARS} />
-              </span>
-            </div>
-
-            <div className="mt-3 text-[0.62rem] uppercase tracking-[0.32em] text-ink2 font-bold">
-              <span className="ar">سنوات منذ التأسيس · 1991—{new Date().getFullYear()}</span>
-              <span className="en">years since founding · 1991—{new Date().getFullYear()}</span>
-            </div>
-
-            <p className="mt-8 text-[0.95rem] sm:text-base leading-[1.8] text-ink2 max-w-md">
-              <span className="ar">
-                تأسس النادي عام 1991 بمرسوم من حكومة الشارقة، وهو أحد أقدم الكيانات الرياضية النسائية المتخصصة في الإمارات.
-              </span>
-              <span className="en">
-                Founded in 1991 by decree of the Sharjah government, the club is among the oldest dedicated women&rsquo;s sporting institutions in the United Arab Emirates.
-              </span>
-            </p>
-          </motion.div>
-
-          {/* Sub-stat ladder — value + sentence-cased label, no accent rules */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } } }}
-            className="lg:col-span-6 lg:pb-2 flex flex-col"
-          >
-            {SUB_STATS.map((s, i) => (
-              <motion.div
-                key={i}
-                variants={{
-                  hidden:  { opacity: 0, y: 18 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE_EMPHASIS } },
-                }}
-                className="grid grid-cols-[auto_1fr] items-baseline gap-6 sm:gap-8 py-5 sm:py-6 border-b border-stone first:border-t"
-              >
-                <div className="font-disp text-4xl sm:text-5xl leading-none font-bold text-ink min-w-[3.5rem] tabular-nums">
-                  <span className="ar">{s.valueAr}</span>
-                  <span className="en">{s.valueEn}</span>
-                </div>
-                <div className="text-[0.92rem] sm:text-base text-ink2 leading-snug pt-1">
-                  <span className="ar">{s.ar}</span>
-                  <span className="en">{s.en}</span>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+      <div className="relative mx-auto max-w-wrap px-5 py-20 sm:px-8 sm:py-24 lg:px-10">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <SectionTitle
+            eyebrowAr="سجلّ مؤسسي"
+            eyebrowEn="Institutional Record"
+            titleAr="النادي في أرقام"
+            titleEn="The Club in Numbers"
+            size="h2"
+          />
+          <p className="max-w-xs text-sm leading-relaxed text-text-3 sm:text-end">
+            <span className="ar">
+              منذ تأسيسه عام 1991 بمرسوم من حكومة الشارقة.
+            </span>
+            <span className="en">
+              Since its founding in 1991 by decree of the Sharjah government.
+            </span>
+          </p>
         </div>
 
-        {/* Footer: institutional attribution — feels like a real annual report */}
+        <motion.dl
+          variants={grid}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-[4px] border border-line bg-line/60 sm:grid-cols-3 lg:grid-cols-5"
+        >
+          {STATS.map((s) => (
+            <motion.div
+              key={s.en}
+              variants={cell}
+              className="group relative bg-white/70 px-6 py-9 backdrop-blur-[3px] transition-colors duration-300 hover:bg-white sm:py-11"
+            >
+              <span
+                aria-hidden
+                className={cn(
+                  "absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 ease-emphasis group-hover:scale-x-100 rtl:origin-right",
+                  s.accent === "red"
+                    ? "bg-scarlet-400"
+                    : s.accent === "green"
+                      ? "bg-forest-700"
+                      : "bg-text-1/30",
+                )}
+              />
+              <dt
+                className={cn(
+                  "font-disp text-[2.75rem] font-bold leading-none sm:text-[3.5rem] lg:text-[3.75rem]",
+                  s.accent === "red"
+                    ? "text-scarlet-500"
+                    : s.accent === "green"
+                      ? "text-forest-700"
+                      : "text-text-1",
+                )}
+              >
+                <CountUp
+                  to={s.to}
+                  prefix={s.prefix}
+                  suffix={s.suffix}
+                  group={s.group}
+                />
+              </dt>
+              <dd className="mt-4 text-[0.8rem] font-semibold uppercase leading-snug tracking-[0.14em] text-text-3">
+                <span className="ar">{s.ar}</span>
+                <span className="en">{s.en}</span>
+              </dd>
+            </motion.div>
+          ))}
+        </motion.dl>
+
+        {/* Institutional attribution — annual-report register */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.8, delay: 0.3, ease: EASE_EMPHASIS }}
-          className="mt-14 sm:mt-16 pt-6 border-t border-stone flex flex-wrap items-baseline justify-between gap-3 text-[0.7rem] text-ink3"
+          transition={{ duration: 0.8, delay: 0.25, ease: EASE_EMPHASIS }}
+          className="mt-12 flex flex-wrap items-baseline justify-between gap-3 border-t border-line pt-6 text-[0.72rem] text-text-4"
         >
-          <span className="tracking-[0.18em] uppercase font-semibold">
-            <span className="ar">إحصاءات يناير 2025</span>
-            <span className="en">Figures as of January 2025</span>
+          <span className="font-semibold uppercase tracking-[0.18em]">
+            <span className="ar">إحصاءات معتمدة · {year}</span>
+            <span className="en">Verified figures · {year}</span>
           </span>
-          <span className="italic opacity-70">
-            <span className="ar">المصدر: التقرير السنوي للنادي</span>
-            <span className="en">Source: Club annual review, 2024</span>
+          <span className="opacity-80">
+            <span className="ar">المصدر: المراجعة السنوية للنادي</span>
+            <span className="en">Source: Club annual review</span>
           </span>
         </motion.div>
       </div>

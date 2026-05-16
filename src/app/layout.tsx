@@ -1,20 +1,29 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Cairo, Tajawal } from "next/font/google";
+import { IBM_Plex_Sans, Cairo } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "@/context/LangContext";
 import { AuthProvider } from "@/context/AuthContext";
 
-const inter = Inter({
+/**
+ * Federation type system.
+ *   Latin  → IBM Plex Sans  (UI, body, and display via weight contrast)
+ *   Arabic → Cairo          (co-primary, true bilingual parity)
+ *
+ * The legacy CSS-variable names (--font-inter / --font-playfair /
+ * --font-cairo / --font-tajawal) are intentionally reused so the ~115
+ * existing references across the codebase keep resolving with no churn.
+ * They now point at the federation fonts, not the old serif/Inter pair.
+ */
+const plex = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+const plexDisplay = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  style: ["normal", "italic"],
+  weight: ["500", "600", "700"],
   variable: "--font-playfair",
   display: "swap",
 });
@@ -26,9 +35,9 @@ const cairo = Cairo({
   display: "swap",
 });
 
-const tajawal = Tajawal({
+const cairoDisplay = Cairo({
   subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "700", "800", "900"],
+  weight: ["700", "800", "900"],
   variable: "--font-tajawal",
   display: "swap",
 });
@@ -97,7 +106,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
-      <body className={`${inter.variable} ${playfair.variable} ${cairo.variable} ${tajawal.variable}`}>
+      <body className={`${plex.variable} ${plexDisplay.variable} ${cairo.variable} ${cairoDisplay.variable}`}>
         <AuthProvider>
           <LangProvider>{children}</LangProvider>
         </AuthProvider>

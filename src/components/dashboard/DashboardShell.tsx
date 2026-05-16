@@ -51,9 +51,24 @@ export default function DashboardShell({
       )}
 
       {/* ── Sidebar ── */}
-      <aside className={`dash-sb${sbOpen ? " open" : ""}`}>
+      <aside
+        className={`dash-sb${sbOpen ? " open" : ""}`}
+        style={{
+          background:
+            "linear-gradient(180deg,#0C1310 0%,#0A1F16 55%,#070B09 100%)",
+        }}
+      >
+        {/* UAE flag hairline */}
+        <div
+          aria-hidden
+          style={{
+            height: 3,
+            background:
+              "linear-gradient(90deg,#C8102E 33.3%,#fff 33.3% 66.6%,#117A4F 66.6%)",
+          }}
+        />
         {/* Logo + role badge */}
-        <div style={{ padding: "1.25rem 1rem", borderBottom: "1px solid rgba(248,245,240,.07)" }}>
+        <div style={{ padding: "1.25rem 1rem", borderBottom: "1px solid rgba(255,255,255,.08)" }}>
           <Link
             href="/"
             style={{ display: "flex", alignItems: "center", gap: ".65rem", marginBottom: ".85rem", textDecoration: "none" }}
@@ -65,7 +80,7 @@ export default function DashboardShell({
             />
             <span
               className="font-disp"
-              style={{ fontSize: ".78rem", color: "#F8F5F0", lineHeight: 1.3 }}
+              style={{ fontSize: ".78rem", color: "#F4F6F4", lineHeight: 1.3 }}
             >
               <span className="ar">نادي الشطرنج</span>
               <span className="en">Chess Club</span>
@@ -98,27 +113,36 @@ export default function DashboardShell({
         </nav>
 
         {/* User footer */}
-        <div style={{ padding: "1rem", borderTop: "1px solid rgba(248,245,240,.07)", display: "flex", alignItems: "center", gap: ".75rem" }}>
+        <div style={{ padding: "1rem", borderTop: "1px solid rgba(255,255,255,.08)", display: "flex", alignItems: "center", gap: ".75rem" }}>
           <div
             style={{ width: 32, height: 32, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: ".75rem", fontWeight: 700, color: "#fff", background: roleColor }}
           >
             {userInitial}
           </div>
           <div style={{ flex: 1, overflow: "hidden" }}>
-            <div style={{ fontSize: ".8rem", color: "#F8F5F0", fontFamily: "'Noto Serif Arabic',var(--font-playfair),serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            <div style={{ fontSize: ".8rem", color: "#F4F6F4", fontFamily: "'Noto Serif Arabic',var(--font-playfair),serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {displayName}
             </div>
-            <div style={{ fontSize: ".6rem", color: "rgba(248,245,240,.28)", marginTop: 2, fontFamily: "'DM Sans',sans-serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.45)", marginTop: 2, fontFamily: "'DM Sans',sans-serif", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {user?.email}
             </div>
           </div>
-          <button
-            onClick={signOut}
-            style={{ fontSize: ".62rem", color: "rgba(248,245,240,.28)", background: "none", border: "none", cursor: "pointer", fontFamily: "'DM Sans',sans-serif", flexShrink: 0 }}
-          >
-            <span className="ar">خروج</span>
-            <span className="en">Exit</span>
-          </button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, flexShrink: 0, alignItems: "flex-end" }}>
+            <Link
+              href="/dashboard/account"
+              style={{ fontSize: ".62rem", color: "rgba(255,255,255,.55)", textDecoration: "none" }}
+            >
+              <span className="ar">حسابي</span>
+              <span className="en">Account</span>
+            </Link>
+            <button
+              onClick={signOut}
+              style={{ fontSize: ".62rem", color: "rgba(255,255,255,.45)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "'DM Sans',sans-serif" }}
+            >
+              <span className="ar">خروج</span>
+              <span className="en">Exit</span>
+            </button>
+          </div>
         </div>
       </aside>
 

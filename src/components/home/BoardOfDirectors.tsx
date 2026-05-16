@@ -1,46 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import Reveal from "@/components/motion/Reveal";
-import { EASE_EMPHASIS } from "@/lib/motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { cn } from "@/lib/utils";
 
 interface Member {
-  ar:        string;
-  en:        string;
-  arRole:    string;
-  enRole:    string;
+  ar: string;
+  en: string;
+  arRole: string;
+  enRole: string;
   honorific?: { ar: string; en: string };
-  photo?:    string;
+  photo?: string;
 }
 
 const HONORIFIC = { ar: "سعادة", en: "H.E." };
 
 const CHAIR: Member = {
-  ar:    "نجلاء عبدالله أحمد الدرويشي الشامسي",
-  en:    "Najla Abdullah Ahmed Al Darwishi Al Shamsi",
+  ar: "نجلاء عبدالله أحمد الدرويشي الشامسي",
+  en: "Najla Abdullah Ahmed Al Darwishi Al Shamsi",
   arRole: "رئيسة مجلس الإدارة",
   enRole: "Chairperson",
   honorific: HONORIFIC,
-  photo:  "/images/board/najla.jpg",
+  photo: "/images/board/najla.jpg",
 };
 
 // Maitha intentionally has no `photo` — the federation page carries an
 // incorrect image for her, so the card falls back to the initials avatar.
 const SECRETARY: Member = {
-  ar:    "ميثاء عيسى خلفان بن عيسى الذبحاني",
-  en:    "Maitha Issa Khalfan bin Isa Al Dhabahi",
+  ar: "ميثاء عيسى خلفان بن عيسى الذبحاني",
+  en: "Maitha Issa Khalfan bin Isa Al Dhabahi",
   arRole: "الأمين العام",
   enRole: "Secretary General",
   honorific: HONORIFIC,
 };
 
 const MEMBERS: Member[] = [
-  { ar: "أروى محمد سلطان محمد العويس",        en: "Arwa Mohammed Sultan Mohammed Al Owais",  arRole: "عضو مجلس",    enRole: "Board member", honorific: HONORIFIC, photo: "/images/board/arwa.jpg"  },
-  { ar: "أمينة جمعة حسن صالح الجسمي",         en: "Amina Juma Hassan Saleh Al Jasmi",        arRole: "عضو مجلس",    enRole: "Board member", honorific: HONORIFIC, photo: "/images/board/amina.jpg" },
-  { ar: "إيمان محمد مبارك محمد العلي",         en: "Iman Mohammed Mubarak Mohammed Al Ali",   arRole: "عضو مجلس",    enRole: "Board member", honorific: HONORIFIC, photo: "/images/board/iman.jpg"  },
-  { ar: "حمدة سالم سلطان العقروبي السويدي",  en: "Hamda Salem Sultan Al Aqroubi Al Suwaidi", arRole: "عضو مجلس",    enRole: "Board member", honorific: HONORIFIC, photo: "/images/board/hamda.jpg" },
-  { ar: "علياء علي غريب أحمد المزمي",         en: "Alia Ali Gharib Ahmed Al Mazmi",          arRole: "عضو مجلس",    enRole: "Board member", honorific: HONORIFIC, photo: "/images/board/alia.jpg"  },
+  { ar: "أروى محمد سلطان محمد العويس", en: "Arwa Mohammed Sultan Mohammed Al Owais", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/arwa.jpg" },
+  { ar: "أمينة جمعة حسن صالح الجسمي", en: "Amina Juma Hassan Saleh Al Jasmi", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/amina.jpg" },
+  { ar: "إيمان محمد مبارك محمد العلي", en: "Iman Mohammed Mubarak Mohammed Al Ali", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/iman.jpg" },
+  { ar: "حمدة سالم سلطان العقروبي السويدي", en: "Hamda Salem Sultan Al Aqroubi Al Suwaidi", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/hamda.jpg" },
+  { ar: "علياء علي غريب أحمد المزمي", en: "Alia Ali Gharib Ahmed Al Mazmi", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/alia.jpg" },
 ];
 
 const EXECUTIVE: Member = {
@@ -62,222 +62,251 @@ function initials(name: string): string {
     .toUpperCase();
 }
 
-/**
- * Portrait — smooth fade-in for board headshots.
- * Image starts at opacity 0 with a subtle blur + slight up-scale; once
- * the browser reports it loaded (`onLoad`), it eases to fully sharp at
- * 1.0 opacity. Cached images that load instantly still get the
- * transition because state flips inside the same paint frame.
- */
-function Portrait({ src, alt }: { src: string; alt: string }) {
+function Portrait({
+  m,
+  className,
+}: {
+  m: Member;
+  className?: string;
+}) {
   const [loaded, setLoaded] = useState(false);
+  if (!m.photo) {
+    return (
+      <div
+        className={cn(
+          "flex h-full w-full items-center justify-center bg-[linear-gradient(150deg,#0A5234_0%,#0C1310_100%)]",
+          className,
+        )}
+        aria-hidden
+      >
+        <span className="font-disp text-[clamp(2rem,4vw,3rem)] font-bold tracking-tight text-white/85">
+          {initials(m.en)}
+        </span>
+      </div>
+    );
+  }
   return (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img
-      src={src}
-      alt={alt}
-      loading="lazy"
-      decoding="async"
-      onLoad={() => setLoaded(true)}
-      style={{ objectPosition: "50% 22%" }}
-      className={`absolute inset-0 w-full h-full object-cover transition-[opacity,filter,transform] duration-720 ease-emphasis group-hover:scale-[1.03] ${
-        loaded ? "opacity-100 blur-0" : "opacity-0 blur-[6px] scale-[1.04]"
-      }`}
-    />
+    <>
+      {!loaded && <div className="absolute inset-0 bg-cream-300" aria-hidden />}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={m.photo}
+        alt={m.en}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        style={{ objectPosition: "50% 20%" }}
+        className={cn(
+          "absolute inset-0 h-full w-full object-cover transition-[opacity,transform,filter] duration-700 ease-emphasis group-hover:scale-[1.04]",
+          loaded ? "opacity-100 blur-0" : "opacity-0 blur-md",
+          className,
+        )}
+      />
+    </>
   );
 }
 
-export default function BoardOfDirectors() {
+function Honorific({ m, tone = "green" }: { m: Member; tone?: "green" | "red" }) {
+  if (!m.honorific) return null;
   return (
-    <section className="relative bg-white overflow-hidden">
-      <div aria-hidden className="absolute inset-0 grain-emerald pointer-events-none" />
+    <div
+      className={cn(
+        "text-[0.62rem] font-bold uppercase tracking-[0.22em]",
+        tone === "red" ? "text-scarlet-500" : "text-forest-700",
+      )}
+    >
+      <span className="ar">{m.honorific.ar}</span>
+      <span className="en">{m.honorific.en}</span>
+    </div>
+  );
+}
 
-      <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 py-26 sm:py-32">
-        {/* Header — short, no italic accent */}
-        <Reveal>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 sm:mb-20 items-end">
-            <div className="lg:col-span-7">
-              <div className="text-[0.6rem] uppercase tracking-[0.32em] text-ink3 font-bold mb-5 flex items-center gap-3">
-                <span className="block w-7 h-px bg-ink3" />
-                <span className="ar">مجلس الإدارة</span>
-                <span className="en">Board &amp; leadership</span>
-              </div>
-              <h2 className="font-disp text-[clamp(2.4rem,5vw,4rem)] text-ink leading-[1.06] tracking-tight max-w-3xl">
-                <span className="ar">سبع عضوات إماراتيات يدِرن النادي.</span>
-                <span className="en">Seven Emirati women run the club.</span>
-              </h2>
-            </div>
-            <div className="lg:col-span-5 lg:pb-2">
-              <p className="text-[0.95rem] sm:text-[1.05rem] leading-[1.85] text-ink2 max-w-md">
-                <span className="ar">
-                  مسؤوليات المجلس: المسار الاستراتيجي، الموازنة السنوية، اعتماد البرامج،
-                  ومتابعة الإدارة التنفيذية.
-                </span>
-                <span className="en">
-                  The board sets strategic direction, approves the annual
-                  budget, ratifies programmes, and oversees the executive
-                  team.
-                </span>
-              </p>
+const gridV: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+};
+
+export default function BoardOfDirectors() {
+  const reduce = useReducedMotion();
+  const rise: Variants = {
+    hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 24 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: reduce ? 0 : 0.65, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  return (
+    <section className="relative border-t border-line bg-white">
+      <div className="mx-auto max-w-wrap px-5 py-24 sm:px-8 sm:py-28 lg:px-10">
+        <div className="mb-16 flex flex-col gap-6 sm:mb-20 lg:flex-row lg:items-end lg:justify-between">
+          <SectionTitle
+            eyebrowAr="الحوكمة"
+            eyebrowEn="Governance"
+            titleAr="مجلس الإدارة والقيادة"
+            titleEn="Board of Directors & Leadership"
+            leadAr="سبع عضوات إماراتيات يقُدن المسار الاستراتيجي للنادي."
+            leadEn="Seven Emirati women lead the strategic direction of the club."
+            size="h2"
+          />
+          <p className="max-w-sm text-sm leading-relaxed text-text-3 lg:text-end">
+            <span className="ar">
+              يضع المجلس الاتجاه الاستراتيجي، ويعتمد الموازنة السنوية
+              والبرامج، ويُشرف على الإدارة التنفيذية.
+            </span>
+            <span className="en">
+              The board sets strategic direction, approves the annual
+              budget and programmes, and oversees the executive office.
+            </span>
+          </p>
+        </div>
+
+        {/* ── Chairperson — own row, full prominence ───────────────── */}
+        <motion.article
+          initial={reduce ? undefined : { opacity: 0, y: 28 }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="group relative mb-6 grid grid-cols-1 overflow-hidden rounded-[4px] border border-line bg-white shadow-card transition-shadow duration-500 hover:shadow-feature sm:grid-cols-[20rem_1fr]"
+        >
+          <div className="relative aspect-[4/5] sm:aspect-auto sm:min-h-[26rem]">
+            <Portrait m={CHAIR} />
+            <div className="absolute inset-x-0 top-0 h-[3px] bg-[linear-gradient(90deg,#C8102E_33.3%,#fff_33.3%_66.6%,#117A4F_66.6%)]" />
+          </div>
+          <div className="flex flex-col justify-center p-8 sm:p-12">
+            <Honorific m={CHAIR} />
+            <h3 className="mt-3 font-disp text-[clamp(1.6rem,3vw,2.4rem)] font-bold leading-[1.15] tracking-tight text-text-1">
+              <span className="ar">{CHAIR.ar}</span>
+              <span className="en">{CHAIR.en}</span>
+            </h3>
+            <div className="mt-6 inline-flex w-fit items-center gap-3 border-t border-line pt-5 text-sm font-bold uppercase tracking-[0.2em] text-forest-700">
+              <span className="h-[2px] w-7 bg-forest-700" />
+              <span className="ar">{CHAIR.arRole}</span>
+              <span className="en">{CHAIR.enRole}</span>
             </div>
           </div>
-        </Reveal>
+        </motion.article>
 
-        {/* Chair — standalone row, no card beside her. The secretary follows
-            in her own row below so the chairperson holds the spotlight. */}
-        <div className="max-w-2xl mx-auto mb-10 sm:mb-12">
-          <FeatureCard m={CHAIR} />
-        </div>
-        <div className="max-w-2xl mx-auto mb-16 sm:mb-20">
-          <FeatureCard m={SECRETARY} />
-        </div>
-
-        {/* Roster — quieter portrait grid, no animated rings */}
-        <Reveal>
-          <div className="mb-7 pb-4 border-b border-stone flex items-end justify-between">
-            <div className="text-[0.6rem] uppercase tracking-[0.32em] text-ink3 font-bold">
-              <span className="ar">باقي أعضاء المجلس</span>
-              <span className="en">Other board members</span>
-            </div>
-            <div className="text-[0.62rem] text-ink3 italic">
-              <span className="ar">{MEMBERS.length} عضوات</span>
-              <span className="en">{MEMBERS.length} members</span>
+        {/* ── Secretary General — own row ──────────────────────────── */}
+        <motion.article
+          initial={reduce ? undefined : { opacity: 0, y: 24 }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="group relative mb-16 grid grid-cols-[8rem_1fr] overflow-hidden rounded-[4px] border border-line bg-white transition-all duration-300 hover:border-line-strong hover:shadow-card sm:mb-20 sm:grid-cols-[12rem_1fr]"
+        >
+          <div className="relative aspect-square sm:aspect-auto">
+            <Portrait m={SECRETARY} />
+          </div>
+          <div className="flex flex-col justify-center p-6 sm:p-9">
+            <Honorific m={SECRETARY} />
+            <h3 className="mt-2.5 font-disp text-[1.2rem] font-bold leading-snug tracking-tight text-text-1 sm:text-[1.45rem]">
+              <span className="ar">{SECRETARY.ar}</span>
+              <span className="en">{SECRETARY.en}</span>
+            </h3>
+            <div className="mt-4 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-text-3">
+              <span className="ar">{SECRETARY.arRole}</span>
+              <span className="en">{SECRETARY.enRole}</span>
             </div>
           </div>
-        </Reveal>
+        </motion.article>
+
+        {/* ── Board roster ─────────────────────────────────────────── */}
+        <div className="mb-8 flex items-end justify-between border-b border-line pb-4">
+          <div className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-text-4">
+            <span className="ar">أعضاء مجلس الإدارة</span>
+            <span className="en">Board Members</span>
+          </div>
+          <div className="text-[0.72rem] font-semibold text-text-4">
+            <span className="ar">{MEMBERS.length} عضوات</span>
+            <span className="en">{MEMBERS.length} members</span>
+          </div>
+        </div>
 
         <motion.ul
+          variants={gridV}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-9 mb-20 sm:mb-24"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          className="mb-20 grid grid-cols-2 gap-5 sm:mb-24 sm:grid-cols-3 lg:grid-cols-5"
         >
-          {MEMBERS.map((m, i) => (
+          {MEMBERS.map((m) => (
             <motion.li
-              key={i}
-              variants={{
-                hidden:  { opacity: 0, y: 18 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_EMPHASIS } },
-              }}
-              className="group"
+              key={m.en}
+              variants={rise}
+              className="group overflow-hidden rounded-[3px] border border-line bg-white transition-all duration-300 ease-emphasis hover:-translate-y-1 hover:border-line-strong hover:shadow-card"
             >
-              <div className="roster-avatar mb-4 overflow-hidden">
-                {m.photo ? (
-                  <Portrait src={m.photo} alt={m.en} />
-                ) : (
-                  <div className="ini">{initials(m.en)}</div>
-                )}
-                <div className="veil" />
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <Portrait m={m} />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_60%,rgba(7,11,9,0.45)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-forest-700 transition-transform duration-500 ease-emphasis group-hover:scale-x-100 rtl:origin-right"
+                />
               </div>
-              <div className="text-[0.55rem] uppercase tracking-[0.22em] text-ink3 font-bold mb-1.5">
-                <span className="ar">{m.honorific?.ar}</span>
-                <span className="en">{m.honorific?.en}</span>
-              </div>
-              <div className="font-disp text-[0.92rem] text-ink leading-[1.32] mb-2">
-                <span className="ar">{m.ar}</span>
-                <span className="en">{m.en}</span>
-              </div>
-              <div className="text-[0.62rem] text-ink3">
-                <span className="ar">{m.arRole}</span>
-                <span className="en">{m.enRole}</span>
+              <div className="p-4 sm:p-5">
+                <Honorific m={m} />
+                <h4 className="mt-2 font-disp text-[0.95rem] font-semibold leading-[1.3] text-text-1">
+                  <span className="ar">{m.ar}</span>
+                  <span className="en">{m.en}</span>
+                </h4>
+                <div className="mt-2.5 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-text-4">
+                  <span className="ar">{m.arRole}</span>
+                  <span className="en">{m.enRole}</span>
+                </div>
               </div>
             </motion.li>
           ))}
         </motion.ul>
 
-        {/* Executive — quieter dark panel, no conic-gradient ring */}
-        <Reveal>
-          <article className="relative overflow-hidden bg-ink text-ivory">
-            <div aria-hidden className="absolute inset-0 chess-tex-lt opacity-50 pointer-events-none" />
-            <div
-              aria-hidden
-              className="absolute -bottom-32 -right-32 w-[320px] h-[320px] rounded-full blur-3xl opacity-20 pointer-events-none"
-              style={{ background: "radial-gradient(circle, #1F6B4F 0%, transparent 70%)" }}
-            />
-            <div aria-hidden className="absolute top-0 left-0 right-0 h-px bg-[#1F6B4F]/60" />
-
-            <div className="relative grid grid-cols-1 md:grid-cols-12 gap-8 p-8 sm:p-12 lg:p-14 items-center">
-              <div className="md:col-span-4 flex md:justify-start">
-                <div className="relative w-32 h-40 sm:w-40 sm:h-48 roster-avatar overflow-hidden">
-                  {EXECUTIVE.photo ? (
-                    <Portrait src={EXECUTIVE.photo} alt={EXECUTIVE.en} />
-                  ) : (
-                    <div className="ini text-[2.6rem]">{initials(EXECUTIVE.en)}</div>
-                  )}
-                  <div className="veil" />
-                </div>
-              </div>
-
-              <div className="md:col-span-8">
-                <div className="text-[0.6rem] uppercase tracking-[0.32em] text-[#1F6B4F] font-bold mb-5 inline-flex items-center gap-2">
-                  <span className="block w-7 h-px bg-[#1F6B4F]" />
-                  <span className="ar">الإدارة التنفيذية</span>
-                  <span className="en">Day-to-day operations</span>
-                </div>
-                <h3 className="font-disp text-3xl sm:text-4xl lg:text-5xl text-ivory leading-[1.06] mb-5 tracking-tight">
-                  <span className="ar">{EXECUTIVE.ar}</span>
-                  <span className="en">{EXECUTIVE.en}</span>
-                </h3>
-                <div className="text-[0.78rem] uppercase tracking-[0.22em] font-bold text-ivory/65">
-                  <span className="ar">{EXECUTIVE.arRole}</span>
-                  <span className="en">{EXECUTIVE.enRole}</span>
-                </div>
-                <p className="mt-6 text-[0.95rem] leading-[1.8] text-ivory/70 max-w-lg">
-                  <span className="ar">
-                    تتولى الإدارة التنفيذية تنفيذ خطط المجلس، وتنسيق العمل بين فِرق التدريب،
-                    البرامج، الشراكات، والاتصال المؤسسي.
-                  </span>
-                  <span className="en">
-                    The executive office carries out the board&rsquo;s plans
-                    and coordinates between the coaching, programming,
-                    partnerships, and communications teams.
-                  </span>
-                </p>
+        {/* ── Executive Director — dark institutional panel ────────── */}
+        <motion.article
+          initial={reduce ? undefined : { opacity: 0, y: 26 }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          className="group relative overflow-hidden rounded-[4px] bg-[linear-gradient(150deg,#0C1310_0%,#0A1F16_55%,#070B09_100%)] text-white"
+        >
+          <div
+            aria-hidden
+            className="absolute inset-x-0 top-0 h-[3px] bg-[linear-gradient(90deg,#C8102E_33.3%,#fff_33.3%_66.6%,#117A4F_66.6%)]"
+          />
+          <div className="grid grid-cols-1 items-center gap-8 p-8 sm:p-12 md:grid-cols-12 lg:p-14">
+            <div className="md:col-span-4">
+              <div className="relative aspect-[4/5] max-w-[16rem] overflow-hidden rounded-[3px] border border-white/12">
+                <Portrait m={EXECUTIVE} />
               </div>
             </div>
-          </article>
-        </Reveal>
+            <div className="md:col-span-8">
+              <div className="mb-5 inline-flex items-center gap-3 text-[0.72rem] font-bold uppercase tracking-[0.22em] text-forest-400">
+                <span className="h-[2px] w-7 bg-forest-400" />
+                <span className="ar">الإدارة التنفيذية</span>
+                <span className="en">Executive Office</span>
+              </div>
+              <h3 className="font-disp text-[clamp(1.8rem,4vw,3rem)] font-bold leading-[1.08] tracking-tight">
+                <span className="ar">{EXECUTIVE.ar}</span>
+                <span className="en">{EXECUTIVE.en}</span>
+              </h3>
+              <div className="mt-4 text-[0.8rem] font-bold uppercase tracking-[0.22em] text-white/65">
+                <span className="ar">{EXECUTIVE.arRole}</span>
+                <span className="en">{EXECUTIVE.enRole}</span>
+              </div>
+              <p className="mt-6 max-w-lg text-[0.95rem] leading-relaxed text-white/70">
+                <span className="ar">
+                  تتولى الإدارة التنفيذية تنفيذ خطط المجلس وتنسيق العمل بين
+                  فرق التدريب والبرامج والشراكات والاتصال المؤسسي.
+                </span>
+                <span className="en">
+                  The executive office carries out the board&rsquo;s plans
+                  and coordinates the coaching, programmes, partnerships,
+                  and communications teams.
+                </span>
+              </p>
+            </div>
+          </div>
+        </motion.article>
       </div>
     </section>
-  );
-}
-
-function FeatureCard({ m }: { m: Member }) {
-  return (
-    <Reveal delay={0.05}>
-      <article className="group relative h-full bg-white border border-stone shadow-card transition-shadow duration-480 ease-standard hover:shadow-card-hover">
-        <div className="grid grid-cols-[8rem_1fr] sm:grid-cols-[10rem_1fr] gap-0 h-full">
-          {/* Portrait column — photo if available, initials otherwise.
-              The shared <Portrait> handles the lazy load + fade-in and
-              biases the crop toward the upper-centre of the source so
-              faces sit at editorial-portrait height in the 4:5 column. */}
-          <div className="roster-avatar h-full min-h-[210px] overflow-hidden">
-            {m.photo ? (
-              <Portrait src={m.photo} alt={m.en} />
-            ) : (
-              <div className="ini text-[2rem]">{initials(m.en)}</div>
-            )}
-            <div className="veil" />
-          </div>
-
-          {/* Content column */}
-          <div className="p-6 sm:p-7 flex flex-col">
-            <div className="text-[0.55rem] uppercase tracking-[0.22em] text-[#0B3D2E] font-bold mb-2">
-              <span className="ar">{m.honorific?.ar}</span>
-              <span className="en">{m.honorific?.en}</span>
-            </div>
-            <h3 className="font-disp text-[1.15rem] sm:text-[1.3rem] text-ink leading-[1.25] mb-3">
-              <span className="ar">{m.ar}</span>
-              <span className="en">{m.en}</span>
-            </h3>
-            <div className="mt-auto text-[0.7rem] uppercase tracking-[0.22em] font-bold text-ink2 pt-3 border-t border-stone">
-              <span className="ar">{m.arRole}</span>
-              <span className="en">{m.enRole}</span>
-            </div>
-          </div>
-        </div>
-      </article>
-    </Reveal>
   );
 }

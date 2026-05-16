@@ -1,43 +1,56 @@
 "use client";
 
-import { motion, type HTMLMotionProps, type Transition } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  type HTMLMotionProps,
+  type Transition,
+} from "framer-motion";
 import { type ReactNode } from "react";
 import { EASE_EMPHASIS } from "@/lib/motion";
 
-interface RevealProps extends Omit<HTMLMotionProps<"div">, "children" | "initial" | "animate" | "whileInView" | "viewport" | "transition"> {
-  children:    ReactNode;
+interface RevealProps
+  extends Omit<
+    HTMLMotionProps<"div">,
+    "children" | "initial" | "animate" | "whileInView" | "viewport" | "transition"
+  > {
+  children: ReactNode;
   /** Delay before animation starts (seconds). */
-  delay?:      number;
+  delay?: number;
   /** Vertical translate distance in px. */
-  y?:          number;
+  y?: number;
   /** Animation duration in seconds. */
-  duration?:   number;
+  duration?: number;
   /** Reveal once (default true) or every time it scrolls into view. */
-  once?:       boolean;
-  /** IntersectionObserver root margin (default: -80px to start a bit before). */
-  margin?:     `${number}px` | `${number}% ${number}%`;
+  once?: boolean;
+  /** IntersectionObserver root margin (default: -80px). */
+  margin?: `${number}px` | `${number}% ${number}%`;
 }
 
 /**
- * Reveal — fades + lifts children when scrolled into the viewport.
- *
- * Uses the design system's signature `EASE_EMPHASIS` curve so every
- * scroll-in feels consistent across the site. Respects
- * `prefers-reduced-motion` via Framer's built-in handling.
+ * Reveal — fades + lifts children into view on the design system's
+ * signature ease-out curve, so every section enters with the same
+ * restrained, premium cadence. Honours prefers-reduced-motion (drops
+ * the translate and snaps in).
  */
 export default function Reveal({
   children,
-  delay   = 0,
-  y       = 28,
+  delay = 0,
+  y = 24,
   duration = 0.7,
-  once    = true,
-  margin  = "-80px",
+  once = true,
+  margin = "-80px",
   ...rest
 }: RevealProps) {
-  const transition: Transition = { duration, delay, ease: EASE_EMPHASIS };
+  const reduce = useReducedMotion();
+  const transition: Transition = {
+    duration: reduce ? 0 : duration,
+    delay: reduce ? 0 : delay,
+    ease: EASE_EMPHASIS,
+  };
   return (
     <motion.div
-      initial={{ opacity: 0, y }}
+      initial={{ opacity: 0, y: reduce ? 0 : y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, margin }}
       transition={transition}
@@ -49,28 +62,34 @@ export default function Reveal({
 }
 
 /**
- * RevealStagger — wraps a list of items so each child appears with a
- * staggered delay. Use children that are already <Reveal> or
- * <motion.div> blocks.
+ * RevealStagger — orchestrates a list so each child enters in sequence.
+ * Children should be <motion.*> blocks using `childVariants`.
  */
 export function RevealStagger({
   children,
   staggerChildren = 0.08,
-  delayChildren   = 0,
+  delayChildren = 0,
+  className,
 }: {
-  children:        ReactNode;
+  children: ReactNode;
   staggerChildren?: number;
-  delayChildren?:   number;
+  delayChildren?: number;
+  className?: string;
 }) {
+  const reduce = useReducedMotion();
   return (
     <motion.div
+      className={className}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
       variants={{
-        hidden:  {},
+        hidden: {},
         visible: {
-          transition: { staggerChildren, delayChildren },
+          transition: {
+            staggerChildren: reduce ? 0 : staggerChildren,
+            delayChildren: reduce ? 0 : delayChildren,
+          },
         },
       }}
     >
@@ -80,6 +99,10 @@ export function RevealStagger({
 }
 
 export const childVariants = {
-  hidden:  { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_EMPHASIS } },
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: EASE_EMPHASIS },
+  },
 };

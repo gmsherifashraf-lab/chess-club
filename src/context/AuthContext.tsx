@@ -41,7 +41,15 @@ const AuthContext = createContext<AuthCtx>({
 });
 
 function normaliseRole(raw: unknown): UserRole {
-  if (raw === "admin" || raw === "coach" || raw === "player") return raw;
+  if (
+    raw === "admin" ||
+    raw === "editor" ||
+    raw === "coach" ||
+    raw === "player" ||
+    raw === "parent"
+  )
+    return raw;
+  // Unknown / legacy ('board') → player (least-privileged default).
   return "player";
 }
 

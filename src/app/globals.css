@@ -14,57 +14,63 @@
    and CSS read from the same scale.
    ════════════════════════════════════════════════════════════════════ */
 :root {
-  /* ── Color: surfaces ── */
-  --ds-surface-0:        #FFFFFF;       /* paper */
-  --ds-surface-1:        #FBF8F3;       /* warm cream */
-  --ds-surface-2:        #F8F5F0;       /* ivory */
-  --ds-surface-3:        #EDE9E2;       /* ivory deep */
-  --ds-surface-4:        #E5DFD2;       /* line-default tint */
-  --ds-surface-dark:     #0A0A0A;       /* ink panel */
-  --ds-surface-dark-2:   #141414;       /* ink panel softer */
+  /* ── Color: surfaces ──
+     Federation system: clean neutral white ground, no cream.
+     Surfaces step in cool-neutral, faintly warmed so pure-white
+     glare is avoided without reading as beige. */
+  --ds-surface-0:        #FFFFFF;       /* pure paper (hero text plates) */
+  --ds-surface-1:        #FCFCFB;       /* default page ground */
+  --ds-surface-2:        #F6F6F4;       /* section alt */
+  --ds-surface-3:        #EFEFEC;       /* sunk panel */
+  --ds-surface-4:        #E6E6E2;       /* deep panel / inset */
+  --ds-surface-dark:     #0C1310;       /* institutional dark band (green-black) */
+  --ds-surface-dark-2:   #11201A;       /* dark band softer */
 
   /* ── Color: text ── */
-  --ds-text-1:   #141414;
-  --ds-text-2:   #3A3A3A;
-  --ds-text-3:   #646464;
-  --ds-text-4:   #8A8579;
-  --ds-text-inv: #F8F5F0;
+  --ds-text-1:   #111111;               /* near-black, not pure */
+  --ds-text-2:   #363636;
+  --ds-text-3:   #5E5E5E;
+  --ds-text-4:   #8C8C8A;
+  --ds-text-inv: #F4F6F4;
 
   /* ── Color: line / border ── */
-  --ds-line:        #E5DFD2;
-  --ds-line-soft:   rgba(20,20,20,0.06);
-  --ds-line-mid:    #D6D0C4;
-  --ds-line-strong: #BFB6A3;
-  --ds-line-dark:   rgba(255,255,255,0.10);
+  --ds-line:        #E6E6E2;
+  --ds-line-soft:   rgba(17,17,17,0.06);
+  --ds-line-mid:    #DADAD5;
+  --ds-line-strong: #C2C2BC;
+  --ds-line-dark:   rgba(255,255,255,0.12);
 
-  /* ── Brand: emerald (primary) ── */
-  --ds-emerald-700: #0B3D2E;  /* primary */
-  --ds-emerald-600: #0E5236;
-  --ds-emerald-500: #1F6B4F;  /* hover / accent */
-  --ds-emerald-400: #3FAA62;
-  --ds-emerald-100: #C8DDD0;
+  /* ── Brand: green (primary identity) ──
+     Deep, dignified UAE-federation green. Carries the brand. */
+  --ds-emerald-700: #0A5234;  /* primary */
+  --ds-emerald-600: #0C6340;
+  --ds-emerald-500: #117A4F;  /* hover / accent */
+  --ds-emerald-400: #2C9A6A;
+  --ds-emerald-100: #D6EADF;
 
-  /* ── Brand: scarlet (accent — sparing) ── */
+  /* ── Brand: red (UAE accent — sparing: honors, flag, key CTA) ── */
   --ds-scarlet-500: #C8102E;
-  --ds-scarlet-600: #9D0C24;
-  --ds-scarlet-700: #7E0B22;
+  --ds-scarlet-600: #A50D26;
+  --ds-scarlet-700: #800A1D;
 
-  /* ── Honour gold (accolade-only) ── */
-  --ds-honor-400: #A07820;
-  --ds-honor-300: #D9B65A;
+  /* ── Honour (accolade-only) — folded to brand green per 4-colour brief ── */
+  --ds-honor-400: #0A5234;
+  --ds-honor-300: #2C9A6A;
 
-  /* ── Type: scale ── */
-  --ds-fs-micro:    0.6rem;   /* legal, micro labels */
-  --ds-fs-eyebrow:  0.66rem;  /* section eyebrows */
-  --ds-fs-caption:  0.78rem;  /* captions, dates */
-  --ds-fs-body-sm:  0.875rem;
-  --ds-fs-body:     1rem;
-  --ds-fs-body-lg:  1.125rem;
-  --ds-fs-lead:     1.25rem;  /* deks, ledes */
-  --ds-fs-h4:       1.2rem;
-  --ds-fs-h3:       1.5rem;
-  --ds-fs-h2:       2rem;
-  --ds-fs-h1:       2.6rem;
+  /* ── Type: scale ──
+     Federation reading sizes: significantly larger than before for
+     authority + readability. 1.25+ ratio between steps. */
+  --ds-fs-micro:    0.6875rem;  /* legal, micro labels */
+  --ds-fs-eyebrow:  0.75rem;    /* section eyebrows */
+  --ds-fs-caption:  0.875rem;   /* captions, dates */
+  --ds-fs-body-sm:  0.9375rem;
+  --ds-fs-body:     1.0625rem;  /* base body, bumped from 1rem */
+  --ds-fs-body-lg:  1.1875rem;
+  --ds-fs-lead:     1.375rem;   /* deks, ledes */
+  --ds-fs-h4:       1.375rem;
+  --ds-fs-h3:       1.75rem;
+  --ds-fs-h2:       2.375rem;
+  --ds-fs-h1:       3.25rem;
 
   /* ── Type: tracking ── */
   --ds-tr-tightest: -0.04em;
@@ -112,18 +118,19 @@
   --ds-radius-4: 4px;   /* small panels, chips */
   --ds-radius-pill: 999px;
 
-  /* ── Elevation: layered, light-source biased upper-left ── */
-  --ds-sh-xs:         0 1px 2px rgba(20,20,20,0.04);
-  --ds-sh-sm:         0 1px 0 rgba(20,20,20,0.03), 0 4px 12px -3px rgba(20,20,20,0.06);
-  --ds-sh-card:       0 1px 0 rgba(20,20,20,0.03), 0 6px 16px -6px rgba(20,20,20,0.06), 0 18px 36px -22px rgba(11,61,46,0.08);
-  --ds-sh-card-hover: 0 1px 0 rgba(20,20,20,0.03), 0 14px 30px -10px rgba(20,20,20,0.12), 0 26px 56px -22px rgba(11,61,46,0.14);
-  --ds-sh-feature:    0 2px 0 rgba(20,20,20,0.04), 0 22px 42px -14px rgba(20,20,20,0.16), 0 36px 70px -22px rgba(11,61,46,0.16);
-  --ds-sh-float:      0 4px 0 rgba(20,20,20,0.04), 0 32px 56px -18px rgba(20,20,20,0.22), 0 56px 96px -28px rgba(11,61,46,0.22);
-  --ds-sh-emerald:    0 1px 0 rgba(11,61,46,0.04), 0 14px 30px -10px rgba(11,61,46,0.22), 0 28px 56px -20px rgba(11,61,46,0.26);
-  --ds-sh-scarlet:    0 1px 0 rgba(200,16,46,0.04), 0 14px 30px -10px rgba(200,16,46,0.20), 0 28px 56px -20px rgba(200,16,46,0.24);
-  --ds-sh-dark:       0 1px 0 rgba(255,255,255,0.04), 0 18px 36px -12px rgba(0,0,0,0.5), 0 32px 60px -20px rgba(0,0,0,0.6);
-  --ds-sh-inset-top:  inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(20,20,20,0.04);
-  --ds-sh-rule:       0 1px 0 rgba(20,20,20,0.06);
+  /* ── Elevation: subtle, neutral, premium ──
+     Soft single-direction ambient. No brand-tinted glow. */
+  --ds-sh-xs:         0 1px 2px rgba(17,17,17,0.04);
+  --ds-sh-sm:         0 1px 2px rgba(17,17,17,0.04), 0 2px 6px -2px rgba(17,17,17,0.05);
+  --ds-sh-card:       0 1px 2px rgba(17,17,17,0.04), 0 10px 24px -14px rgba(17,17,17,0.12);
+  --ds-sh-card-hover: 0 2px 4px rgba(17,17,17,0.05), 0 18px 40px -16px rgba(17,17,17,0.18);
+  --ds-sh-feature:    0 2px 4px rgba(17,17,17,0.05), 0 26px 56px -22px rgba(17,17,17,0.20);
+  --ds-sh-float:      0 4px 8px rgba(17,17,17,0.06), 0 32px 64px -24px rgba(17,17,17,0.26);
+  --ds-sh-emerald:    0 2px 4px rgba(17,17,17,0.05), 0 18px 40px -16px rgba(10,82,52,0.18);
+  --ds-sh-scarlet:    0 2px 4px rgba(17,17,17,0.05), 0 18px 40px -16px rgba(200,16,46,0.16);
+  --ds-sh-dark:       0 2px 8px rgba(0,0,0,0.30), 0 24px 56px -20px rgba(0,0,0,0.55);
+  --ds-sh-inset-top:  inset 0 1px 0 rgba(255,255,255,0.6);
+  --ds-sh-rule:       0 1px 0 rgba(17,17,17,0.06);
   --ds-sh-focus:      0 0 0 2px #FFFFFF, 0 0 0 4px var(--ds-emerald-700);
 
   /* ── Motion: curves ── */
@@ -154,16 +161,51 @@ html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
   font-family: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
-  background: #F8F5F0;
-  color: #141414;
+  background: var(--ds-surface-1);
+  color: var(--ds-text-1);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "ss01", "cv11";
-  font-size: 1rem;
-  line-height: 1.6;
-  letter-spacing: -0.005em;
+  font-feature-settings: "ss01", "cv05";
+  font-size: var(--ds-fs-body);
+  line-height: 1.65;
+  letter-spacing: -0.003em;
 }
+/* ════════════════════════════════════════════════════════════════════
+   MOBILE OPTIMIZATION — touch, scaling, native feel
+   ════════════════════════════════════════════════════════════════════ */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 380px) { html { font-size: 15px; } }
+
+/* Media never forces horizontal scroll on small screens */
+img, video, svg, canvas { max-width: 100%; height: auto; }
+
+/* Comfortable, native-feeling tap targets. Interactive elements get a
+   44px minimum hit area on touch/coarse pointers without changing
+   their visual size on desktop. */
+@media (pointer: coarse) {
+  a[role="button"], button, [role="tab"], summary,
+  .btn, .ds-btn, input[type="submit"], input[type="button"] {
+    min-height: 44px;
+  }
+  /* Looser line spacing for dense bilingual nav/footer link lists */
+  nav a { line-height: 1.5; }
+}
+
+/* iOS momentum scroll + notch-safe horizontal padding helpers */
+.safe-b { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.safe-t { padding-top: env(safe-area-inset-top, 0px); }
+.overscroll-contain { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+
+/* Tighten heavy decorative type on phones so it never overflows */
+@media (max-width: 640px) {
+  body { letter-spacing: 0; }
+}
+
 /* selection + scrollbar — refined in design-system primitives section */
 
 /* ── BILINGUAL: hide/show by dir ── */
@@ -178,9 +220,9 @@ body {
 
 /* ── DISPLAY FONT (dir-aware) ── */
 [dir="ltr"] .font-disp {
-  font-family: var(--font-playfair), Georgia, serif;
+  font-family: var(--font-playfair), "IBM Plex Sans", system-ui, sans-serif;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.022em;
 }
 [dir="rtl"] .font-disp {
   font-family: var(--font-tajawal), var(--font-cairo), sans-serif;
@@ -192,13 +234,15 @@ body {
    All display sizes use clamp(min, vw, max) for fluid responsiveness.
    Tracking tightens as size grows; line-height compresses as size grows.
    ──────────────────────────────────────────────────────────────── */
-.t-hero { font-size: clamp(3.6rem, 7.5vw, 6.6rem); line-height: var(--ds-lh-h1);  letter-spacing: var(--ds-tr-tighter); }
-.t-h1   { font-size: clamp(2.6rem, 4.8vw, 4rem);   line-height: var(--ds-lh-h1);  letter-spacing: var(--ds-tr-tighter); }
-.t-h2   { font-size: clamp(2rem,   3.4vw, 2.8rem); line-height: var(--ds-lh-h2);  letter-spacing: -0.02em;  }
-.t-h3   { font-size: clamp(1.4rem, 2.2vw, 1.7rem); line-height: var(--ds-lh-h3);  letter-spacing: var(--ds-tr-tight); }
-.t-h4   { font-size: var(--ds-fs-h4);              line-height: var(--ds-lh-h4);  letter-spacing: -0.01em; font-weight: 700; }
-.t-lead { font-size: clamp(1.05rem, 1.4vw, 1.25rem); line-height: var(--ds-lh-body); letter-spacing: var(--ds-tr-normal); }
-.t-stat { font-size: clamp(2.6rem, 4.8vw, 3.8rem); line-height: 1; letter-spacing: -0.03em; font-weight: 800; }
+.t-hero { font-size: clamp(2.5rem, 7.4vw, 7rem);    line-height: 1.05; letter-spacing: -0.03em; }
+.t-h1   { font-size: clamp(2.125rem, 5vw, 4.5rem);  line-height: 1.08; letter-spacing: -0.028em; }
+.t-h2   { font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.14; letter-spacing: -0.022em; }
+.t-h3   { font-size: clamp(1.375rem, 2.4vw, 2rem);  line-height: 1.22; letter-spacing: -0.018em; }
+.t-h4   { font-size: clamp(1.15rem, 1.7vw, 1.5rem); line-height: 1.3;  letter-spacing: -0.012em; font-weight: 700; }
+.t-lead { font-size: clamp(1.0625rem, 1.7vw, 1.5rem); line-height: 1.6; letter-spacing: -0.006em; }
+.t-stat { font-size: clamp(2.5rem, 5.4vw, 4.75rem); line-height: 1;    letter-spacing: -0.035em; font-weight: 800; }
+/* Long Arabic compound words must not overflow narrow viewports */
+[dir="rtl"] .t-hero, [dir="rtl"] .t-h1, [dir="rtl"] .t-h2 { word-break: break-word; overflow-wrap: anywhere; }
 
 /* Slightly bigger body paragraph baseline */
 p { line-height: var(--ds-lh-body); }
@@ -207,32 +251,34 @@ p { line-height: var(--ds-lh-body); }
 .sec-tag {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: .58rem;
-  letter-spacing: .22em;
+  gap: 12px;
+  font-size: .8125rem;
+  letter-spacing: .2em;
   text-transform: uppercase;
-  color: #D42B3C;
-  font-family: 'Noto Sans Arabic', sans-serif;
+  font-weight: 600;
+  color: var(--ds-scarlet-500);
+  font-family: var(--font-cairo), sans-serif;
   margin-bottom: 1.5rem;
 }
-.sec-tag::before { content: ''; width: 28px; height: 1px; background: #D42B3C; flex-shrink: 0; }
+.sec-tag::before { content: ''; width: 32px; height: 2px; background: var(--ds-scarlet-500); flex-shrink: 0; }
 [dir="ltr"] .sec-tag {
-  font-family: 'DM Sans', sans-serif;
-  font-style: italic;
-  text-transform: none;
-  font-size: .8rem;
-  letter-spacing: .04em;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-style: normal;
+  text-transform: uppercase;
+  font-size: .8125rem;
+  letter-spacing: .2em;
 }
 
 /* ── EYEBROW / LABEL ── */
 .eyebrow {
-  font-size: .6rem;
-  letter-spacing: .22em;
+  font-size: .8125rem;
+  letter-spacing: .2em;
   text-transform: uppercase;
-  font-weight: 500;
-  font-family: 'Noto Sans Arabic', sans-serif;
+  font-weight: 600;
+  color: var(--ds-emerald-700);
+  font-family: var(--font-cairo), sans-serif;
 }
-[dir="ltr"] .eyebrow { font-family: 'DM Sans', sans-serif; font-style: italic; text-transform: none; font-size: .8rem; letter-spacing: .04em; }
+[dir="ltr"] .eyebrow { font-family: var(--font-inter), system-ui, sans-serif; font-style: normal; text-transform: uppercase; font-size: .8125rem; letter-spacing: .2em; }
 
 .label-xs {
   font-size: .58rem;
@@ -245,10 +291,10 @@ p { line-height: var(--ds-lh-body); }
 [dir="ltr"] .label-xs { font-family: 'DM Sans', sans-serif; font-style: italic; text-transform: none; opacity: .5; }
 
 /* ── UAE FLAG STRIPE ── */
-.flag-h { height: 3px; background: linear-gradient(90deg,#D42B3C 33.3%,#fff 33.3% 66.6%,#007A38 66.6%); }
+.flag-h { height: 3px; background: linear-gradient(90deg,#C8102E 33.3%,#fff 33.3% 66.6%,#117A4F 66.6%); }
 .flag-v {
   position: absolute; top: 0; bottom: 0; width: 3px;
-  background: linear-gradient(to bottom,#D42B3C 33.3%,#fff 33.3% 66.6%,#007A38 66.6%);
+  background: linear-gradient(to bottom,#C8102E 33.3%,#fff 33.3% 66.6%,#117A4F 66.6%);
 }
 [dir="rtl"] .flag-v { right: 0; }
 [dir="ltr"] .flag-v  { left:  0; }
@@ -283,56 +329,77 @@ p { line-height: var(--ds-lh-body); }
 
 /* ── CARD ── */
 .card {
-  background: #fff;
-  border: 1px solid #D6D0C4;
-  transition: transform .28s ease, box-shadow .28s ease;
+  background: var(--ds-surface-0);
+  border: 1px solid var(--ds-line);
+  box-shadow: var(--ds-sh-card);
+  transition: transform .28s var(--ds-ease-emphasis),
+              box-shadow .28s var(--ds-ease-emphasis),
+              border-color .28s var(--ds-ease-emphasis);
 }
-.card:hover { transform: translateY(-4px); }
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ds-sh-card-hover);
+  border-color: var(--ds-line-strong);
+}
 
 /* ── CARD TOP ACCENT ── */
-.card-top-red   { border-top: 2.5px solid #D42B3C; }
-.card-top-green { border-top: 2.5px solid #007A38; }
-.card-top-ink   { border-top: 2.5px solid #141414; }
+.card-top-red   { border-top: 3px solid var(--ds-scarlet-500); }
+.card-top-green { border-top: 3px solid var(--ds-emerald-700); }
+.card-top-ink   { border-top: 3px solid var(--ds-text-1); }
 
 /* ── BADGE ── */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: .18rem .7rem;
-  font-size: .62rem;
-  font-family: 'Noto Sans Arabic', sans-serif;
+  gap: .4rem;
+  padding: .3rem .8rem;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  font-family: var(--font-cairo), sans-serif;
   white-space: nowrap;
 }
-[dir="ltr"] .badge { font-family: 'DM Sans', sans-serif; }
-.badge-red   { background: rgba(212,43,60,.08);  color: #D42B3C; }
-.badge-green { background: rgba(0,122,56,.09);   color: #007A38; }
-.badge-ink   { background: rgba(20,20,20,.06);   color: #262626; }
-.badge-gold  { background: rgba(160,120,32,.1);  color: #A07820; }
-.badge-ivory { background: rgba(255,255,255,.15);color: #F8F5F0; }
+[dir="ltr"] .badge { font-family: var(--font-inter), system-ui, sans-serif; }
+.badge-red   { background: rgba(200,16,46,.07);  color: var(--ds-scarlet-600); border-color: rgba(200,16,46,.18); }
+.badge-green { background: rgba(10,82,52,.07);   color: var(--ds-emerald-700); border-color: rgba(10,82,52,.18); }
+.badge-ink   { background: rgba(17,17,17,.05);   color: var(--ds-text-2); border-color: rgba(17,17,17,.12); }
+.badge-gold  { background: rgba(10,82,52,.07);   color: var(--ds-emerald-700); border-color: rgba(10,82,52,.18); }
+.badge-ivory { background: rgba(255,255,255,.12);color: var(--ds-text-inv); border-color: rgba(255,255,255,.22); }
 
 /* ── BUTTON ── */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: .5rem;
-  padding: .75rem 1.5rem;
-  font-size: .78rem;
-  border: none;
+  padding: .9rem 1.9rem;
+  font-size: .9375rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: all .2s;
-  font-family: 'Noto Sans Arabic', sans-serif;
+  transition: background-color .22s var(--ds-ease-standard),
+              color .22s var(--ds-ease-standard),
+              border-color .22s var(--ds-ease-standard),
+              box-shadow .28s var(--ds-ease-emphasis),
+              transform .28s var(--ds-ease-emphasis);
+  font-family: var(--font-cairo), sans-serif;
   white-space: nowrap;
 }
-[dir="ltr"] .btn { font-family: 'DM Sans', sans-serif; }
-.btn-sm { padding: .45rem 1.1rem; font-size: .72rem; }
-.btn-primary   { background: #D42B3C; color: #fff; }
-.btn-primary:hover { background: #B02030; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(212,43,60,.3); }
-.btn-secondary { background: transparent; color: #141414; border: 1px solid rgba(20,20,20,.8); }
-.btn-secondary:hover { background: #141414; color: #F8F5F0; }
-.btn-green     { background: #007A38; color: #fff; }
-.btn-green:hover { background: #006B30; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,106,48,.28); }
-.btn-outline-light { background: transparent; color: #F8F5F0; border: 1px solid rgba(248,245,240,.3); }
-.btn-outline-light:hover { border-color: #F8F5F0; background: rgba(248,245,240,.08); }
+[dir="ltr"] .btn { font-family: var(--font-inter), system-ui, sans-serif; }
+.btn-sm { padding: .6rem 1.25rem; font-size: .8125rem; }
+.btn-primary   { background: var(--ds-emerald-700); color: #fff; }
+.btn-primary:hover { background: var(--ds-emerald-600); transform: translateY(-2px); box-shadow: var(--ds-sh-emerald); }
+.btn-secondary { background: transparent; color: var(--ds-text-1); border-color: var(--ds-text-1); }
+.btn-secondary:hover { background: var(--ds-text-1); color: #fff; transform: translateY(-2px); }
+.btn-green     { background: var(--ds-emerald-700); color: #fff; }
+.btn-green:hover { background: var(--ds-emerald-600); transform: translateY(-2px); box-shadow: var(--ds-sh-emerald); }
+.btn-red       { background: var(--ds-scarlet-500); color: #fff; }
+.btn-red:hover { background: var(--ds-scarlet-600); transform: translateY(-2px); box-shadow: var(--ds-sh-scarlet); }
+.btn-outline-light { background: transparent; color: var(--ds-text-inv); border-color: rgba(255,255,255,.34); }
+.btn-outline-light:hover { border-color: #fff; background: rgba(255,255,255,.08); transform: translateY(-2px); }
 
 /* ── FORM ── */
 .form-inp {

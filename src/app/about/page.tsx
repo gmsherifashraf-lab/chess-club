@@ -1,159 +1,120 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 import Stats from "@/components/home/Stats";
-import History from "@/components/home/History";
-import VisionMission from "@/components/home/VisionMission";
 import BoardOfDirectors from "@/components/home/BoardOfDirectors";
-import Achievements from "@/components/home/Achievements";
-import Partners from "@/components/home/Partners";
-import Contact from "@/components/home/Contact";
+import { SectionTitle } from "@/components/ui/SectionTitle";
 
 export const metadata = {
-  title: "About — Chess & Culture Club for Women",
+  title: "About — Chess & Culture Club for Women, Sharjah",
   description:
-    "The history, vision, and leadership of the Chess & Culture Club for Women in Sharjah — a UAE institution since 1991.",
+    "The history, governance, and mission of the Chess & Culture Club for Women in Sharjah — a UAE institution since 1991.",
 };
+
+const STORY: { ar: string; en: string }[] = [
+  {
+    ar: "يُعدّ نادي الشطرنج والثقافة للفتيات بالشارقة أحد أعرق المؤسسات النسائية في الإمارات العربية المتحدة، تأسس عام 1991 ضمن منظومة الشارقة الثقافية والرياضية الرائدة، وأصبح علامة فارقة في تاريخ الشطرنج النسائي بالدولة.",
+    en: "The Chess & Culture Club for Women in Sharjah is one of the oldest and most respected women's institutions in the United Arab Emirates. Established in 1991 within Sharjah's pioneering cultural and sporting ecosystem, the club has become a landmark in the history of women's chess in the country.",
+  },
+  {
+    ar: "يُركّز النادي على تطوير اللاعبات الإماراتيات، وتمكين الفتيات من خلال الشطرنج والثقافة، وصناعة بطلات المستقبل، والجمع بين الرياضة والتعليم والثقافة وخدمة المجتمع.",
+    en: "The club focuses on developing Emirati players, empowering girls through chess and culture, creating future champions, and combining sport, education, culture, and community development.",
+  },
+  {
+    ar: "يحمل النادي سمعة راسخة في بطولات الإمارات للشطرنج النسائي، ويتمتع بحضور مؤسسي مميز ومبادرات مجتمعية واسعة، ضمن إطار حوكمة معتمد بشهادة الجودة الدولية ISO 9001.",
+    en: "The club holds a strong reputation in UAE women's chess championships, with distinguished institutional standing and wide community initiatives, within a governance framework certified to ISO 9001 standards.",
+  },
+];
+
+const VALUES: { ar: string; en: string; descAr: string; descEn: string }[] = [
+  {
+    ar: "التميّز الرياضي",
+    en: "Sporting Excellence",
+    descAr: "تطوير لاعبات قادرات على تمثيل الدولة في أعلى المستويات.",
+    descEn: "Developing players able to represent the nation at the highest level.",
+  },
+  {
+    ar: "تمكين المرأة",
+    en: "Women's Empowerment",
+    descAr: "بناء القيادة والثقة لدى الفتاة الإماراتية عبر الشطرنج والثقافة.",
+    descEn: "Building leadership and confidence in Emirati women through chess and culture.",
+  },
+  {
+    ar: "الحوكمة المؤسسية",
+    en: "Institutional Governance",
+    descAr: "إدارة شفافة معتمدة بمعايير الجودة الدولية منذ 2018.",
+    descEn: "Transparent administration certified to international quality standards since 2018.",
+  },
+];
 
 export default function AboutPage() {
   return (
     <>
       <Navbar />
-      <main>
-        {/* Page hero — light luxury opener */}
-        <section className="hero-light border-b border-stone relative overflow-hidden">
-          <div className="chess-tex absolute inset-0 opacity-40" />
-          <div className="relative max-w-wrap mx-auto px-4 sm:px-6 lg:px-10 pt-32 pb-20 sm:pt-40 sm:pb-28">
-            <span className="eyebrow-light mb-6">
-              <span className="dot-emerald" />
-              <span className="ar">المؤسسة</span>
-              <span className="en">The Institution</span>
-            </span>
+      <main id="main">
+        <PageHeader
+          kickerAr="المؤسسة"
+          kickerEn="The Institution"
+          titleAr="نادي الشطرنج والثقافة للفتيات بالشارقة"
+          titleEn="Chess & Culture Club for Women, Sharjah"
+          leadAr="مؤسسة رياضية وثقافية رائدة منذ 1991، تقود مسيرة الشطرنج النسائي في دولة الإمارات."
+          leadEn="A leading sporting and cultural institution since 1991, leading the women's chess movement in the UAE."
+          crumbs={[{ href: "/about", ar: "عن النادي", en: "About" }]}
+        />
 
-            <h1 className="font-disp t-mega text-ink mb-6 mt-6 max-w-4xl">
-              <span className="ar">نادي الشطرنج والثقافة للفتيات بالشارقة</span>
-              <span className="en">Chess &amp; Culture Club for Women — Sharjah</span>
-            </h1>
+        {/* Institutional narrative */}
+        <section className="border-t border-line bg-white">
+          <div className="mx-auto max-w-wrap-md px-5 py-24 sm:px-8 sm:py-28 lg:px-10">
+            <SectionTitle
+              eyebrowAr="من نحن"
+              eyebrowEn="Who We Are"
+              titleAr="إرث ممتد منذ 1991"
+              titleEn="A legacy since 1991"
+              size="h2"
+            />
+            <div className="mt-10 space-y-7 text-[1.0625rem] leading-relaxed text-text-2 sm:text-[1.15rem]">
+              {STORY.map((p, i) => (
+                <p key={i}>
+                  <span className="ar">{p.ar}</span>
+                  <span className="en">{p.en}</span>
+                </p>
+              ))}
+            </div>
+          </div>
+        </section>
 
-            <div className="h-[2px] w-40 bg-gradient-to-r from-[#1F6B4F] via-ink to-[#C8102E] mb-8" />
-
-            <p className="text-lg sm:text-xl leading-[1.85] text-ink2 max-w-3xl">
-              <span className="ar">
-                مؤسسة رياضية وثقافية رائدة، تأسست عام 1991 لتقود مسيرة الشطرنج النسائي
-                في الإمارات العربية المتحدة، وتُسهم في تمكين الفتاة الإماراتية ذهنياً وقيادياً
-                من خلال الشطرنج، الثقافة، والتعليم.
-              </span>
-              <span className="en">
-                A leading sports and cultural institution founded in 1991 to lead
-                the women&rsquo;s chess movement in the United Arab Emirates and
-                empower Emirati women intellectually and as leaders — through
-                chess, culture, and education.
-              </span>
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/70 border border-stone text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#C8102E]" />
-                <span className="ar">تأسس 1991</span>
-                <span className="en">Est. 1991</span>
-              </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/70 border border-stone text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#0B3D2E]" />
-                <span className="ar">معتمد ISO</span>
-                <span className="en">ISO Certified</span>
-              </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/70 border border-stone text-[0.65rem] uppercase tracking-[0.22em] font-semibold backdrop-blur">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#1F6B4F]" />
-                <span className="ar">مؤسسة نسائية رائدة</span>
-                <span className="en">Leading Women&rsquo;s Institution</span>
-              </span>
+        {/* Values */}
+        <section className="border-t border-line bg-cream-100">
+          <div className="mx-auto max-w-wrap px-5 py-24 sm:px-8 sm:py-28 lg:px-10">
+            <SectionTitle
+              eyebrowAr="مبادئنا"
+              eyebrowEn="Our Principles"
+              titleAr="القيم التي نعمل بها"
+              titleEn="The values we operate by"
+              size="h2"
+            />
+            <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-[4px] border border-line bg-line/60 sm:grid-cols-3">
+              {VALUES.map((v, i) => (
+                <div key={v.en} className="bg-white p-8 sm:p-10">
+                  <div className="font-disp text-5xl font-bold tabular-nums text-forest-700/30">
+                    0{i + 1}
+                  </div>
+                  <h3 className="mt-5 font-disp text-[1.3rem] font-bold tracking-tight text-text-1">
+                    <span className="ar">{v.ar}</span>
+                    <span className="en">{v.en}</span>
+                  </h3>
+                  <p className="mt-3 text-[0.95rem] leading-relaxed text-text-3">
+                    <span className="ar">{v.descAr}</span>
+                    <span className="en">{v.descEn}</span>
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         <Stats />
-
-        {/* Long-form institutional intro */}
-        <section className="bg-white">
-          <div className="max-w-wrap-md mx-auto px-4 sm:px-6 lg:px-10 section-pad">
-            <div className="sec-tag inline-flex items-center gap-3 mb-5 text-red">
-              <span className="block w-9 h-[2px] bg-red" />
-              <span>
-                <span className="ar">من نحن</span>
-                <span className="en">Who We Are</span>
-              </span>
-            </div>
-            <h2 className="font-disp t-h2 text-ink mb-7">
-              <span className="ar">إرث ممتد منذ 1991</span>
-              <span className="en">A legacy since 1991</span>
-            </h2>
-            <div className="h-[3px] w-24 bg-gradient-to-r from-red via-white to-green2 mb-10" />
-
-            <div className="space-y-7 text-base sm:text-lg leading-[1.9] text-ink2">
-              <p>
-                <span className="ar">
-                  يُعدّ نادي الشطرنج والثقافة للفتيات بالشارقة أحد أعرق المؤسسات
-                  النسائية في الإمارات العربية المتحدة، تأسس عام 1991 ضمن منظومة
-                  الشارقة الثقافية والرياضية الرائدة، وأصبح علامة فارقة في تاريخ
-                  الشطرنج النسائي بالدولة.
-                </span>
-                <span className="en">
-                  The Chess &amp; Culture Club for Women in Sharjah is one of the
-                  oldest and most respected women&rsquo;s institutions in the
-                  United Arab Emirates. Established in 1991 within Sharjah&rsquo;s
-                  pioneering cultural and sporting ecosystem, the club has become
-                  a landmark in the history of women&rsquo;s chess in the country.
-                </span>
-              </p>
-
-              <p>
-                <span className="ar">
-                  يُركّز النادي على تطوير اللاعبات الإماراتيات، تمكين الفتيات من
-                  خلال الشطرنج والثقافة، صناعة بطلات المستقبل، والجمع بين الرياضة
-                  والتعليم والثقافة وخدمة المجتمع — بما يعزز النمو الفكري وروح
-                  القيادة لدى الشابات.
-                </span>
-                <span className="en">
-                  The club focuses on developing female chess players, empowering
-                  girls through chess and culture, creating future champions, and
-                  combining sport, education, culture, and community development —
-                  fostering intellectual growth and leadership in young women.
-                </span>
-              </p>
-
-              <p>
-                <span className="ar">
-                  يحمل النادي سمعة راسخة في بطولات الإمارات للشطرنج النسائي،
-                  ويتمتع بحضور مؤسسي مميز ومبادرات مجتمعية واسعة، ويُمثّل نموذجاً
-                  يُحتذى به في الجمع بين التميّز الرياضي والقيمة الثقافية.
-                </span>
-                <span className="en">
-                  The club holds a strong reputation in UAE women&rsquo;s chess
-                  championships, is recognised for institutional excellence and
-                  wide-reaching community initiatives, and stands as a model for
-                  combining sporting excellence with cultural value.
-                </span>
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Vision, mission, values */}
-        <VisionMission />
-
-        {/* Three-decade timeline */}
-        <History />
-
-        {/* Recognition + ISO */}
-        <Achievements />
-
-        {/* Board of Directors */}
         <BoardOfDirectors />
-
-        {/* Partners */}
-        <Partners />
-
-        {/* Contact */}
-        <Contact />
       </main>
       <Footer />
     </>

@@ -4,19 +4,10 @@ import Footer from "@/components/layout/Footer";
 import Hero from "@/components/home/Hero";
 import Stats from "@/components/home/Stats";
 import AboutPreview from "@/components/home/AboutPreview";
-import History from "@/components/home/History";
-import VisionMission from "@/components/home/VisionMission";
-import Achievements from "@/components/home/Achievements";
-import TournamentsPreview from "@/components/home/TournamentsPreview";
-import TrainingPrograms from "@/components/home/TrainingPrograms";
-import BoardOfDirectors from "@/components/home/BoardOfDirectors";
-import Community from "@/components/home/Community";
 import NewsPreview from "@/components/home/NewsPreview";
-import Partners from "@/components/home/Partners";
+import TournamentsPreview from "@/components/home/TournamentsPreview";
+import BoardOfDirectors from "@/components/home/BoardOfDirectors";
 import Gallery from "@/components/home/Gallery";
-import Testimonials from "@/components/home/Testimonials";
-import SocialSection from "@/components/home/SocialSection";
-import Contact from "@/components/home/Contact";
 
 import ScrollProgress from "@/components/motion/ScrollProgress";
 
@@ -35,55 +26,29 @@ export default async function HomePage() {
     <>
       <ScrollProgress />
       <Navbar />
-      <main>
-        {/* Hero — light luxury cinematic intro */}
+      <main id="main">
+        {/* 1 — Cinematic federation hero */}
         <Hero />
 
-        {/* Headline metrics */}
+        {/* 2 — The club in numbers */}
         <Stats />
 
-        {/* DARK ACCENT — institutional narrative */}
+        {/* 3 — Institutional narrative (dark band) */}
         <AboutPreview />
 
-        {/* Three-decade history */}
-        <History />
-
-        {/* Vision, Mission, Core Values */}
-        <VisionMission />
-
-        {/* Awards and recognition */}
-        <Achievements />
-
-        {/* Live tournaments preview */}
-        <TournamentsPreview items={tournaments} />
-
-        {/* Training programmes */}
-        <TrainingPrograms />
-
-        {/* Board + Executive Leadership */}
-        <BoardOfDirectors />
-
-        {/* DARK ACCENT — cultural & community work */}
-        <Community />
-
-        {/* Live news preview */}
+        {/* 4 — Latest news */}
         <NewsPreview items={news} />
 
-        {/* Institutional partners */}
-        <Partners />
+        {/* 5 — Upcoming tournaments & events */}
+        <TournamentsPreview items={tournaments} />
 
-        {/* Visual gallery */}
+        {/* 6 — Board of directors & leadership */}
+        <BoardOfDirectors />
+
+        {/* 7 — Editorial gallery */}
         <Gallery items={gallery} />
-
-        {/* Testimonials */}
-        <Testimonials />
-
-        {/* DARK ACCENT — real social media integration */}
-        <SocialSection />
-
-        {/* Contact / CTA */}
-        <Contact />
       </main>
+      {/* 8 — Federation footer: CTA, partners, contact, newsletter */}
       <Footer />
     </>
   );

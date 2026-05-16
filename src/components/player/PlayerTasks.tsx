@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import FileUpload from "@/components/ui/FileUpload";
 
 interface Task {
   id:             string;
@@ -211,8 +212,8 @@ export default function PlayerTasks() {
                   <textarea className="form-inp compact" rows={4} value={content} onChange={(e) => setContent(e.target.value)} disabled={savingId === t.id} />
                 </div>
                 <div>
-                  <label className="form-lbl"><span className="ar">رابط ملف (اختياري)</span><span className="en">File URL (optional)</span></label>
-                  <input className="form-inp compact" type="url" value={fileUrl} onChange={(e) => setFileUrl(e.target.value)} disabled={savingId === t.id} placeholder="https://…" />
+                  <label className="form-lbl"><span className="ar">ملف (اختياري)</span><span className="en">File (optional)</span></label>
+                  <FileUpload bucket="submissions" value={fileUrl || null} onChange={(u) => setFileUrl(u ?? "")} disabled={savingId === t.id} />
                 </div>
                 <div style={{ display: "flex", gap: ".5rem", justifyContent: "flex-end" }}>
                   <button onClick={close} disabled={savingId === t.id} className="btn btn-secondary btn-sm">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import FileUpload from "@/components/ui/FileUpload";
 
 interface PlayerOption {
   id:        string;          // auth.users.id
@@ -160,10 +161,10 @@ export default function TaskFormModal({ initial, onClose, onSaved }: Props) {
           <div className="g2" style={{ gap: "1rem" }}>
             <div>
               <label className="form-lbl">
-                <span className="ar">رابط مرفق (اختياري)</span>
-                <span className="en">Attachment URL (optional)</span>
+                <span className="ar">مرفق (اختياري)</span>
+                <span className="en">Attachment (optional)</span>
               </label>
-              <input className="form-inp" type="url" value={form.attachment_url ?? ""} onChange={(e) => update("attachment_url", e.target.value)} disabled={saving} placeholder="https://…" />
+              <FileUpload bucket="training-material" value={form.attachment_url} onChange={(u) => update("attachment_url", u)} disabled={saving} />
             </div>
 
             <div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { cn } from "@/lib/utils";
+import type { BoardMember } from "@/lib/queries/home";
 
 interface Member {
   ar: string;
@@ -16,7 +17,7 @@ interface Member {
 
 const HONORIFIC = { ar: "سعادة", en: "H.E." };
 
-const CHAIR: Member = {
+const FB_CHAIR: Member = {
   ar: "نجلاء عبدالله أحمد الدرويشي الشامسي",
   en: "Najla Abdullah Ahmed Al Darwishi Al Shamsi",
   arRole: "رئيسة مجلس الإدارة",
@@ -27,7 +28,7 @@ const CHAIR: Member = {
 
 // Maitha intentionally has no `photo` — the federation page carries an
 // incorrect image for her, so the card falls back to the initials avatar.
-const SECRETARY: Member = {
+const FB_SECRETARY: Member = {
   ar: "ميثاء عيسى خلفان بن عيسى الذبحاني",
   en: "Maitha Issa Khalfan bin Isa Al Dhabahi",
   arRole: "الأمين العام",
@@ -35,7 +36,7 @@ const SECRETARY: Member = {
   honorific: HONORIFIC,
 };
 
-const MEMBERS: Member[] = [
+const FB_MEMBERS: Member[] = [
   { ar: "أروى محمد سلطان محمد العويس", en: "Arwa Mohammed Sultan Mohammed Al Owais", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/arwa.jpg" },
   { ar: "أمينة جمعة حسن صالح الجسمي", en: "Amina Juma Hassan Saleh Al Jasmi", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/amina.jpg" },
   { ar: "إيمان محمد مبارك محمد العلي", en: "Iman Mohammed Mubarak Mohammed Al Ali", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/iman.jpg" },
@@ -43,7 +44,7 @@ const MEMBERS: Member[] = [
   { ar: "علياء علي غريب أحمد المزمي", en: "Alia Ali Gharib Ahmed Al Mazmi", arRole: "عضو مجلس", enRole: "Board Member", honorific: HONORIFIC, photo: "/images/board/alia.jpg" },
 ];
 
-const EXECUTIVE: Member = {
+const FB_EXECUTIVE: Member = {
   ar: "آمنة الملا",
   en: "Amna Al Mulla",
   arRole: "المدير التنفيذي",
@@ -126,7 +127,13 @@ const gridV: Variants = {
   show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
 };
 
-export default function BoardOfDirectors() {
+export default function BoardOfDirectors({ members }: { members?: BoardMember[] }) {
+  const has = !!(members && members.length);
+  const CHAIR     = (has ? members!.find((m) => m.category === "chair")     : undefined) ?? FB_CHAIR;
+  const SECRETARY = (has ? members!.find((m) => m.category === "secretary") : undefined) ?? FB_SECRETARY;
+  const EXECUTIVE = (has ? members!.find((m) => m.category === "executive") : undefined) ?? FB_EXECUTIVE;
+  const MEMBERS   = has ? members!.filter((m) => m.category === "member")   : FB_MEMBERS;
+
   const reduce = useReducedMotion();
   const rise: Variants = {
     hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 24 },

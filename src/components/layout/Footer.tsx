@@ -139,9 +139,10 @@ function BackToTop({ reduce }: { reduce: boolean | null }) {
   );
 }
 
-export default function Footer() {
+export default function Footer({ partners }: { partners?: { ar: string; en: string }[] }) {
   const reduce = useReducedMotion();
   const year = new Date().getFullYear();
+  const PARTNER_LIST = partners && partners.length ? partners : PARTNERS;
 
   const group: Variants = {
     hidden: {},
@@ -226,7 +227,7 @@ export default function Footer() {
             <span className="en">In partnership with</span>
           </div>
           <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-5 sm:gap-x-12">
-            {PARTNERS.map((p, i) => (
+            {PARTNER_LIST.map((p, i) => (
               <li key={p.en} className="flex items-center gap-x-8 sm:gap-x-12">
                 {i > 0 && (
                   <span

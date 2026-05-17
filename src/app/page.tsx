@@ -11,15 +11,21 @@ import Gallery from "@/components/home/Gallery";
 
 import ScrollProgress from "@/components/motion/ScrollProgress";
 
-import { getNews, getTournaments, getGalleryImages } from "@/lib/queries/home";
+import {
+  getNews, getTournaments, getGalleryImages,
+  getBoardMembers, getPartners, getStats,
+} from "@/lib/queries/home";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [news, tournaments, gallery] = await Promise.all([
+  const [news, tournaments, gallery, board, partners, stats] = await Promise.all([
     getNews(3),
     getTournaments(3),
     getGalleryImages(12),
+    getBoardMembers(),
+    getPartners(),
+    getStats(),
   ]);
 
   return (
@@ -31,7 +37,7 @@ export default async function HomePage() {
         <Hero />
 
         {/* 2 — The club in numbers */}
-        <Stats />
+        <Stats items={stats} />
 
         {/* 3 — Institutional narrative (dark band) */}
         <AboutPreview />
@@ -43,13 +49,13 @@ export default async function HomePage() {
         <TournamentsPreview items={tournaments} />
 
         {/* 6 — Board of directors & leadership */}
-        <BoardOfDirectors />
+        <BoardOfDirectors members={board} />
 
         {/* 7 — Editorial gallery */}
         <Gallery items={gallery} />
       </main>
       {/* 8 — Federation footer: CTA, partners, contact, newsletter */}
-      <Footer />
+      <Footer partners={partners} />
     </>
   );
 }

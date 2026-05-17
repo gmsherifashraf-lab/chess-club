@@ -138,3 +138,93 @@ export const galleryFields: FieldConfig[] = [
   { key: "is_published",  labelAr: "نشر علناً",         labelEn: "Published",         type: "boolean", defaultValue: "true", placeholder: "Visible on public site" },
 ];
 
+// ─── Board of Directors ──────────────────────────────────────────────────────
+export interface BoardRow { id: string; name_ar: string; name_en: string; role_ar: string | null; role_en: string | null; honorific_ar: string | null; honorific_en: string | null; photo: string | null; category: string; sort_order: number; is_published: boolean; created_at: string }
+
+export const boardColumns: ColumnConfig<BoardRow>[] = [
+  { headerAr: "الصورة", headerEn: "Photo", width: "60px", render: (r) => <Thumb url={r.photo} alt={r.name_en} /> },
+  { headerAr: "الاسم",  headerEn: "Name",  render: (r) => (
+    <div>
+      <div style={{ fontWeight: 600, color: "#141414" }}>{r.name_en}</div>
+      <div style={{ fontSize: ".78rem", opacity: .55, marginTop: 2 }}>{r.name_ar}</div>
+    </div>
+  )},
+  { headerAr: "الصفة",  headerEn: "Role",  render: (r) => dim(r.role_en) },
+  { headerAr: "الفئة",  headerEn: "Category", width: "110px", render: (r) => <span className="badge badge-ink">{r.category}</span> },
+  { headerAr: "الترتيب", headerEn: "Order", width: "70px", render: (r) => <span style={{ opacity: .7 }}>{r.sort_order}</span> },
+  { headerAr: "النشر",  headerEn: "Status", width: "90px", render: (r) => r.is_published ? <span className="badge badge-green">Live</span> : <span className="badge badge-gold">Draft</span> },
+];
+
+export const boardFields: FieldConfig[] = [
+  { key: "name_en",      labelAr: "الاسم (إنجليزي)",  labelEn: "Name (English)",   type: "text", required: true },
+  { key: "name_ar",      labelAr: "الاسم (عربي)",     labelEn: "Name (Arabic)",    type: "text", required: true },
+  { key: "role_en",      labelAr: "الصفة (إنجليزي)",  labelEn: "Role (English)",   type: "text" },
+  { key: "role_ar",      labelAr: "الصفة (عربي)",     labelEn: "Role (Arabic)",    type: "text" },
+  { key: "honorific_en", labelAr: "اللقب (إنجليزي)",  labelEn: "Honorific (English)", type: "text", placeholder: "H.E. (optional)" },
+  { key: "honorific_ar", labelAr: "اللقب (عربي)",     labelEn: "Honorific (Arabic)",  type: "text", placeholder: "سعادة (optional)" },
+  { key: "photo",        labelAr: "رابط الصورة",       labelEn: "Photo path/URL",   type: "text", placeholder: "/images/board/name.jpg" },
+  { key: "category",     labelAr: "الفئة",            labelEn: "Category",         type: "select", required: true, defaultValue: "member", options: [
+    { value: "chair",     labelEn: "Chairperson" },
+    { value: "secretary", labelEn: "Secretary General" },
+    { value: "member",    labelEn: "Board Member" },
+    { value: "executive", labelEn: "Executive Director" },
+  ]},
+  { key: "sort_order",   labelAr: "الترتيب",           labelEn: "Sort Order",       type: "number", placeholder: "0", defaultValue: "0" },
+  { key: "is_published", labelAr: "نشر علناً",         labelEn: "Published",        type: "boolean", defaultValue: "true", placeholder: "Visible on public site" },
+];
+
+// ─── Partners ────────────────────────────────────────────────────────────────
+export interface PartnerRow { id: string; name_ar: string; name_en: string; url: string | null; sort_order: number; is_published: boolean; created_at: string }
+
+export const partnerColumns: ColumnConfig<PartnerRow>[] = [
+  { headerAr: "الشريك", headerEn: "Partner", render: (r) => (
+    <div>
+      <div style={{ fontWeight: 600, color: "#141414" }}>{r.name_en}</div>
+      <div style={{ fontSize: ".78rem", opacity: .55, marginTop: 2 }}>{r.name_ar}</div>
+    </div>
+  )},
+  { headerAr: "الرابط", headerEn: "Link", render: (r) => dim(r.url) },
+  { headerAr: "الترتيب", headerEn: "Order", width: "70px", render: (r) => <span style={{ opacity: .7 }}>{r.sort_order}</span> },
+  { headerAr: "النشر",  headerEn: "Status", width: "90px", render: (r) => r.is_published ? <span className="badge badge-green">Live</span> : <span className="badge badge-gold">Draft</span> },
+];
+
+export const partnerFields: FieldConfig[] = [
+  { key: "name_en",      labelAr: "الاسم (إنجليزي)", labelEn: "Name (English)", type: "text", required: true },
+  { key: "name_ar",      labelAr: "الاسم (عربي)",    labelEn: "Name (Arabic)",  type: "text", required: true },
+  { key: "url",          labelAr: "رابط (اختياري)",  labelEn: "URL (optional)", type: "url",  placeholder: "https://…" },
+  { key: "sort_order",   labelAr: "الترتيب",          labelEn: "Sort Order",     type: "number", placeholder: "0", defaultValue: "0" },
+  { key: "is_published", labelAr: "نشر علناً",        labelEn: "Published",      type: "boolean", defaultValue: "true", placeholder: "Visible on public site" },
+];
+
+// ─── Stats ───────────────────────────────────────────────────────────────────
+export interface StatRow { id: string; value: number; prefix: string | null; suffix: string | null; grouped: boolean; label_ar: string; label_en: string; accent: string | null; sort_order: number; is_published: boolean; created_at: string }
+
+export const statColumns: ColumnConfig<StatRow>[] = [
+  { headerAr: "القيمة", headerEn: "Value", width: "110px", render: (r) => <b>{(r.prefix ?? "") + (r.grouped ? r.value.toLocaleString() : r.value) + (r.suffix ?? "")}</b> },
+  { headerAr: "التسمية", headerEn: "Label", render: (r) => (
+    <div>
+      <div style={{ fontWeight: 600, color: "#141414" }}>{r.label_en}</div>
+      <div style={{ fontSize: ".78rem", opacity: .55, marginTop: 2 }}>{r.label_ar}</div>
+    </div>
+  )},
+  { headerAr: "اللون", headerEn: "Accent", width: "90px", render: (r) => r.accent ? <span className={`badge ${r.accent === "red" ? "badge-red" : "badge-green"}`}>{r.accent}</span> : dim(null) },
+  { headerAr: "الترتيب", headerEn: "Order", width: "70px", render: (r) => <span style={{ opacity: .7 }}>{r.sort_order}</span> },
+  { headerAr: "النشر",  headerEn: "Status", width: "90px", render: (r) => r.is_published ? <span className="badge badge-green">Live</span> : <span className="badge badge-gold">Draft</span> },
+];
+
+export const statFields: FieldConfig[] = [
+  { key: "value",        labelAr: "القيمة",           labelEn: "Value",          type: "number", required: true, placeholder: "180" },
+  { key: "prefix",       labelAr: "بادئة",            labelEn: "Prefix",         type: "text",   placeholder: "e.g. $ (optional)" },
+  { key: "suffix",       labelAr: "لاحقة",            labelEn: "Suffix",         type: "text",   placeholder: "e.g. + (optional)" },
+  { key: "grouped",      labelAr: "فواصل الآلاف",     labelEn: "Group thousands", type: "boolean", defaultValue: "false", placeholder: "2,150 vs 2150" },
+  { key: "label_en",     labelAr: "التسمية (إنجليزي)", labelEn: "Label (English)", type: "text", required: true },
+  { key: "label_ar",     labelAr: "التسمية (عربي)",    labelEn: "Label (Arabic)",  type: "text", required: true },
+  { key: "accent",       labelAr: "اللون المؤسسي",     labelEn: "Accent",         type: "select", defaultValue: "", options: [
+    { value: "",      labelEn: "None (ink)" },
+    { value: "green", labelEn: "Green" },
+    { value: "red",   labelEn: "Red" },
+  ]},
+  { key: "sort_order",   labelAr: "الترتيب",           labelEn: "Sort Order",     type: "number", placeholder: "0", defaultValue: "0" },
+  { key: "is_published", labelAr: "نشر علناً",         labelEn: "Published",      type: "boolean", defaultValue: "true", placeholder: "Visible on public site" },
+];
+

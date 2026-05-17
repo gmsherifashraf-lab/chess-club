@@ -17,6 +17,9 @@ import {
   tournamentColumns, tournamentFields, type TournamentRow,
   newsColumns,   newsFields,   type NewsRow,
   galleryColumns, galleryFields, type GalleryRow,
+  boardColumns,  boardFields,  type BoardRow,
+  partnerColumns, partnerFields, type PartnerRow,
+  statColumns,   statFields,   type StatRow,
 } from "@/components/admin/configs";
 
 const NAV: NavItem[] = [
@@ -30,6 +33,9 @@ const NAV: NavItem[] = [
   { key: "tournaments", icon: "🏆", ar: "البطولات",      en: "Tournaments"   },
   { key: "news",        icon: "📰", ar: "الأخبار",        en: "News"          },
   { key: "gallery",     icon: "🖼", ar: "معرض الصور",    en: "Gallery"       },
+  { key: "board",       icon: "👔", ar: "مجلس الإدارة",  en: "Board"         },
+  { key: "partners",    icon: "🤝", ar: "الشركاء",       en: "Partners"      },
+  { key: "stats",       icon: "📊", ar: "الأرقام",        en: "Stats"         },
   { key: "settings",    icon: "⚙", ar: "الإعدادات",      en: "Settings"      },
 ];
 
@@ -169,6 +175,39 @@ export default function AdminDashboard() {
           addLabelAr="+ صورة جديدة" addLabelEn="+ Add Image"
           columns={galleryColumns}
           fields={galleryFields}
+          orderBy={{ column: "sort_order", ascending: true }}
+        />
+      )}
+
+      {tab === "board" && (
+        <CrudShell<BoardRow>
+          table="board_members"
+          titleAr="إدارة مجلس الإدارة" titleEn="Board of Directors"
+          addLabelAr="+ عضو جديد" addLabelEn="+ Add Member"
+          columns={boardColumns}
+          fields={boardFields}
+          orderBy={{ column: "sort_order", ascending: true }}
+        />
+      )}
+
+      {tab === "partners" && (
+        <CrudShell<PartnerRow>
+          table="partners"
+          titleAr="إدارة الشركاء" titleEn="Partners"
+          addLabelAr="+ شريك جديد" addLabelEn="+ Add Partner"
+          columns={partnerColumns}
+          fields={partnerFields}
+          orderBy={{ column: "sort_order", ascending: true }}
+        />
+      )}
+
+      {tab === "stats" && (
+        <CrudShell<StatRow>
+          table="stats"
+          titleAr="إدارة الأرقام" titleEn="Club Statistics"
+          addLabelAr="+ رقم جديد" addLabelEn="+ Add Stat"
+          columns={statColumns}
+          fields={statFields}
           orderBy={{ column: "sort_order", ascending: true }}
         />
       )}

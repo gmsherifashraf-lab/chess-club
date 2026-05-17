@@ -12,6 +12,7 @@ import {
 import { EASE_EMPHASIS } from "@/lib/motion";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { cn } from "@/lib/utils";
+import type { StatItem } from "@/lib/queries/home";
 
 /* ── Animated counter ──────────────────────────────────────────────
    Counts up once on enter. Honours reduced motion (snaps to final).
@@ -86,8 +87,9 @@ const cell: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE_EMPHASIS } },
 };
 
-export default function Stats() {
+export default function Stats({ items }: { items?: StatItem[] }) {
   const year = new Date().getFullYear();
+  const DATA: StatItem[] = items && items.length ? items : STATS;
 
   return (
     <section className="relative overflow-hidden border-t border-line bg-cream-100">
@@ -123,7 +125,7 @@ export default function Stats() {
           viewport={{ once: true, margin: "-60px" }}
           className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-[4px] border border-line bg-line/60 sm:grid-cols-3 lg:grid-cols-5"
         >
-          {STATS.map((s) => (
+          {DATA.map((s) => (
             <motion.div
               key={s.en}
               variants={cell}
@@ -152,8 +154,8 @@ export default function Stats() {
               >
                 <CountUp
                   to={s.to}
-                  prefix={s.prefix}
-                  suffix={s.suffix}
+                  prefix={s.prefix ?? undefined}
+                  suffix={s.suffix ?? undefined}
                   group={s.group}
                 />
               </dt>

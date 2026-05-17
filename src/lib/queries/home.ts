@@ -85,3 +85,84 @@ export async function getGalleryImages(limit = 12): Promise<GalleryImage[]> {
   }
   return (data ?? []) as GalleryImage[];
 }
+
+// ── Board of Directors ──────────────────────────────────────────────────────
+export interface BoardMember {
+  ar: string;
+  en: string;
+  arRole: string;
+  enRole: string;
+  honorific?: { ar: string; en: string };
+  photo?: string;
+  category: "chair" | "secretary" | "member" | "executive";
+}
+
+export async function getBoardMembers(): Promise<BoardMember[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("board_members")
+    .select("name_ar, name_en, role_ar, role_en, honorific_ar, honorific_en, photo, category, sort_order")
+    .eq("is_published", true)
+    .order("sort_order", { ascending: true });
+  if (error) {
+    console.error("getBoardMembers:", error.message);
+    return [];
+  }
+  return (data ?? []).map((r) => ({
+    ar: r.name_ar,
+    en: r.name_en,
+    arRole: r.role_ar ?? "",
+    enRole: r.role_en ?? "",
+    honorific: r.honorific_ar && r.honorific_en
+      ? { ar: r.honorific_ar, en: r.honorific_en }
+      : undefined,
+    photo: r.photo ?? undefined,
+    category: r.category,
+  })) as BoardMember[];
+}
+
+// ── Partners ────────────────────────────────────────────────────────────────
+export interface Partner {
+  ar: string;
+  en: string;
+  url?: string | null;
+}
+
+export async function getPartners(): Promise<Partner[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("partners")
+    .select("ar:name_ar, en:name_en, url, sort_order")
+    .eq("is_published", true)
+    .order("sort_order", { ascending: true });
+  if (error) {
+    console.error("getPartners:", error.message);
+    return [];
+  }
+  return (data ?? []) as Partner[];
+}
+
+// ── Stats ───────────────────────────────────────────────────────────────────
+export interface StatItem {
+  to: number;
+  prefix?: string | null;
+  suffix?: string | null;
+  group?: boolean;
+  ar: string;
+  en: string;
+  accent?: "green" | "red" | null;
+}
+
+export async function getStats(): Promise<StatItem[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("stats")
+    .select("to:value, prefix, suffix, group:grouped, ar:label_ar, en:label_en, accent, sort_order")
+    .eq("is_published", true)
+    .order("sort_order", { ascending: true });
+  if (error) {
+    console.error("getStats:", error.message);
+    return [];
+  }
+  return (data ?? []) as StatItem[];
+}

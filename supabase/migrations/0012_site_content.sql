@@ -56,6 +56,42 @@ create table if not exists public.stats (
   updated_at    timestamptz not null default now()
 );
 
+-- ── Self-heal: ensure every column exists even if a table predated this
+--    migration with a different shape (create-if-not-exists would skip it).
+alter table public.board_members
+  add column if not exists name_ar text,
+  add column if not exists name_en text,
+  add column if not exists role_ar text,
+  add column if not exists role_en text,
+  add column if not exists honorific_ar text,
+  add column if not exists honorific_en text,
+  add column if not exists photo text,
+  add column if not exists category text default 'member',
+  add column if not exists sort_order int default 0,
+  add column if not exists is_published boolean default true,
+  add column if not exists created_at timestamptz default now(),
+  add column if not exists updated_at timestamptz default now();
+alter table public.partners
+  add column if not exists name_ar text,
+  add column if not exists name_en text,
+  add column if not exists url text,
+  add column if not exists sort_order int default 0,
+  add column if not exists is_published boolean default true,
+  add column if not exists created_at timestamptz default now(),
+  add column if not exists updated_at timestamptz default now();
+alter table public.stats
+  add column if not exists value int,
+  add column if not exists prefix text,
+  add column if not exists suffix text,
+  add column if not exists grouped boolean default false,
+  add column if not exists label_ar text,
+  add column if not exists label_en text,
+  add column if not exists accent text,
+  add column if not exists sort_order int default 0,
+  add column if not exists is_published boolean default true,
+  add column if not exists created_at timestamptz default now(),
+  add column if not exists updated_at timestamptz default now();
+
 -- ── updated_at triggers (reuse the shared fn) ───────────────────────────────
 drop trigger if exists set_updated_at_board on public.board_members;
 create trigger set_updated_at_board before update on public.board_members

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, Cairo } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 import { LangProvider } from "@/context/LangContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { isLocale, dirOf, DEFAULT_LOCALE } from "@/lib/i18n";
 
 /**
  * Federation type system.
@@ -65,13 +67,6 @@ export const metadata: Metadata = {
   creator: "Chess & Culture Club for Women, Sharjah",
   publisher: "Chess & Culture Club for Women, Sharjah",
   category: "Sports & Culture",
-  alternates: {
-    canonical: "/",
-    languages: {
-      "ar-AE": "/",
-      "en-AE": "/",
-    },
-  },
   openGraph: {
     type: "website",
     locale: "en_AE",
@@ -98,16 +93,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Locale is resolved by middleware and forwarded as `x-locale`, so the
+  // direction is correct at server-render time — no client-side flip.
+  const headerLocale = (await headers()).get("x-locale");
+  const locale = isLocale(headerLocale) ? headerLocale : DEFAULT_LOCALE;
+
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning>
+    <html lang={locale} dir={dirOf(locale)} suppressHydrationWarning>
       <body className={`${plex.variable} ${plexDisplay.variable} ${cairo.variable} ${cairoDisplay.variable}`}>
         <AuthProvider>
-          <LangProvider>{children}</LangProvider>
+          <LangProvider lang={locale}>{children}</LangProvider>
         </AuthProvider>
       </body>
     </html>

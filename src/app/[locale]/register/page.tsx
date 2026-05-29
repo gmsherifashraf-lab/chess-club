@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useLang } from "@/context/LangContext";
+import { withLocale } from "@/lib/i18n";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageHeader from "@/components/layout/PageHeader";
@@ -140,7 +141,7 @@ export default function RegisterPage() {
                   className="mx-auto my-7 h-[3px] w-[72px] bg-[linear-gradient(90deg,#C8102E_33.3%,#fff_33.3%_66.6%,#117A4F_66.6%)]"
                 />
                 <Link
-                  href="/"
+                  href={withLocale(lang, "/")}
                   className={cn(buttonVariants({ variant: "primary", size: "md" }))}
                 >
                   <span className="ar">العودة إلى الرئيسية</span>
@@ -264,7 +265,7 @@ export default function RegisterPage() {
                       <span className="en">{loading ? "Submitting…" : "Submit Application"}</span>
                     </button>
                     <Link
-                      href="/"
+                      href={withLocale(lang, "/")}
                       className={cn(buttonVariants({ variant: "secondary", size: "md" }))}
                     >
                       <span className="ar">إلغاء</span>

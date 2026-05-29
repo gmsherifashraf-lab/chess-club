@@ -6,7 +6,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { signIn } from "@/lib/auth";
 import { useLang } from "@/context/LangContext";
-import { LOGO_URI } from "@/lib/logo";
+import Logo from "@/components/brand/Logo";
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -78,13 +78,7 @@ function LoginInner() {
     <div className="flex min-h-screen items-center justify-center bg-cream-100 px-4 py-16">
       <div className="w-full max-w-[460px]">
         <div className="mb-9 text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={LOGO_URI}
-            alt="Chess & Culture Club for Women — emblem"
-            className="mx-auto mb-5"
-            style={{ height: 84, width: "auto" }}
-          />
+          <Logo size={88} surface="light" priority className="mx-auto mb-5" />
           <div
             aria-hidden
             className="mx-auto mb-5 h-[3px] w-[72px] bg-[linear-gradient(90deg,#C8102E_33.3%,#fff_33.3%_66.6%,#117A4F_66.6%)]"

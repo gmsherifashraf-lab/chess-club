@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useLang } from "@/context/LangContext";
+import { withLocale } from "@/lib/i18n";
 
 interface Crumb {
   href: string;
@@ -17,10 +21,9 @@ interface PageHeaderProps {
 }
 
 /**
- * Federation page-header band. Server component (no client cost): the
- * navigation fade-in is handled globally by app/template.tsx. Used on
- * every interior route so titling, breadcrumb, and the dark masthead
- * read identically site-wide.
+ * Federation page-header band. Used on every interior route so titling,
+ * breadcrumb, and the dark masthead read identically site-wide. Reads the
+ * active locale so breadcrumb links stay inside `/en` or `/ar`.
  */
 export default function PageHeader({
   kickerAr,
@@ -31,6 +34,7 @@ export default function PageHeader({
   leadEn,
   crumbs = [],
 }: PageHeaderProps) {
+  const { lang: locale } = useLang();
   return (
     <section className="relative overflow-hidden bg-[linear-gradient(170deg,#0C1310_0%,#0A1F16_55%,#070B09_100%)] text-white">
       <div
@@ -44,7 +48,10 @@ export default function PageHeader({
           aria-label="Breadcrumb"
           className="mb-7 flex flex-wrap items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-white/45"
         >
-          <Link href="/" className="transition-colors hover:text-white">
+          <Link
+            href={withLocale(locale, "/")}
+            className="transition-colors hover:text-white"
+          >
             <span className="ar">الرئيسية</span>
             <span className="en">Home</span>
           </Link>
@@ -58,7 +65,7 @@ export default function PageHeader({
                 </span>
               ) : (
                 <Link
-                  href={c.href}
+                  href={withLocale(locale, c.href)}
                   className="transition-colors hover:text-white"
                 >
                   <span className="ar">{c.ar}</span>

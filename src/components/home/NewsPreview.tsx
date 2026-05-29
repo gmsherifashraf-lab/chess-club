@@ -4,13 +4,14 @@ import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type { NewsItem } from "@/lib/queries/home";
 import { useLang } from "@/context/LangContext";
+import { withLocale, type Locale } from "@/lib/i18n";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { cn } from "@/lib/utils";
 
 /* Per-article route is CMS-ready (plan: /news/[slug]); until it exists
    every link safely resolves to the news archive. */
-function href(n: NewsItem) {
-  return n.slug ? `/news/${n.slug}` : "/news";
+function href(lang: Locale, n: NewsItem) {
+  return withLocale(lang, n.slug ? `/news/${n.slug}` : "/news");
 }
 
 function useDate() {
@@ -58,7 +59,7 @@ function Cover({
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={item.image_url}
-        alt=""
+        alt={item.title}
         className={cn(
           "h-full w-full object-cover transition-transform duration-[900ms] ease-emphasis group-hover:scale-105",
           className,
@@ -135,6 +136,7 @@ function makeVariants(reduce: boolean | null): {
 
 export default function NewsPreview({ items }: { items: NewsItem[] }) {
   const reduce = useReducedMotion();
+  const { lang } = useLang();
   const date = useDate();
   const { grid, rise } = makeVariants(reduce);
   const feature = items[0];
@@ -152,7 +154,7 @@ export default function NewsPreview({ items }: { items: NewsItem[] }) {
             size="h2"
           />
           <Link
-            href="/news"
+            href={withLocale(lang, "/news")}
             className="group inline-flex items-center gap-2 self-start border-b-2 border-line pb-1 text-[0.8rem] font-bold uppercase tracking-[0.2em] text-text-2 transition-colors hover:border-forest-700 hover:text-forest-700"
           >
             <span className="ar">الأرشيف الكامل</span>
@@ -184,7 +186,7 @@ export default function NewsPreview({ items }: { items: NewsItem[] }) {
               variants={rise}
               className="group lg:col-span-7"
             >
-              <Link href={href(feature)} className="block">
+              <Link href={href(lang, feature)} className="block">
                 <div className="relative aspect-[16/10] overflow-hidden rounded-t-[3px] sm:aspect-[16/9]">
                   <Cover item={feature} glyphClass="text-[15rem]" />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(7,11,9,0.62)_100%)]" />
@@ -238,7 +240,7 @@ export default function NewsPreview({ items }: { items: NewsItem[] }) {
                     className="group flex-1"
                   >
                     <Link
-                      href={href(n)}
+                      href={href(lang, n)}
                       className="flex h-full gap-5 overflow-hidden rounded-[3px] border border-line bg-white transition-all duration-300 ease-emphasis hover:-translate-y-1 hover:border-line-strong hover:shadow-card"
                     >
                       <div className="relative aspect-square w-28 shrink-0 overflow-hidden sm:w-36">

@@ -6,13 +6,17 @@ import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Logo from "@/components/brand/Logo";
 import { SocialRow } from "@/components/brand/SocialIcons";
 import { buttonVariants } from "@/components/ui/Button";
+import { useLang } from "@/context/LangContext";
+import { localeHref } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const COL_BROWSE = [
   { href: "/about", ar: "عن النادي", en: "About the Club" },
-  { href: "/news", ar: "الأخبار", en: "News" },
+  { href: "/board", ar: "مجلس الإدارة", en: "Board Members" },
+  { href: "/events", ar: "فعالياتنا", en: "Our Events" },
   { href: "/tournaments", ar: "البطولات", en: "Tournaments" },
-  { href: "/about", ar: "مجلس الإدارة", en: "Board of Directors" },
+  { href: "/news", ar: "الأخبار", en: "News" },
+  { href: "/contact", ar: "اتصلي بنا", en: "Contact Us" },
 ];
 
 const COL_MEMBERS = [
@@ -141,6 +145,7 @@ function BackToTop({ reduce }: { reduce: boolean | null }) {
 
 export default function Footer({ partners }: { partners?: { ar: string; en: string }[] }) {
   const reduce = useReducedMotion();
+  const { lang } = useLang();
   const year = new Date().getFullYear();
   const PARTNER_LIST = partners && partners.length ? partners : PARTNERS;
 
@@ -198,14 +203,14 @@ export default function Footer({ partners }: { partners?: { ar: string; en: stri
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-4">
             <Link
-              href="/register"
+              href={localeHref(lang, "/register")}
               className={cn(buttonVariants({ variant: "primary", size: "lg" }))}
             >
               <span className="ar">طلب الانضمام</span>
               <span className="en">Apply to Join</span>
             </Link>
             <Link
-              href="/about"
+              href={localeHref(lang, "/about")}
               className={cn(buttonVariants({ variant: "light", size: "lg" }))}
             >
               <span className="ar">عن النادي</span>
@@ -254,17 +259,15 @@ export default function Footer({ partners }: { partners?: { ar: string; en: stri
         >
           {/* Club information */}
           <motion.div variants={rise} className="lg:col-span-4">
-            <div className="mb-6 flex items-center gap-4">
-              <Logo size={60} tone="white" />
-              <div className="leading-tight">
-                <div className="font-disp text-[1.1rem] tracking-tight sm:text-[1.2rem]">
-                  <span className="ar">نادي الشطرنج والثقافة للفتيات</span>
-                  <span className="en">Chess &amp; Culture Club for Women</span>
-                </div>
-                <div className="mt-1.5 text-[0.6rem] font-bold uppercase tracking-[0.26em] text-forest-400">
-                  <span className="ar">الشارقة · تأسس 1991</span>
-                  <span className="en">Sharjah · Est. 1991</span>
-                </div>
+            <div className="mb-7 flex items-center gap-4">
+              <Logo size={78} surface="dark" />
+              <div className="flex flex-col leading-tight">
+                <span className="font-ar text-[1.05rem] font-bold text-white">
+                  نادي الشطرنج والثقافة للفتيات بالشارقة
+                </span>
+                <span className="mt-1 font-body text-[0.76rem] font-semibold text-white/65">
+                  Chess &amp; Culture Club for Sharjah Women
+                </span>
               </div>
             </div>
             <p className="mb-7 max-w-md text-[0.95rem] leading-relaxed text-white/55">
@@ -295,7 +298,7 @@ export default function Footer({ partners }: { partners?: { ar: string; en: stri
               {COL_BROWSE.map((l) => (
                 <li key={l.href + l.en}>
                   <Link
-                    href={l.href}
+                    href={localeHref(lang, l.href)}
                     className="group inline-flex items-center gap-2 text-[0.92rem] text-white/70 transition-colors hover:text-white"
                   >
                     <span
@@ -324,7 +327,7 @@ export default function Footer({ partners }: { partners?: { ar: string; en: stri
               {COL_MEMBERS.map((l) => (
                 <li key={l.href + l.en}>
                   <Link
-                    href={l.href}
+                    href={localeHref(lang, l.href)}
                     className="group inline-flex items-center gap-2 text-[0.92rem] text-white/70 transition-colors hover:text-white"
                   >
                     <span
@@ -384,14 +387,6 @@ export default function Footer({ partners }: { partners?: { ar: string; en: stri
             </span>
           </p>
           <div className="flex flex-wrap items-center gap-5 font-semibold uppercase tracking-[0.16em]">
-            <Link
-              href="/privacy"
-              className="transition-colors hover:text-white/70"
-            >
-              <span className="ar">سياسة الخصوصية</span>
-              <span className="en">Privacy</span>
-            </Link>
-            <span aria-hidden className="text-white/20">·</span>
             <span className="text-white/40">
               <span className="ar">معتمد ISO 9001 منذ 2018</span>
               <span className="en">ISO 9001 certified since 2018</span>

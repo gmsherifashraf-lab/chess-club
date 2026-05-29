@@ -12,6 +12,7 @@ import { EASE_EMPHASIS } from "@/lib/motion";
 import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LangContext";
 import { ROLE_DASHBOARD, DEFAULT_DASHBOARD } from "@/lib/auth";
+import { withLocale, splitLocale } from "@/lib/i18n";
 import Logo from "@/components/brand/Logo";
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -28,14 +29,34 @@ const NAV: Item[] = [
   {
     href: "/about",
     ar: "عن النادي",
-    en: "About",
+    en: "About Us",
     children: [
       { href: "/about", ar: "نبذة عن النادي", en: "About the Club" },
-      { href: "/register", ar: "التسجيل في النادي", en: "Register with the Club" },
+      { href: "/board", ar: "مجلس الإدارة", en: "Board Members" },
+      { href: "/achievements", ar: "الإنجازات", en: "Achievements" },
     ],
   },
-  { href: "/news", ar: "الأخبار", en: "News" },
+  {
+    href: "/events",
+    ar: "فعالياتنا",
+    en: "Our Events",
+    children: [
+      { href: "/events", ar: "الفعاليات", en: "Events" },
+      { href: "/calendar", ar: "روزنامة الفعاليات", en: "Event Calendar" },
+    ],
+  },
   { href: "/tournaments", ar: "البطولات", en: "Tournaments" },
+  {
+    href: "/media",
+    ar: "الإعلام",
+    en: "Media",
+    children: [
+      { href: "/news", ar: "الأخبار", en: "News" },
+      { href: "/gallery", ar: "المعرض", en: "Gallery" },
+      { href: "/media", ar: "المركز الإعلامي", en: "Media Center" },
+    ],
+  },
+  { href: "/contact", ar: "اتصلي بنا", en: "Contact Us" },
 ];
 
 export default function Navbar() {
@@ -82,7 +103,20 @@ export default function Navbar() {
   }, []);
 
   const dashboardHref = (role && ROLE_DASHBOARD[role]) || DEFAULT_DASHBOARD;
-  const isHome = pathname === "/";
+  // pathname now carries a locale prefix (/en, /ar); compare against the rest.
+  const restPath = splitLocale(pathname).rest;
+  const isHome = restPath === "/";
+  const loc = (href: string) => withLocale(lang, href);
+
+  // Active-route matching. A dropdown parent counts as active when the
+  // current route matches the parent or any of its children.
+  const matchPath = (href: string) =>
+    href === "/"
+      ? restPath === "/"
+      : restPath === href || restPath.startsWith(href + "/");
+  const itemActive = (item: Item) =>
+    matchPath(item.href) ||
+    (item.children?.some((c) => matchPath(c.href)) ?? false);
 
   // Solid bar when scrolled, off-home, or drawer open. Otherwise the
   // bar floats transparently over the dark hero with light type.
@@ -129,46 +163,46 @@ export default function Navbar() {
           <div className="h-[3px] w-full bg-[linear-gradient(90deg,#C8102E_33.3%,#fff_33.3%_66.6%,#117A4F_66.6%)]" />
         )}
 
-        <div className="mx-auto flex h-20 max-w-wrap items-center justify-between gap-4 px-5 sm:px-8 lg:gap-10 lg:px-10">
+        <div className="flex h-24 items-center justify-between gap-4 px-5 sm:px-6 lg:gap-6 lg:px-8">
           {/* ── Logo + wordmark ─────────────────────────────────────── */}
           <Link
-            href="/"
-            className="group flex min-w-0 items-center gap-3.5 lg:gap-4"
+            href={loc("/")}
+            className="group flex shrink-0 items-center gap-3"
             aria-label="Chess & Culture Club for Women, Sharjah — home"
           >
-            <Logo size={56} tone={solid ? "natural" : "white"} />
-            <span className="hidden min-w-0 flex-col leading-none sm:flex">
+            <Logo
+              size={64}
+              surface={solid ? "light" : "dark"}
+              priority
+              className="shrink-0 transition-transform duration-300 ease-emphasis group-hover:scale-[1.03]"
+            />
+            <span className="hidden flex-col leading-tight xl:flex">
               <span
                 className={cn(
-                  "font-disp text-[1.05rem] font-bold tracking-tight lg:text-[1.22rem]",
+                  "font-ar whitespace-nowrap text-[0.92rem] font-bold tracking-tight",
                   solid ? "text-text-1" : "text-white",
                 )}
               >
-                <span className="ar">نادي الشطرنج والثقافة للفتيات</span>
-                <span className="en">Chess &amp; Culture Club for Women</span>
+                نادي الشطرنج والثقافة للفتيات بالشارقة
               </span>
               <span
                 className={cn(
-                  "mt-1.5 text-[0.6rem] font-bold uppercase tracking-[0.26em]",
-                  solid ? "text-forest-700" : "text-white/70",
+                  "mt-0.5 whitespace-nowrap font-body text-[0.68rem] font-semibold tracking-tight",
+                  solid ? "text-forest-700" : "text-white/75",
                 )}
               >
-                <span className="ar">الشارقة • تأسس 1991</span>
-                <span className="en">Sharjah · Est. 1991</span>
+                Chess &amp; Culture Club for Sharjah Women
               </span>
             </span>
           </Link>
 
           {/* ── Desktop nav ─────────────────────────────────────────── */}
           <nav
-            className="hidden items-center gap-1 md:flex"
+            className="hidden items-center gap-1 lg:flex"
             aria-label="Primary"
           >
             {NAV.map((item) => {
-              const active =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+              const active = itemActive(item);
 
               if (item.children) {
                 const isOpen = menu === item.href;
@@ -190,7 +224,7 @@ export default function Navbar() {
                       aria-expanded={isOpen}
                       onClick={() => setMenu(isOpen ? null : item.href)}
                       className={cn(
-                        "inline-flex items-center gap-1.5 px-4 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
+                        "inline-flex items-center gap-1.5 px-3 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
                         solid
                           ? active || isOpen
                             ? "text-forest-700"
@@ -236,7 +270,7 @@ export default function Navbar() {
                           {item.children.map((c) => (
                             <Link
                               key={c.href + c.en}
-                              href={c.href}
+                              href={loc(c.href)}
                               role="menuitem"
                               className="block px-5 py-3 text-[0.9rem] font-medium text-text-2 transition-colors hover:bg-forest-50 hover:text-forest-700 focus-visible:bg-forest-50 focus-visible:text-forest-700 focus-visible:outline-none"
                             >
@@ -254,9 +288,9 @@ export default function Navbar() {
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={loc(item.href)}
                   className={cn(
-                    "relative px-4 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
+                    "relative px-3 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
                     solid
                       ? active
                         ? "text-forest-700"
@@ -328,7 +362,7 @@ export default function Navbar() {
                   <span className="en">Login</span>
                 </Link>
                 <Link
-                  href="/register"
+                  href={loc("/register")}
                   className={cn(
                     buttonVariants({
                       variant: solid ? "primary" : "light",
@@ -349,7 +383,7 @@ export default function Navbar() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               className={cn(
-                "inline-flex h-11 w-11 flex-col items-center justify-center gap-[5px] border transition-colors md:hidden",
+                "inline-flex h-11 w-11 flex-col items-center justify-center gap-[5px] border transition-colors lg:hidden",
                 solid
                   ? "border-text-1/25 hover:border-text-1"
                   : "border-white/30 hover:border-white",
@@ -382,7 +416,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: reduce ? 0 : 0.25 }}
-            className="overscroll-contain fixed inset-0 top-20 z-40 overflow-y-auto bg-white md:hidden"
+            className="overscroll-contain fixed inset-0 top-24 z-40 overflow-y-auto bg-white lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Site menu"
@@ -407,10 +441,7 @@ export default function Navbar() {
                     ]
                   : [item],
               ).map((l: Item & { _h?: boolean; _sub?: boolean }, i) => {
-                const active =
-                  l.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(l.href);
+                const active = matchPath(l.href);
                 if (l._h) {
                   return (
                     <div
@@ -433,7 +464,7 @@ export default function Navbar() {
                     }}
                   >
                     <Link
-                      href={l.href}
+                      href={loc(l.href)}
                       onClick={() => setOpen(false)}
                       className={cn(
                         "block border-b border-line py-4 font-disp transition-colors",
@@ -471,7 +502,7 @@ export default function Navbar() {
                   </Link>
                 )}
                 <Link
-                  href={user ? dashboardHref : "/register"}
+                  href={user ? dashboardHref : loc("/register")}
                   onClick={() => setOpen(false)}
                   className={cn(buttonVariants({ variant: "primary", size: "sm" }))}
                 >

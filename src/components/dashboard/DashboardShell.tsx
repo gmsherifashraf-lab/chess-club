@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LangContext";
-import { LOGO_URI } from "@/lib/logo";
+import Logo from "@/components/brand/Logo";
 
 export interface NavItem {
   key:     string;
@@ -71,19 +71,16 @@ export default function DashboardShell({
         <div style={{ padding: "1.25rem 1rem", borderBottom: "1px solid rgba(255,255,255,.08)" }}>
           <Link
             href="/"
-            style={{ display: "flex", alignItems: "center", gap: ".65rem", marginBottom: ".85rem", textDecoration: "none" }}
+            style={{ display: "flex", alignItems: "center", gap: ".6rem", marginBottom: ".85rem", textDecoration: "none" }}
           >
-            <img
-              src={LOGO_URI}
-              alt="Logo"
-              style={{ height: 36, width: "auto", background: "rgba(255,255,255,.9)", padding: 2, borderRadius: 2 }}
-            />
-            <span
-              className="font-disp"
-              style={{ fontSize: ".78rem", color: "#F4F6F4", lineHeight: 1.3 }}
-            >
-              <span className="ar">نادي الشطرنج</span>
-              <span className="en">Chess Club</span>
+            <Logo size={46} surface="dark" />
+            <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.25 }}>
+              <span className="font-ar" style={{ fontSize: ".82rem", fontWeight: 700, color: "#F4F6F4" }}>
+                نادي الشطرنج والثقافة
+              </span>
+              <span className="font-body" style={{ fontSize: ".58rem", fontWeight: 600, color: "rgba(255,255,255,.6)" }}>
+                Chess &amp; Culture Club
+              </span>
             </span>
           </Link>
 

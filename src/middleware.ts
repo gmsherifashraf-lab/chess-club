@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createMiddlewareClient } from "@/lib/supabase/middleware";
 import { ROLE_DASHBOARD, DEFAULT_DASHBOARD, type UserRole } from "@/lib/auth";
+import {
+  DEFAULT_LOCALE,
+  LOCALIZED_SEGMENTS,
+  isLocale,
+  type Locale,
+} from "@/lib/i18n";
 
 // Routes that require the user to be logged in
 const PROTECTED_PREFIXES = ["/dashboard"];
@@ -13,8 +19,50 @@ const AUTH_ROUTES = ["/login"];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Create a response we can mutate to refresh session cookies
-  const response = NextResponse.next({ request });
+  // ── Locale resolution ───────────────────────────────────────────────────
+  // Public marketing pages live under /[locale]. App surfaces (/dashboard,
+  // /login, /auth, /api) are intentionally not localized.
+  const firstSegment = pathname.split("/")[1] ?? "";
+  const pathLocale: Locale | null = isLocale(firstSegment) ? firstSegment : null;
+  const cookieValue = request.cookies.get("locale")?.value;
+  const cookieLocale: Locale | null = isLocale(cookieValue) ? cookieValue : null;
+  // Manual + remembered only — the browser's Accept-Language is never used.
+  const preferredLocale: Locale = cookieLocale ?? DEFAULT_LOCALE;
+
+  // ── Locale redirects ────────────────────────────────────────────────────
+  if (!pathLocale) {
+    // Bare root → the visitor's remembered locale (or the default).
+    if (pathname === "/") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${preferredLocale}`;
+      return NextResponse.redirect(url);
+    }
+    // Legacy un-prefixed public link → the same page under a locale.
+    if ((LOCALIZED_SEGMENTS as readonly string[]).includes(firstSegment)) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${preferredLocale}${pathname}`;
+      return NextResponse.redirect(url);
+    }
+  }
+
+  const currentLocale: Locale = pathLocale ?? preferredLocale;
+
+  // Create a response we can mutate to refresh session cookies. The locale
+  // headers let the root layout server-render <html lang dir> and let
+  // [locale]/layout build per-page hreflang.
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-locale", currentLocale);
+  requestHeaders.set("x-pathname", pathname);
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
+
+  // Persist the locale when it was chosen via the URL.
+  if (pathLocale && pathLocale !== cookieLocale) {
+    response.cookies.set("locale", pathLocale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
+  }
 
   // IMPORTANT — call supabase.auth.getUser() (NOT getSession()) so the JWT
   // is validated and any auth cookies on the response are refreshed in one

@@ -11,6 +11,8 @@ import {
 } from "framer-motion";
 import { EASE_EMPHASIS } from "@/lib/motion";
 import { useIsMobile } from "@/hooks/useMediaQuery";
+import { useLang } from "@/context/LangContext";
+import { withLocale } from "@/lib/i18n";
 import Logo from "@/components/brand/Logo";
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -43,6 +45,7 @@ export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const isMobile = useIsMobile();
+  const { lang } = useLang();
   // Phones skip scroll-linked + infinite background motion (battery,
   // jank); the one-shot entrance still plays.
   const lite = !!reduce || isMobile;
@@ -181,8 +184,8 @@ export default function Hero() {
             variants={rise}
             className="mb-8 flex items-center gap-4"
           >
-            <Logo size={46} tone="white" />
-            <span className="h-9 w-px bg-white/20" />
+            <Logo size={64} surface="dark" priority />
+            <span className="h-12 w-px bg-white/20" />
             <span className="flex items-center gap-3 text-eyebrow font-semibold uppercase text-text-inverse/85">
               <span className="h-[2px] w-8 bg-scarlet-400" />
               <span className="ar">الشارقة، الإمارات · تأسس 1991</span>
@@ -232,14 +235,14 @@ export default function Hero() {
             className="mt-11 flex flex-col gap-3.5 sm:flex-row sm:items-center"
           >
             <Link
-              href="/register"
+              href={withLocale(lang, "/register")}
               className={cn(buttonVariants({ variant: "primary", size: "lg" }))}
             >
               <span className="ar">طلب الانضمام</span>
               <span className="en">Apply to Join</span>
             </Link>
             <Link
-              href="/about"
+              href={withLocale(lang, "/about")}
               className={cn(buttonVariants({ variant: "light", size: "lg" }))}
             >
               <span className="ar">عن النادي</span>

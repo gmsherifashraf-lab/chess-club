@@ -3,9 +3,12 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { EASE_EMPHASIS } from "@/lib/motion";
+import { useLang } from "@/context/LangContext";
+import { withLocale } from "@/lib/i18n";
 
 export default function AboutPreview() {
   const reduce = useReducedMotion();
+  const { lang } = useLang();
   const enter = (delay = 0) => ({
     initial: reduce ? { opacity: 0 } : { opacity: 0, y: 24 },
     whileInView: { opacity: 1, y: 0 },
@@ -81,7 +84,7 @@ export default function AboutPreview() {
             </dl>
 
             <Link
-              href="/about"
+              href={withLocale(lang, "/about")}
               className="group mt-9 inline-flex items-center gap-2 border-b-2 border-white/25 pb-1 text-[0.8rem] font-bold uppercase tracking-[0.18em] text-white/80 transition-colors hover:border-forest-400 hover:text-white"
             >
               <span className="ar">قراءة المزيد عن النادي</span>

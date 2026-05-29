@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type { Tournament } from "@/lib/queries/home";
 import { useLang } from "@/context/LangContext";
+import { withLocale } from "@/lib/i18n";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -196,6 +197,7 @@ export default function TournamentsPreview({
   items: Tournament[];
 }) {
   const reduce = useReducedMotion();
+  const { lang } = useLang();
   const parts = useDateParts();
   const [now, setNow] = useState<number | null>(null);
 
@@ -244,7 +246,7 @@ export default function TournamentsPreview({
             size="h2"
           />
           <Link
-            href="/tournaments"
+            href={withLocale(lang, "/tournaments")}
             className="group inline-flex items-center gap-2 self-start border-b-2 border-line pb-1 text-[0.8rem] font-bold uppercase tracking-[0.2em] text-text-2 transition-colors hover:border-forest-700 hover:text-forest-700"
           >
             <span className="ar">الجدول الكامل</span>
@@ -320,7 +322,7 @@ export default function TournamentsPreview({
 
               <div className="mt-auto flex flex-wrap items-center gap-4">
                 <Link
-                  href="/register"
+                  href={withLocale(lang, "/register")}
                   className={cn(
                     buttonVariants({ variant: "primary", size: "md" }),
                   )}
@@ -329,7 +331,7 @@ export default function TournamentsPreview({
                   <span className="en">Register to Compete</span>
                 </Link>
                 <Link
-                  href="/tournaments"
+                  href={withLocale(lang, "/tournaments")}
                   className="group/r inline-flex items-center gap-2 border-b border-white/25 pb-1 text-[0.78rem] font-bold uppercase tracking-[0.18em] text-white/65 transition-colors hover:border-white hover:text-white"
                 >
                   <span className="ar">لائحة البطولة</span>
@@ -375,7 +377,7 @@ export default function TournamentsPreview({
                         )}
                       </div>
                       <Link
-                        href="/register"
+                        href={withLocale(lang, "/register")}
                         aria-label="Register for this tournament"
                         className="shrink-0 self-stretch border-s border-line ps-4 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-forest-700 transition-colors hover:text-forest-600"
                       >

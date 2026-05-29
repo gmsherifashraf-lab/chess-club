@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -157,7 +157,13 @@ function Tile({
   );
 }
 
-export default function Gallery({ items }: { items?: GalleryImage[] }) {
+export default function Gallery({
+  items,
+  hideHeader = false,
+}: {
+  items?: GalleryImage[];
+  hideHeader?: boolean;
+}) {
   const reduce = useReducedMotion();
   const tiles = items && items.length > 0 ? items : FALLBACK;
   const photos = tiles.filter((t) => !!t.image_url);
@@ -171,33 +177,38 @@ export default function Gallery({ items }: { items?: GalleryImage[] }) {
     lastFocused.current = document.activeElement as HTMLElement;
     setIndex(photos.findIndex((p) => p.id === id));
   };
-  const close = useCallback(() => {
+  // Plain handlers — the React Compiler memoizes them; a manual useCallback
+  // here can't be preserved by the compiler (it reads props-derived state).
+  const close = () => {
     setIndex(null);
     lastFocused.current?.focus?.();
-  }, []);
-  const step = useCallback(
-    (d: number) =>
-      setIndex((i) =>
-        i === null ? i : (i + d + photos.length) % photos.length,
-      ),
-    [photos.length],
-  );
+  };
+  const step = (d: number) =>
+    setIndex((i) =>
+      i === null ? i : (i + d + photos.length) % photos.length,
+    );
 
   useEffect(() => {
     if (index === null) return;
     document.body.style.overflow = "hidden";
     closeRef.current?.focus();
+    const len = photos.length;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-      else if (e.key === "ArrowRight") step(1);
-      else if (e.key === "ArrowLeft") step(-1);
+      if (e.key === "Escape") {
+        setIndex(null);
+        lastFocused.current?.focus?.();
+      } else if (e.key === "ArrowRight") {
+        setIndex((i) => (i === null ? i : (i + 1 + len) % len));
+      } else if (e.key === "ArrowLeft") {
+        setIndex((i) => (i === null ? i : (i - 1 + len) % len));
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [index, close, step]);
+  }, [index, photos.length]);
 
   const rise: Variants = {
     hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 22 },
@@ -213,20 +224,22 @@ export default function Gallery({ items }: { items?: GalleryImage[] }) {
   return (
     <section className="relative border-t border-line bg-cream-100">
       <div className="mx-auto max-w-wrap px-5 py-24 sm:px-8 sm:py-28 lg:px-10">
-        <div className="mb-12 flex flex-col gap-5 border-b border-line pb-7 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
-          <SectionTitle
-            eyebrowAr="المعرض"
-            eyebrowEn="Gallery"
-            titleAr="من التدريب والبطولات والفعاليات"
-            titleEn="From Training, Tournaments & Events"
-            size="h2"
-          />
-          <div className="flex items-center gap-3 self-start text-[0.72rem] font-bold uppercase tracking-[0.2em] text-text-4">
-            <span className="h-1.5 w-1.5 rounded-full bg-forest-700" />
-            <span className="ar">المعرض الرسمي · يُحدَّث كل موسم</span>
-            <span className="en">Official set · updated each season</span>
+        {!hideHeader && (
+          <div className="mb-12 flex flex-col gap-5 border-b border-line pb-7 sm:mb-14 sm:flex-row sm:items-end sm:justify-between">
+            <SectionTitle
+              eyebrowAr="المعرض"
+              eyebrowEn="Gallery"
+              titleAr="من التدريب والبطولات والفعاليات"
+              titleEn="From Training, Tournaments & Events"
+              size="h2"
+            />
+            <div className="flex items-center gap-3 self-start text-[0.72rem] font-bold uppercase tracking-[0.2em] text-text-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-forest-700" />
+              <span className="ar">المعرض الرسمي · يُحدَّث كل موسم</span>
+              <span className="en">Official set · updated each season</span>
+            </div>
           </div>
-        </div>
+        )}
 
         <motion.div
           variants={gridV}

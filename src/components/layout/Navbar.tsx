@@ -135,15 +135,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Accessibility: skip link */}
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-forest-700 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
-      >
-        <span className="ar">تخطَّ إلى المحتوى</span>
-        <span className="en">Skip to content</span>
-      </a>
-
       <motion.header
         initial={false}
         animate={{

@@ -130,7 +130,7 @@ end $$;
 insert into public.board_members (name_ar, name_en, role_ar, role_en, honorific_ar, honorific_en, photo, category, sort_order)
 select * from (values
   ('نجلاء عبدالله أحمد الدرويشي الشامسي','Najla Abdullah Ahmed Al Darwishi Al Shamsi','رئيسة مجلس الإدارة','Chairperson','سعادة','H.E.','/images/board/najla.jpg','chair',0),
-  ('ميثاء عيسى خلفان بن عيسى الذبحاني','Maitha Issa Khalfan bin Isa Al Dhabahi','الأمين العام','Secretary General','سعادة','H.E.',null,'secretary',1),
+  ('ميثاء عيسى خلفان بن عيسى الذبحاني','Maitha Issa Khalfan bin Isa Al Dhabahi','الأمين العام','Secretary General','سعادة','H.E.','/images/board/maitha.jpg','secretary',1),
   ('أروى محمد سلطان محمد العويس','Arwa Mohammed Sultan Mohammed Al Owais','عضو مجلس','Board Member','سعادة','H.E.','/images/board/arwa.jpg','member',2),
   ('أمينة جمعة حسن صالح الجسمي','Amina Juma Hassan Saleh Al Jasmi','عضو مجلس','Board Member','سعادة','H.E.','/images/board/amina.jpg','member',3),
   ('إيمان محمد مبارك محمد العلي','Iman Mohammed Mubarak Mohammed Al Ali','عضو مجلس','Board Member','سعادة','H.E.','/images/board/iman.jpg','member',4),

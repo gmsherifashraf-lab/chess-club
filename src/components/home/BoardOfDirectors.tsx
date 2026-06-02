@@ -26,14 +26,13 @@ const FB_CHAIR: Member = {
   photo: "/images/board/najla.jpg",
 };
 
-// Maitha intentionally has no `photo` — the federation page carries an
-// incorrect image for her, so the card falls back to the initials avatar.
 const FB_SECRETARY: Member = {
   ar: "ميثاء عيسى خلفان بن عيسى الذبحاني",
   en: "Maitha Issa Khalfan bin Isa Al Dhabahi",
   arRole: "الأمين العام",
   enRole: "Secretary General",
   honorific: HONORIFIC,
+  photo: "/images/board/maitha.jpg",
 };
 
 const FB_MEMBERS: Member[] = [

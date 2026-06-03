@@ -42,8 +42,8 @@ const VALUES: { ar: string; en: string; descAr: string; descEn: string }[] = [
   {
     ar: "الحوكمة المؤسسية",
     en: "Institutional Governance",
-    descAr: "إدارة شفافة معتمدة بمعايير الجودة الدولية منذ 2018.",
-    descEn: "Transparent administration certified to international quality standards since 2018.",
+    descAr: "إدارة شفافة معتمدة بمعايير الجودة الدولية منذ 2023.",
+    descEn: "Transparent administration certified to international quality standards since 2023.",
   },
 ];
 

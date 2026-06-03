@@ -351,18 +351,18 @@ export default function Footer({ partners }: { partners?: { ar: string; en: stri
             <ul className="mb-8 flex flex-col gap-3 text-[0.92rem] text-white/70">
               <li>
                 <a
-                  href="mailto:info@sharjah-women-chess.ae"
+                  href="mailto:info@cccsw.shj.ae"
                   className="break-all transition-colors hover:text-forest-400"
                 >
-                  info@sharjah-women-chess.ae
+                  info@cccsw.shj.ae
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+97160000000"
+                  href="tel:+97165387787"
                   className="transition-colors hover:text-forest-400"
                 >
-                  <span dir="ltr">+971 6 000 0000</span>
+                  <span dir="ltr">+971 6 538 7787</span>
                 </a>
               </li>
               <li className="text-white/45">
@@ -388,8 +388,8 @@ export default function Footer({ partners }: { partners?: { ar: string; en: stri
           </p>
           <div className="flex flex-wrap items-center gap-5 font-semibold uppercase tracking-[0.16em]">
             <span className="text-white/40">
-              <span className="ar">معتمد ISO 9001 منذ 2018</span>
-              <span className="en">ISO 9001 certified since 2018</span>
+              <span className="ar">معتمد ISO 9001 منذ 2023</span>
+              <span className="en">ISO 9001 certified since 2023</span>
             </span>
             <span aria-hidden className="text-white/20">·</span>
             <BackToTop reduce={reduce} />

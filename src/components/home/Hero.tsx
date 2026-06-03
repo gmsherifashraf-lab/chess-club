@@ -31,7 +31,7 @@ const STATS = [
   { value: "1991", ar: "سنة التأسيس", en: "Established" },
   { value: "180+", ar: "لاعبة نشطة", en: "Active players", accent: true },
   { value: "40+", ar: "بطولة وطنية", en: "National titles" },
-  { value: "ISO", ar: "معتمد · 2018", en: "Certified · 2018" },
+  { value: "ISO", ar: "معتمد · 2023", en: "Certified · 2023" },
 ];
 
 /* Engraved chess-piece glyphs that drift in the deep background. */

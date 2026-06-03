@@ -39,6 +39,16 @@ const FEATURED: Honour = {
 const HONOURS: Honour[] = [
   {
     year: "2023",
+    titleAr: "اعتماد الجودة الدولي ISO 9001",
+    titleEn: "ISO 9001 quality accreditation",
+    resultAr: "أول ناد نسائي معتمد في الإمارة",
+    resultEn: "Governance milestone",
+    categoryAr: "حوكمة",
+    categoryEn: "Governance",
+    tone: "ink",
+  },
+  {
+    year: "2023",
     titleAr: "بطولة الخليج للشطرنج",
     titleEn: "Gulf Chess Championship",
     resultAr: "ميداليتان · فردي السيدات",
@@ -65,16 +75,6 @@ const HONOURS: Honour[] = [
     resultEn: "Age-group titles",
     categoryAr: "تطوير الناشئات",
     categoryEn: "Youth development",
-    tone: "ink",
-  },
-  {
-    year: "2018",
-    titleAr: "اعتماد الجودة الدولي ISO 9001",
-    titleEn: "ISO 9001 quality accreditation",
-    resultAr: "أول ناد نسائي معتمد في الإمارة",
-    resultEn: "Governance milestone",
-    categoryAr: "حوكمة",
-    categoryEn: "Governance",
     tone: "ink",
   },
   {

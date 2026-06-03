@@ -19,7 +19,7 @@ const FALLBACK: Partner[] = [
   { ar: "الاتحاد الآسيوي للشطرنج", en: "Asian Chess Federation" },
 ];
 
-const CONTACT_EMAIL = "info@sharjah-women-chess.ae";
+const CONTACT_EMAIL = "info@cccsw.shj.ae";
 
 export default function Sponsors({ partners }: { partners?: Partner[] }) {
   const reduce = useReducedMotion();

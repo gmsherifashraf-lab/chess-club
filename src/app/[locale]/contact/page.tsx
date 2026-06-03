@@ -14,9 +14,9 @@ export const metadata = {
     "Get in touch with the Chess & Culture Club for Women, Sharjah — enquiries, membership, partnerships, location, and office hours.",
 };
 
-const EMAIL = "info@sharjah-women-chess.ae";
-const PHONE_DISPLAY = "+971 6 000 0000";
-const PHONE_TEL = "+97160000000";
+const EMAIL = "info@cccsw.shj.ae";
+const PHONE_DISPLAY = "+971 6 538 7787";
+const PHONE_TEL = "+97165387787";
 
 /* Direct contact channels shown alongside the enquiry form. */
 const HOURS = [

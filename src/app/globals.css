@@ -2171,4 +2171,118 @@ html { scroll-padding-top: 88px; }
 /* Premium link hover for in-text anchors */
 a:not(.btn):not([class*="bg-"]) { transition: color .2s ease; }
 
+/* ════════════════════════════════════════════════════════════════════
+   CINEMATIC MEDIA LAYER (homepage densification)
+   Reusable, GPU-friendly primitives for immersive photography:
+   premium framing, ambient colour-bleed glow, slow Ken-Burns drift,
+   fine film grain, and hover zoom. Transform/opacity only; every motion
+   primitive disables itself under prefers-reduced-motion.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Fine film grain — a tileable SVG noise at very low opacity. Layered
+   over photographic and dark sections to kill flat, empty negative space. */
+.tex-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+.tex-grain-soft::after { opacity: 0.28; }
+
+/* Premium photo frame — hairline bezel + layered shadow + inset highlight.
+   Sits around real photography so it reads as a placed print, not a div. */
+.photo-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #0a0f0c;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.04),
+    0 30px 60px -28px rgba(7,11,9,0.65),
+    0 12px 28px -18px rgba(7,11,9,0.55);
+}
+.photo-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.16);
+}
+.photo-frame-light {
+  background: #fff;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.6),
+    0 30px 60px -30px rgba(17,17,17,0.30),
+    0 14px 30px -20px rgba(11,61,46,0.18);
+}
+.photo-frame-light::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(17,17,17,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* Ambient colour-bleed glow — a blurred, scaled clone of the photo placed
+   behind the frame so the section picks up the image's own colours.
+   (AmbientImage renders the duplicate <img>; this class styles it.) */
+.img-ambient {
+  position: absolute;
+  inset: -14%;
+  z-index: -1;
+  filter: blur(46px) saturate(1.35);
+  opacity: 0.5;
+  transform: scale(1.18);
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+/* Hover zoom for media tiles — the image scales inside a clipped frame. */
+.zoomable { overflow: hidden; }
+.zoomable img {
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.group:hover .zoomable img,
+.zoomable:hover img { transform: scale(1.06); }
+
+/* Slow Ken-Burns drift for ambient hero/section backdrops. */
+@keyframes ken-burns {
+  0%   { transform: scale(1.06) translate3d(0, 0, 0); }
+  100% { transform: scale(1.16) translate3d(-1.5%, -2%, 0); }
+}
+.ken-burns { animation: ken-burns 26s ease-in-out infinite alternate; will-change: transform; }
+.ken-burns-rev { animation-direction: alternate-reverse; }
+
+/* Continuous auto-scroll rail for the highlight strip. The track is
+   duplicated in markup; -50% lands the clone exactly over the original. */
+@keyframes strip-scroll {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+.strip-track {
+  display: flex;
+  width: max-content;
+  animation: strip-scroll 60s linear infinite;
+  will-change: transform;
+}
+.strip-track.reverse { animation-direction: reverse; }
+.strip-rail:hover .strip-track { animation-play-state: paused; }
+
+/* Edge fade mask for marquee rails — content dissolves at both ends. */
+.edge-fade-x {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ken-burns, .strip-track { animation: none !important; }
+  .zoomable img { transition: none !important; }
+}
+
 

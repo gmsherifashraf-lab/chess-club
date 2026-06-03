@@ -32,3 +32,15 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 .vercel
+
+# Stray skill clone at repo root — never commit
+/impeccable/
+
+# Internal documents — must not be served from the public site
+/public/*.pptx
+
+# Raw source photos — only the web-optimized copies are shipped
+/public/images/homepage/sharjah.jpg
+/public/images/homepage/4926097.jpeg
+/public/images/homepage/4937201.jpg
+/public/images/homepage/99z04gje1k810jtpd.jpeg

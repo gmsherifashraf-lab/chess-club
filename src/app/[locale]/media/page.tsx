@@ -14,7 +14,7 @@ export const metadata = {
     "The media center of the Chess & Culture Club for Women, Sharjah — newsroom, photography, and press resources.",
 };
 
-const EMAIL = "info@sharjah-women-chess.ae";
+const EMAIL = "info@cccsw.shj.ae";
 
 /* The two media channels. */
 const CHANNELS = [

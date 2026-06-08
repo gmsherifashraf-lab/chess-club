@@ -21,6 +21,8 @@ import {
   boardColumns,  boardFields,  type BoardRow,
   partnerColumns, partnerFields, type PartnerRow,
   statColumns,   statFields,   type StatRow,
+  branchColumns, branchFields, type BranchRow,
+  classColumns,  classFields,  type ClassRow,
 } from "@/components/admin/configs";
 
 const NAV: NavItem[] = [
@@ -31,6 +33,8 @@ const NAV: NavItem[] = [
   { key: "submissions", icon: "📥", ar: "المُسلَّمات",   en: "Submissions"   },
   { key: "players",     icon: "♟", ar: "اللاعبون",      en: "Players"       },
   { key: "coaches",     icon: "🎓", ar: "المدربون",      en: "Coaches"       },
+  { key: "branches",    icon: "📍", ar: "الفروع",        en: "Branches"      },
+  { key: "classes",     icon: "📚", ar: "الفصول",        en: "Classes"       },
   { key: "tournaments", icon: "🏆", ar: "البطولات",      en: "Tournaments"   },
   { key: "news",        icon: "📰", ar: "الأخبار",        en: "News"          },
   { key: "gallery",     icon: "🖼", ar: "معرض الصور",    en: "Gallery"       },
@@ -150,6 +154,28 @@ export default function AdminDashboard() {
           addLabelAr="+ إضافة مدرب" addLabelEn="+ Add Coach"
           columns={coachColumns}
           fields={coachFields}
+        />
+      )}
+
+      {tab === "branches" && (
+        <CrudShell<BranchRow>
+          table="branches"
+          titleAr="إدارة الفروع" titleEn="Branches"
+          addLabelAr="+ فرع جديد" addLabelEn="+ Add Branch"
+          columns={branchColumns}
+          fields={branchFields}
+          orderBy={{ column: "sort_order", ascending: true }}
+        />
+      )}
+
+      {tab === "classes" && (
+        <CrudShell<ClassRow>
+          table="classes"
+          titleAr="إدارة الفصول" titleEn="Classes"
+          addLabelAr="+ فصل جديد" addLabelEn="+ Add Class"
+          columns={classColumns}
+          fields={classFields}
+          orderBy={{ column: "created_at", ascending: false }}
         />
       )}
 

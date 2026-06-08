@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { IBM_Plex_Sans, Cairo } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
-import { LangProvider } from "@/context/LangContext";
-import { AuthProvider } from "@/context/AuthContext";
+import { Providers } from "./providers";
 import { isLocale, dirOf, DEFAULT_LOCALE } from "@/lib/i18n";
 
 /**
@@ -106,9 +105,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={dirOf(locale)} suppressHydrationWarning>
       <body className={`${plex.variable} ${plexDisplay.variable} ${cairo.variable} ${cairoDisplay.variable}`}>
-        <AuthProvider>
-          <LangProvider lang={locale}>{children}</LangProvider>
-        </AuthProvider>
+        <Providers locale={locale}>{children}</Providers>
       </body>
     </html>
   );

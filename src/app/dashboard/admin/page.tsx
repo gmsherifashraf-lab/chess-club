@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import DashboardShell, { type NavItem } from "@/components/dashboard/DashboardShell";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { createClient } from "@/lib/supabase/client";
@@ -36,14 +37,20 @@ const NAV: NavItem[] = [
   { key: "board",       icon: "👔", ar: "مجلس الإدارة",  en: "Board"         },
   { key: "partners",    icon: "🤝", ar: "الشركاء",       en: "Partners"      },
   { key: "stats",       icon: "📊", ar: "الأرقام",        en: "Stats"         },
+  { key: "analyze",     icon: "♟", ar: "محلّل الشطرنج",  en: "Analyze"       },
   { key: "settings",    icon: "⚙", ar: "الإعدادات",      en: "Settings"      },
 ];
 
 export default function AdminDashboard() {
   const { loading } = useRequireAuth("admin");
   const { profile } = useAuth();
+  const router = useRouter();
   const [tab, setTab] = useState("overview");
   const counts = useAdminCounts();
+
+  // "analyze" opens the chess workspace (external route), not an in-page tab.
+  const handleTab = (key: string) =>
+    key === "analyze" ? router.push("/play?mode=analyze") : setTab(key);
 
   if (loading) return <LoadingScreen />;
 
@@ -56,7 +63,7 @@ export default function AdminDashboard() {
       userInitial={initial}
       navItems={NAV}
       activeTab={tab}
-      onTab={setTab}
+      onTab={handleTab}
     >
       {tab === "overview" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

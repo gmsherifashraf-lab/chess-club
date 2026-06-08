@@ -1,7 +1,7 @@
-// Board + piece theming for ECA.
+// Board + piece theming for the club chess workspace.
 // Themes are intentionally scoped: the default 'paper' is the brand-on-board
 // theme; others give the user familiar alternatives without pulling the chrome
-// out of the ECA palette.
+// out of the federation palette.
 
 export type BoardThemeId = "paper" | "periwinkle" | "slate" | "wood" | "marine" | "mono";
 

@@ -1,40 +1,19 @@
 -- =============================================================================
--- 0013_branches_classes.sql
--- Branches (physical locations), recurring classes, per-session occurrences.
--- Existing attendance(player_id, date) gets an optional session_id link so we
--- can keep the legacy compound key working and progressively move to
--- session-bound attendance without a destructive rewrite.
+-- 0016_classes.sql
+-- Recurring classes (courses) and their concrete dated sessions. The existing
+-- attendance(player_id, date) gets an optional session_id link so we can move
+-- to session-bound attendance without a destructive rewrite.
+--
+-- This is a single-location club, so there is no "branches" concept — classes
+-- belong directly to the club and to a primary coach.
 -- =============================================================================
 
--- ── 1. Branches ──────────────────────────────────────────────────────────────
-create table if not exists public.branches (
-  id           uuid        primary key default gen_random_uuid(),
-  slug         text        not null unique,
-  name         text        not null,
-  governorate  text,                                 -- e.g. 'Cairo', 'Giza'
-  address      text,
-  phone        text,
-  is_active    boolean     not null default true,
-  sort_order   int         not null default 0,
-  created_at   timestamptz not null default now(),
-  updated_at   timestamptz not null default now()
-);
-
-create index if not exists branches_active_sort_idx
-  on public.branches (is_active, sort_order);
-
-drop trigger if exists set_updated_at_branches on public.branches;
-create trigger set_updated_at_branches
-  before update on public.branches
-  for each row execute function public.set_updated_at();
-
--- ── 2. Class definitions (recurring courses) ─────────────────────────────────
+-- ── 1. Class definitions (recurring courses) ─────────────────────────────────
 create type public.class_format as enum ('in_person', 'online', 'hybrid');
 create type public.class_level  as enum ('beginner', 'intermediate', 'advanced', 'elite');
 
 create table if not exists public.classes (
   id                uuid        primary key default gen_random_uuid(),
-  branch_id         uuid                 references public.branches(id)    on delete restrict,
   primary_coach_id  uuid                 references public.coaches(id)     on delete set null,
   title             text        not null,
   description       text,
@@ -51,17 +30,16 @@ create table if not exists public.classes (
   updated_at        timestamptz not null default now()
 );
 
-create index if not exists classes_branch_idx       on public.classes (branch_id);
-create index if not exists classes_coach_idx        on public.classes (primary_coach_id);
-create index if not exists classes_active_idx       on public.classes (is_active);
-create index if not exists classes_level_idx        on public.classes (level);
+create index if not exists classes_coach_idx  on public.classes (primary_coach_id);
+create index if not exists classes_active_idx on public.classes (is_active);
+create index if not exists classes_level_idx  on public.classes (level);
 
 drop trigger if exists set_updated_at_classes on public.classes;
 create trigger set_updated_at_classes
   before update on public.classes
   for each row execute function public.set_updated_at();
 
--- ── 3. Class enrollment (which player is in which class) ─────────────────────
+-- ── 2. Class enrollment (which player is in which class) ─────────────────────
 create type public.enrollment_state as enum ('active', 'paused', 'completed', 'withdrawn');
 
 create table if not exists public.class_enrollments (
@@ -78,7 +56,7 @@ create index if not exists class_enrollments_player_idx on public.class_enrollme
 create index if not exists class_enrollments_class_idx  on public.class_enrollments (class_id);
 create index if not exists class_enrollments_state_idx  on public.class_enrollments (state);
 
--- ── 4. Class sessions (concrete dated occurrence) ────────────────────────────
+-- ── 3. Class sessions (concrete dated occurrence) ────────────────────────────
 create type public.session_state as enum ('scheduled', 'in_progress', 'completed', 'cancelled');
 
 create table if not exists public.class_sessions (
@@ -103,26 +81,16 @@ create trigger set_updated_at_class_sessions
   before update on public.class_sessions
   for each row execute function public.set_updated_at();
 
--- ── 5. Bridge legacy attendance to sessions (additive, nullable) ─────────────
--- attendance(player_id, date) is the primary key from 0001; we just add a
--- nullable session_id so newer rows can be session-bound without breaking
--- existing data or queries.
+-- ── 4. Bridge legacy attendance to sessions (additive, nullable) ─────────────
 alter table public.attendance
   add column if not exists session_id uuid references public.class_sessions(id) on delete set null;
 
 create index if not exists attendance_session_idx on public.attendance (session_id);
 
--- ── 6. RLS ───────────────────────────────────────────────────────────────────
-alter table public.branches          enable row level security;
+-- ── 5. RLS ───────────────────────────────────────────────────────────────────
 alter table public.classes           enable row level security;
 alter table public.class_enrollments enable row level security;
 alter table public.class_sessions    enable row level security;
-
--- Branches: public read (so the marketing site lists them), admin writes.
-drop policy if exists "branches: public read"     on public.branches;
-drop policy if exists "branches: admin writes"    on public.branches;
-create policy "branches: public read"  on public.branches for select to anon, authenticated using (true);
-create policy "branches: admin writes" on public.branches for all    to authenticated using (public.is_admin()) with check (public.is_admin());
 
 -- Classes: public read of active classes (programs grid on marketing site).
 drop policy if exists "classes: public read active" on public.classes;
@@ -159,8 +127,7 @@ create policy "class_enrollments: parent reads child" on public.class_enrollment
   using (public.is_parent_of_roster(player_id));
 
 -- Class sessions: admin all; coach reads/writes sessions for classes they
--- coach (so they can mark a session in_progress / completed). Players +
--- parents read sessions for classes the player is enrolled in.
+-- coach; players + parents read sessions for classes the player is enrolled in.
 drop policy if exists "class_sessions: admin all"          on public.class_sessions;
 drop policy if exists "class_sessions: coach writes own"   on public.class_sessions;
 drop policy if exists "class_sessions: player reads"       on public.class_sessions;
@@ -199,7 +166,7 @@ create policy "class_sessions: parent reads child" on public.class_sessions
     )
   );
 
--- ── 7. Helper view: latest scheduled session per class ───────────────────────
+-- ── 6. Helper view: latest scheduled session per class ───────────────────────
 create or replace view public.next_class_session as
   select distinct on (class_id)
          id as session_id, class_id, starts_at, ends_at, coach_id

@@ -228,29 +228,8 @@ export const statFields: FieldConfig[] = [
   { key: "is_published", labelAr: "نشر علناً",         labelEn: "Published",      type: "boolean", defaultValue: "true", placeholder: "Visible on public site" },
 ];
 
-// ─── Branches (migration 0016) ───────────────────────────────────────────────
-export interface BranchRow { id: string; slug: string; name: string; governorate: string | null; address: string | null; phone: string | null; is_active: boolean; sort_order: number; created_at: string }
-
-export const branchColumns: ColumnConfig<BranchRow>[] = [
-  { headerAr: "الاسم",     headerEn: "Name",     render: (r) => <b>{r.name}</b> },
-  { headerAr: "الإمارة",   headerEn: "Emirate",  render: (r) => r.governorate ?? dim(null) },
-  { headerAr: "الهاتف",    headerEn: "Phone",    width: "150px", render: (r) => r.phone ?? dim(null) },
-  { headerAr: "الترتيب",   headerEn: "Order",    width: "70px",  render: (r) => <span style={{ opacity: .7 }}>{r.sort_order}</span> },
-  { headerAr: "الحالة",    headerEn: "Status",   width: "90px",  render: (r) => r.is_active ? <span className="badge badge-green">Active</span> : <span className="badge badge-gold">Hidden</span> },
-];
-
-export const branchFields: FieldConfig[] = [
-  { key: "name",        labelAr: "الاسم",          labelEn: "Name",        type: "text",    required: true },
-  { key: "slug",        labelAr: "المعرّف",         labelEn: "Slug",        type: "text",    required: true, placeholder: "e.g. al-majaz" },
-  { key: "governorate", labelAr: "الإمارة",         labelEn: "Emirate",     type: "text",    placeholder: "e.g. Sharjah" },
-  { key: "address",     labelAr: "العنوان",         labelEn: "Address",     type: "text" },
-  { key: "phone",       labelAr: "الهاتف",          labelEn: "Phone",       type: "text",    placeholder: "+971 …" },
-  { key: "sort_order",  labelAr: "الترتيب",         labelEn: "Sort Order",  type: "number",  defaultValue: "0" },
-  { key: "is_active",   labelAr: "نشِط",            labelEn: "Active",      type: "boolean", defaultValue: "true" },
-];
-
 // ─── Classes (migration 0016) ────────────────────────────────────────────────
-export interface ClassRow { id: string; title: string; level: string | null; format: string; capacity: number | null; fee_minor: number | null; currency: string; is_active: boolean; branch_id: string | null; primary_coach_id: string | null; created_at: string }
+export interface ClassRow { id: string; title: string; level: string | null; format: string; capacity: number | null; fee_minor: number | null; currency: string; is_active: boolean; primary_coach_id: string | null; created_at: string }
 
 export const classColumns: ColumnConfig<ClassRow>[] = [
   { headerAr: "العنوان",  headerEn: "Title",    render: (r) => <b>{r.title}</b> },
@@ -278,7 +257,6 @@ export const classFields: FieldConfig[] = [
   { key: "capacity",         labelAr: "السعة",           labelEn: "Capacity",     type: "number",   placeholder: "e.g. 12" },
   { key: "fee_minor",        labelAr: "الرسوم (فلس)",     labelEn: "Fee (minor)",  type: "number",   placeholder: "AED in fils, e.g. 50000 = 500 AED" },
   { key: "currency",         labelAr: "العملة",          labelEn: "Currency",     type: "text",     defaultValue: "AED" },
-  { key: "branch_id",        labelAr: "الفرع (معرّف)",    labelEn: "Branch ID",    type: "text",     placeholder: "Optional — branch UUID" },
   { key: "primary_coach_id", labelAr: "المدرّبة (معرّف)", labelEn: "Coach ID",     type: "text",     placeholder: "Optional — coach UUID" },
   { key: "is_active",        labelAr: "نشِط",            labelEn: "Active",       type: "boolean",  defaultValue: "true" },
 ];

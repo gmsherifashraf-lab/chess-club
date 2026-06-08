@@ -29,7 +29,7 @@ Back up / run on a branch first.
 - `0013_ratings_history` — `rating_events` + `record_rating_event()` + views
 - `0014_notifications` — templates/notifications/deliveries/preferences + `notify()`
 - `0015_notification_emitters` — grading a submission notifies the player
-- `0016_branches_classes` — branches, classes, class_enrollments, class_sessions
+- `0016_classes` — classes, class_enrollments, class_sessions (single-location club; no branches)
 - `0017_classroom` — board/chat/raise-hand tables, `session_analytics`, RLS
 - `0018_attendance_session_scope` — session-scoped attendance
 - `0019_realtime` — add notifications + rating_events to the realtime publication

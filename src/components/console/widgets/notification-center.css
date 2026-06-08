@@ -1,0 +1,147 @@
+/* =============================================================================
+   NotificationCenter — the dashboard topbar bell + dropdown feed.
+   Federation palette: ink #141414 · emerald #0A5234 · scarlet #C8102E ·
+   surfaces #FFFFFF / #F6F6F4 · line #E6E6E2 · muted #6B6B68.
+   Self-contained so the bell can mount in any shell without the wider console
+   stylesheet.
+   ============================================================================= */
+
+.nc-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #141414;
+  cursor: pointer;
+  transition: background 0.18s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.18s;
+}
+.nc-trigger:hover { background: #f6f6f4; border-color: #e6e6e2; }
+.nc-trigger svg { width: 18px; height: 18px; }
+
+.nc-badge {
+  position: absolute;
+  top: 2px;
+  inset-inline-end: 2px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  background: #c8102e;
+  border-radius: 999px;
+}
+
+.nc-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-end: 0;
+  width: 340px;
+  max-width: calc(100vw - 2rem);
+  max-height: 460px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e6e6e2;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(17, 17, 17, 0.04), 0 24px 48px -28px rgba(17, 17, 17, 0.32);
+  z-index: 80;
+  overflow: hidden;
+}
+
+.nc-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid #f0f0ec;
+}
+.nc-hd-t {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #141414;
+  letter-spacing: 0.01em;
+}
+.nc-hd-act {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #0a5234;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.nc-hd-act:hover { text-decoration: underline; }
+
+.nc-list { overflow-y: auto; }
+
+.nc-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.82rem;
+  color: #6b6b68;
+}
+
+.nc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  text-align: start;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f4f4f1;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.nc-item:hover { background: #f6f6f4; }
+.nc-item-dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: transparent;
+}
+.nc-item.unread .nc-item-dot { background: #0a5234; }
+.nc-item.unread .nc-item-t { font-weight: 700; }
+
+.nc-item-bd { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.nc-item-t { font-size: 0.8rem; color: #141414; line-height: 1.35; }
+.nc-item-b {
+  font-size: 0.74rem;
+  color: #6b6b68;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nc-item-m { font-size: 0.66rem; color: #9a9a97; margin-top: 2px; }
+
+/* Loading skeleton lines (also used by other widgets). */
+.wg-skel-line {
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #efefec 25%, #f6f6f4 37%, #efefec 63%);
+  background-size: 400% 100%;
+  animation: wg-shimmer 1.4s ease infinite;
+}
+@keyframes wg-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wg-skel-line { animation: none; }
+}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/context/AuthContext";
 import { LangProvider } from "@/context/LangContext";
+import { AppToaster } from "@/components/notifications/Toaster";
 import type { Locale } from "@/lib/i18n";
 
 /**
@@ -47,6 +48,9 @@ export function Providers({
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <LangProvider lang={locale}>{children}</LangProvider>
+        {/* Single global toast surface for `notify`. Renders nothing until a
+            call-site fires a toast. */}
+        <AppToaster />
       </AuthProvider>
     </QueryClientProvider>
   );

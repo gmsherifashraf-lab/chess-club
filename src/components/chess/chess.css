@@ -125,10 +125,16 @@
   .eca-play .pl-work { grid-template-columns: 1fr; }
 }
 
-.eca-play .pl-board-row { display: flex; gap: 0.7rem; align-items: stretch; min-height: 0; }
+.eca-play .pl-board-row {
+  display: flex; gap: 0.7rem; align-items: stretch; min-height: 0;
+  justify-content: center;
+}
 .eca-play .pl-board-wrap {
-  flex: 1; min-width: 0; max-width: min(720px, calc(100vw - 32px));
-  margin: 0 auto;
+  flex: 0 1 auto; width: 100%; min-width: 0;
+  /* Square board: capping width by viewport height keeps the whole board
+     (plus topbar and controls) on screen without scrolling. */
+  max-width: min(600px, calc(100vh - 280px), calc(100vw - 48px));
+  max-width: min(600px, calc(100dvh - 280px), calc(100vw - 48px));
 }
 
 /* ── Board chrome ───────────────────────────────────────────────────────── */

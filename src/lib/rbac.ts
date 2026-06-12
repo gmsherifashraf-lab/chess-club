@@ -83,10 +83,11 @@ export const ROLE_NAV: Record<UserRole, RoleNavItem[]> = {
     { key: "material",    icon: "📚", ar: "المواد",      en: "Material" },
   ],
   player: [
-    { key: "overview", icon: "⊞",  ar: "نظرة عامة", en: "Overview" },
-    { key: "tasks",    icon: "📝", ar: "مهامي",     en: "My Tasks" },
-    { key: "history",  icon: "📚", ar: "السجل",     en: "History" },
-    { key: "profile",  icon: "👤", ar: "ملفي",      en: "Profile" },
+    { key: "overview", icon: "⊞",  ar: "نظرة عامة",     en: "Overview" },
+    { key: "tasks",    icon: "📝", ar: "مهامي",          en: "My Tasks" },
+    { key: "play",     icon: "♟",  ar: "اللعب والتدريب", en: "Play & Train" },
+    { key: "history",  icon: "📚", ar: "السجل",          en: "History" },
+    { key: "profile",  icon: "👤", ar: "ملفي",           en: "Profile" },
   ],
   parent: [
     { key: "overview",    icon: "⊞",  ar: "نظرة عامة",   en: "Overview" },

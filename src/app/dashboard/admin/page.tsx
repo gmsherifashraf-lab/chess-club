@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import DashboardShell, { type NavItem } from "@/components/dashboard/DashboardShell";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { createClient } from "@/lib/supabase/client";
@@ -20,6 +21,7 @@ import {
   boardColumns,  boardFields,  type BoardRow,
   partnerColumns, partnerFields, type PartnerRow,
   statColumns,   statFields,   type StatRow,
+  classColumns,  classFields,  type ClassRow,
 } from "@/components/admin/configs";
 
 const NAV: NavItem[] = [
@@ -30,20 +32,27 @@ const NAV: NavItem[] = [
   { key: "submissions", icon: "📥", ar: "المُسلَّمات",   en: "Submissions"   },
   { key: "players",     icon: "♟", ar: "اللاعبون",      en: "Players"       },
   { key: "coaches",     icon: "🎓", ar: "المدربون",      en: "Coaches"       },
+  { key: "classes",     icon: "📚", ar: "الفصول",        en: "Classes"       },
   { key: "tournaments", icon: "🏆", ar: "البطولات",      en: "Tournaments"   },
   { key: "news",        icon: "📰", ar: "الأخبار",        en: "News"          },
   { key: "gallery",     icon: "🖼", ar: "معرض الصور",    en: "Gallery"       },
   { key: "board",       icon: "👔", ar: "مجلس الإدارة",  en: "Board"         },
   { key: "partners",    icon: "🤝", ar: "الشركاء",       en: "Partners"      },
   { key: "stats",       icon: "📊", ar: "الأرقام",        en: "Stats"         },
+  { key: "analyze",     icon: "♟", ar: "محلّل الشطرنج",  en: "Analyze"       },
   { key: "settings",    icon: "⚙", ar: "الإعدادات",      en: "Settings"      },
 ];
 
 export default function AdminDashboard() {
   const { loading } = useRequireAuth("admin");
   const { profile } = useAuth();
+  const router = useRouter();
   const [tab, setTab] = useState("overview");
   const counts = useAdminCounts();
+
+  // "analyze" opens the chess workspace (external route), not an in-page tab.
+  const handleTab = (key: string) =>
+    key === "analyze" ? router.push("/play?mode=analyze") : setTab(key);
 
   if (loading) return <LoadingScreen />;
 
@@ -56,7 +65,7 @@ export default function AdminDashboard() {
       userInitial={initial}
       navItems={NAV}
       activeTab={tab}
-      onTab={setTab}
+      onTab={handleTab}
     >
       {tab === "overview" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
@@ -143,6 +152,17 @@ export default function AdminDashboard() {
           addLabelAr="+ إضافة مدرب" addLabelEn="+ Add Coach"
           columns={coachColumns}
           fields={coachFields}
+        />
+      )}
+
+      {tab === "classes" && (
+        <CrudShell<ClassRow>
+          table="classes"
+          titleAr="إدارة الفصول" titleEn="Classes"
+          addLabelAr="+ فصل جديد" addLabelEn="+ Add Class"
+          columns={classColumns}
+          fields={classFields}
+          orderBy={{ column: "created_at", ascending: false }}
         />
       )}
 

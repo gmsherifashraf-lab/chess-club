@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { useAuth } from "@/context/AuthContext";
@@ -12,7 +13,12 @@ import PlayerProfile from "@/components/player/PlayerProfile";
 export default function PlayerDashboard() {
   const { loading } = useRequireAuth("player");
   const { profile } = useAuth();
+  const router = useRouter();
   const [tab, setTab] = useState("overview");
+
+  // "play" is an external route (the chess workspace), not an in-page tab.
+  const handleTab = (key: string) =>
+    key === "play" ? router.push("/play") : setTab(key);
 
   if (loading)
     return (
@@ -32,7 +38,7 @@ export default function PlayerDashboard() {
       userInitial={initial}
       navItems={ROLE_NAV.player}
       activeTab={tab}
-      onTab={setTab}
+      onTab={handleTab}
     >
       {tab === "overview" && (
         <div className="rounded-[4px] border border-line bg-white p-8 shadow-card sm:p-10">

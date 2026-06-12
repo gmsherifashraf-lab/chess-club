@@ -14,6 +14,27 @@
    and CSS read from the same scale.
    ════════════════════════════════════════════════════════════════════ */
 :root {
+  /* ── Compat: `--c-*` brand aliases ──
+     The ported learning-platform widgets (classroom dashboard cards,
+     CoachStartClass, analytics tiles) reference an Egypt-era `--c-*` token
+     namespace. We re-map those names onto the federation palette so the
+     ported components adopt this club's green/cream identity instead of the
+     original royal-blue. Room/stage chrome defines its own `--eca-*` tokens
+     (see classroom.css) and is intentionally left as a dark video stage. */
+  --c-paper:      #FFFFFF;
+  --c-white:      #FFFFFF;
+  --c-mist:       #F6F6F4;   /* federation surface-2 */
+  --c-frost:      #E9F0EC;   /* light emerald tint */
+  --c-periwinkle: #CBD8D0;   /* soft green-grey (was bluish) */
+  --c-royal:      #0A5234;   /* primary action — federation emerald */
+  --c-royal-deep: #07351F;   /* pressed/disabled emerald */
+  --c-navy:       #0A1F16;   /* institutional dark green */
+  --c-navy-ink:   #141414;   /* near-black ink */
+  --c-ink:        #141414;
+  --c-muted:      #6B6B68;   /* soft grey text */
+  --c-line:       rgba(17, 17, 17, 0.12);
+  --c-line-dark:  rgba(255, 255, 255, 0.18);
+
   /* ── Color: surfaces ──
      Federation system: clean neutral white ground, no cream.
      Surfaces step in cool-neutral, faintly warmed so pure-white

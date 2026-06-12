@@ -1,0 +1,57 @@
+/* Imports the shared chess workspace stylesheet so /play and any embed share it. */
+@import "../../components/chess/chess.css";
+
+/* Access-gate fallback shown while resolving auth or for disallowed roles. */
+.pl-gate {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(0, 79, 188, 0.10), transparent 55%),
+    radial-gradient(circle at 82% 88%, rgba(11, 56, 113, 0.10), transparent 55%),
+    var(--pl-surface-1);
+}
+.pl-gate-card {
+  width: min(420px, 100%);
+  background: var(--pl-surface-0);
+  border: 1px solid var(--pl-line);
+  border-radius: 18px;
+  box-shadow: var(--pl-sh-card);
+  padding: 2rem 1.75rem;
+  text-align: center;
+}
+.pl-gate-mk {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--pl-mist);
+  color: var(--pl-accent-deep);
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+.pl-gate-ttl {
+  font-family: var(--font-display, "Cormorant Garamond", serif);
+  font-size: 1.55rem;
+  color: var(--pl-navy-ink);
+  margin-bottom: 0.35rem;
+}
+.pl-gate-sub {
+  color: var(--pl-text-3);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.pl-gate-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-top: 1.4rem;
+}
+.pl-gate-actions .pl-btn.ghost {
+  background: transparent;
+  color: var(--pl-text-2);
+  border: 1px solid var(--pl-line);
+}
+.pl-gate-actions .pl-btn.ghost:hover { background: var(--pl-surface-2); }

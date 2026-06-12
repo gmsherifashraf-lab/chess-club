@@ -228,3 +228,36 @@ export const statFields: FieldConfig[] = [
   { key: "is_published", labelAr: "نشر علناً",         labelEn: "Published",      type: "boolean", defaultValue: "true", placeholder: "Visible on public site" },
 ];
 
+// ─── Classes (migration 0016) ────────────────────────────────────────────────
+export interface ClassRow { id: string; title: string; level: string | null; format: string; capacity: number | null; fee_minor: number | null; currency: string; is_active: boolean; primary_coach_id: string | null; created_at: string }
+
+export const classColumns: ColumnConfig<ClassRow>[] = [
+  { headerAr: "العنوان",  headerEn: "Title",    render: (r) => <b>{r.title}</b> },
+  { headerAr: "المستوى",  headerEn: "Level",    width: "120px", render: (r) => r.level ? <span className="badge badge-green">{r.level}</span> : dim(null) },
+  { headerAr: "الصيغة",   headerEn: "Format",   width: "120px", render: (r) => r.format },
+  { headerAr: "السعة",    headerEn: "Capacity", width: "90px",  render: (r) => r.capacity ?? dim(null) },
+  { headerAr: "الحالة",   headerEn: "Status",   width: "90px",  render: (r) => r.is_active ? <span className="badge badge-green">Active</span> : <span className="badge badge-gold">Hidden</span> },
+];
+
+export const classFields: FieldConfig[] = [
+  { key: "title",            labelAr: "العنوان",         labelEn: "Title",        type: "text",     required: true },
+  { key: "description",      labelAr: "الوصف",           labelEn: "Description",  type: "textarea" },
+  { key: "format",           labelAr: "الصيغة",          labelEn: "Format",       type: "select",   defaultValue: "in_person", options: [
+    { value: "in_person", labelEn: "In person" },
+    { value: "online",    labelEn: "Online" },
+    { value: "hybrid",    labelEn: "Hybrid" },
+  ]},
+  { key: "level",            labelAr: "المستوى",         labelEn: "Level",        type: "select",   defaultValue: "", options: [
+    { value: "",             labelEn: "—" },
+    { value: "beginner",     labelEn: "Beginner" },
+    { value: "intermediate", labelEn: "Intermediate" },
+    { value: "advanced",     labelEn: "Advanced" },
+    { value: "elite",        labelEn: "Elite" },
+  ]},
+  { key: "capacity",         labelAr: "السعة",           labelEn: "Capacity",     type: "number",   placeholder: "e.g. 12" },
+  { key: "fee_minor",        labelAr: "الرسوم (فلس)",     labelEn: "Fee (minor)",  type: "number",   placeholder: "AED in fils, e.g. 50000 = 500 AED" },
+  { key: "currency",         labelAr: "العملة",          labelEn: "Currency",     type: "text",     defaultValue: "AED" },
+  { key: "primary_coach_id", labelAr: "المدرّبة (معرّف)", labelEn: "Coach ID",     type: "text",     placeholder: "Optional — coach UUID" },
+  { key: "is_active",        labelAr: "نشِط",            labelEn: "Active",       type: "boolean",  defaultValue: "true" },
+];
+

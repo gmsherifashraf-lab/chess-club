@@ -1,0 +1,661 @@
+/* =============================================================================
+   Chess & Culture Club — Live Classroom
+   The board is the stage. Dark institutional canvas with restrained accents.
+   ============================================================================= */
+
+:root {
+  --eca-paper:      #FFFFFF;
+  --eca-mist:       #EEF0FB;
+  --eca-periwinkle: #C6CCF1;
+  --eca-royal:      #004FBC;
+  --eca-royal-deep: #0B3871;
+  --eca-navy:       #1C4479;
+  --eca-navy-ink:   #14233F;
+  --eca-frost:      #D8DDF5;
+  --eca-muted-on-navy: rgba(216, 221, 245, 0.72);
+}
+
+.eca-classroom {
+  min-height: 100dvh;
+  background:
+    radial-gradient(120% 80% at 50% 0%, #1C4479 0%, #14233F 60%, #0A1830 100%);
+  color: var(--eca-paper);
+  font-family: var(--font-hanken, "Hanken Grotesk", system-ui, sans-serif);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  position: relative;
+  isolation: isolate;
+}
+
+.eca-classroom::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(80% 50% at 20% 100%, rgba(198, 204, 241, 0.04), transparent 60%),
+    radial-gradient(60% 40% at 100% 30%, rgba(0, 79, 188, 0.06), transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── Top bar ───────────────────────────────────────────────────────────── */
+.eca-cr-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid rgba(198, 204, 241, 0.10);
+  background: rgba(20, 35, 63, 0.55);
+  backdrop-filter: blur(8px);
+}
+
+.eca-cr-title {
+  font-family: var(--font-bodoni, "Bodoni Moda", "Times New Roman", serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--eca-paper);
+  line-height: 1.2;
+}
+.eca-cr-title-sub {
+  display: block;
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+  font-size: 0.68rem;
+  color: var(--eca-muted-on-navy);
+  margin-top: 0.15rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Stage grid ────────────────────────────────────────────────────────── */
+.eca-cr-stage {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  grid-template-rows: 1fr;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  min-height: 0;
+}
+
+.eca-cr-board-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.eca-cr-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+/* ── The board, framed in periwinkle ──────────────────────────────────── */
+.eca-cr-board-shell {
+  background: var(--eca-paper);
+  border: 1px solid var(--eca-periwinkle);
+  border-radius: 8px;
+  padding: 0.75rem;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 20px 50px -25px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.eca-cr-board-mount {
+  width: 100%;
+  max-width: min(72vh, 640px);
+  aspect-ratio: 1 / 1;
+}
+
+.eca-cr-board-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+  font-size: 0.7rem;
+  color: var(--eca-muted-on-navy);
+  letter-spacing: 0.04em;
+  padding: 0 0.25rem;
+}
+
+/* ── Video tiles ───────────────────────────────────────────────────────── */
+.eca-cr-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+
+.eca-cr-tile {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--eca-navy-ink);
+  border: 1px solid rgba(198, 204, 241, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.eca-cr-tile[data-coach="true"] {
+  grid-column: span 2;
+  aspect-ratio: 16 / 9;
+  border-color: rgba(198, 204, 241, 0.28);
+}
+
+.eca-cr-tile[data-speaking="true"] {
+  border-color: var(--eca-royal);
+  box-shadow: 0 0 0 1px var(--eca-royal);
+}
+
+.eca-cr-tile-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--eca-navy-ink);
+}
+
+.eca-cr-tile-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-bodoni, "Bodoni Moda", serif);
+  font-size: 1.4rem;
+  color: var(--eca-frost);
+  letter-spacing: 0.02em;
+  background:
+    linear-gradient(135deg, rgba(28, 68, 121, 0.85), rgba(20, 35, 63, 0.95));
+}
+
+.eca-cr-tile-label {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: var(--eca-paper);
+  background: rgba(10, 24, 48, 0.6);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+.eca-cr-tile-label-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.eca-cr-tile-icons {
+  display: inline-flex;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  align-items: center;
+  color: var(--eca-frost);
+}
+
+/* ── Hand raised badge on tile ─────────────────────────────────────────── */
+.eca-cr-hand-pill {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(0, 79, 188, 0.92);
+  color: var(--eca-paper);
+  border: 1px solid var(--eca-royal);
+  padding: 0.15rem 0.45rem;
+  font-size: 0.65rem;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  animation: eca-hand-rise 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes eca-hand-rise {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Control bar ───────────────────────────────────────────────────────── */
+.eca-cr-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(11, 24, 48, 0.75);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(198, 204, 241, 0.10);
+}
+
+.eca-cr-ctl {
+  appearance: none;
+  background: rgba(198, 204, 241, 0.08);
+  border: 1px solid rgba(198, 204, 241, 0.18);
+  color: var(--eca-paper);
+  padding: 0.55rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: background 160ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.eca-cr-ctl:hover {
+  background: rgba(198, 204, 241, 0.14);
+  border-color: rgba(198, 204, 241, 0.32);
+}
+.eca-cr-ctl:focus-visible {
+  outline: 2px solid var(--eca-royal);
+  outline-offset: 2px;
+}
+.eca-cr-ctl[data-on="true"] {
+  background: rgba(0, 79, 188, 0.18);
+  border-color: rgba(0, 79, 188, 0.6);
+  color: var(--eca-paper);
+}
+.eca-cr-ctl[data-danger="true"] {
+  background: rgba(214, 64, 84, 0.16);
+  border-color: rgba(214, 64, 84, 0.55);
+  color: #FFD9DF;
+}
+.eca-cr-ctl[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Chat panel ────────────────────────────────────────────────────────── */
+.eca-cr-chat {
+  background: rgba(11, 24, 48, 0.6);
+  border: 1px solid rgba(198, 204, 241, 0.12);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  flex: 1;
+}
+.eca-cr-chat-head {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid rgba(198, 204, 241, 0.10);
+  font-size: 0.72rem;
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+  color: var(--eca-muted-on-navy);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.eca-cr-chat-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.eca-cr-chat-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--eca-paper);
+}
+.eca-cr-chat-msg-meta {
+  font-size: 0.65rem;
+  color: var(--eca-muted-on-navy);
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+  letter-spacing: 0.04em;
+}
+.eca-cr-chat-msg[data-kind="system"] .eca-cr-chat-msg-body {
+  color: var(--eca-periwinkle);
+  font-style: italic;
+}
+.eca-cr-chat-input {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border-top: 1px solid rgba(198, 204, 241, 0.10);
+}
+.eca-cr-chat-input input {
+  flex: 1;
+  background: rgba(198, 204, 241, 0.06);
+  border: 1px solid rgba(198, 204, 241, 0.16);
+  border-radius: 5px;
+  padding: 0.45rem 0.65rem;
+  color: var(--eca-paper);
+  font-size: 0.82rem;
+  font-family: inherit;
+}
+.eca-cr-chat-input input::placeholder { color: var(--eca-muted-on-navy); }
+.eca-cr-chat-input input:focus-visible {
+  outline: 2px solid var(--eca-royal);
+  outline-offset: 1px;
+  border-color: rgba(0, 79, 188, 0.6);
+}
+.eca-cr-chat-send {
+  background: var(--eca-royal);
+  border: 1px solid var(--eca-royal);
+  color: var(--eca-paper);
+  padding: 0 0.85rem;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.eca-cr-chat-send:hover { background: var(--eca-royal-deep); border-color: var(--eca-royal-deep); }
+
+/* ── Coach deck (slide-over) ───────────────────────────────────────────── */
+.eca-cr-deck {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(380px, 92vw);
+  background: linear-gradient(180deg, #14233F 0%, #0A1830 100%);
+  border-left: 1px solid rgba(198, 204, 241, 0.18);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform: translateX(100%);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 30;
+  overflow-y: auto;
+}
+.eca-cr-deck[data-open="true"] { transform: translateX(0); }
+.eca-cr-deck-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(198, 204, 241, 0.10);
+  padding-bottom: 0.6rem;
+}
+.eca-cr-deck-eyebrow {
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--eca-muted-on-navy);
+}
+.eca-cr-deck-close {
+  background: none;
+  border: none;
+  color: var(--eca-paper);
+  cursor: pointer;
+  font-size: 1rem;
+}
+.eca-cr-deck-section h4 {
+  font-family: var(--font-bodoni, "Bodoni Moda", serif);
+  font-size: 0.95rem;
+  color: var(--eca-paper);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
+}
+
+/* ── Roster ────────────────────────────────────────────────────────────── */
+.eca-cr-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.eca-cr-roster-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.55rem;
+  background: rgba(198, 204, 241, 0.05);
+  border: 1px solid rgba(198, 204, 241, 0.10);
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+.eca-cr-roster-row[data-hand="true"] {
+  border-color: rgba(0, 79, 188, 0.55);
+  background: rgba(0, 79, 188, 0.10);
+}
+.eca-cr-roster-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.eca-cr-roster-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6DCB8E;
+}
+.eca-cr-roster-actions {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+.eca-cr-roster-actions button {
+  font-size: 0.68rem;
+  padding: 0.2rem 0.45rem;
+  background: rgba(198, 204, 241, 0.08);
+  border: 1px solid rgba(198, 204, 241, 0.16);
+  color: var(--eca-paper);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.eca-cr-roster-actions button:hover { background: rgba(198, 204, 241, 0.16); }
+.eca-cr-roster-actions button[data-primary="true"] {
+  background: var(--eca-royal);
+  border-color: var(--eca-royal);
+}
+
+/* ── Connection meter ──────────────────────────────────────────────────── */
+.eca-cr-net {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: var(--eca-muted-on-navy);
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+}
+.eca-cr-net-bars { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px; }
+.eca-cr-net-bars span {
+  display: inline-block;
+  width: 3px;
+  background: var(--eca-frost);
+  opacity: 0.35;
+  border-radius: 1px;
+}
+.eca-cr-net-bars span:nth-child(1) { height: 4px; }
+.eca-cr-net-bars span:nth-child(2) { height: 7px; }
+.eca-cr-net-bars span:nth-child(3) { height: 10px; }
+.eca-cr-net-bars span:nth-child(4) { height: 12px; }
+.eca-cr-net[data-quality="excellent"] span { opacity: 1; }
+.eca-cr-net[data-quality="good"] span:nth-child(-n+3) { opacity: 1; }
+.eca-cr-net[data-quality="poor"] span:nth-child(-n+2) { opacity: 1; background: #E3A85A; }
+.eca-cr-net[data-quality="lost"] span:nth-child(1) { opacity: 1; background: #D64054; }
+
+/* ── Waiting / device check ────────────────────────────────────────────── */
+.eca-cr-waiting {
+  max-width: 520px;
+  margin: 5vh auto;
+  background: var(--eca-paper);
+  border: 1px solid var(--eca-periwinkle);
+  border-radius: 8px;
+  padding: 2rem;
+  color: var(--eca-navy-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.eca-cr-waiting h1 {
+  font-family: var(--font-bodoni, "Bodoni Moda", serif);
+  font-size: 1.65rem;
+  font-weight: 500;
+  color: var(--eca-navy-ink);
+  letter-spacing: 0.01em;
+}
+.eca-cr-waiting-meta {
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--eca-royal);
+}
+.eca-cr-waiting-preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--eca-navy-ink);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--eca-frost);
+  font-family: var(--font-bodoni, "Bodoni Moda", serif);
+  overflow: hidden;
+}
+.eca-cr-waiting-preview video { width: 100%; height: 100%; object-fit: cover; }
+.eca-cr-waiting-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.eca-cr-primary {
+  background: var(--eca-royal);
+  border: 1px solid var(--eca-royal);
+  color: var(--eca-paper);
+  padding: 0.6rem 1.1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.eca-cr-primary:hover { background: var(--eca-royal-deep); border-color: var(--eca-royal-deep); }
+.eca-cr-secondary {
+  background: var(--eca-mist);
+  border: 1px solid var(--eca-periwinkle);
+  color: var(--eca-navy-ink);
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.eca-cr-secondary:hover { background: var(--eca-periwinkle); }
+
+/* ── Engine readout (coach toggle) ─────────────────────────────────────── */
+.eca-cr-engine {
+  border: 1px solid rgba(198, 204, 241, 0.16);
+  border-radius: 5px;
+  padding: 0.55rem 0.7rem;
+  background: rgba(198, 204, 241, 0.04);
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+  font-size: 0.72rem;
+  color: var(--eca-frost);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ── Reactions row ─────────────────────────────────────────────────────── */
+.eca-cr-reactions {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+.eca-cr-reaction {
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  background: rgba(198, 204, 241, 0.08);
+  border: 1px solid rgba(198, 204, 241, 0.16);
+  color: var(--eca-paper);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+.eca-cr-reaction:hover { background: rgba(198, 204, 241, 0.16); }
+
+/* ── Analytics widgets (used on dashboards, light theme) ─────────────── */
+.eca-cr-summary {
+  border: 1px solid var(--eca-periwinkle);
+  border-radius: 6px;
+  padding: 1rem;
+  background: var(--eca-paper);
+  color: var(--eca-navy-ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.eca-cr-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+.eca-cr-summary-cell {
+  border-top: 1px solid var(--eca-periwinkle);
+  padding-top: 0.4rem;
+}
+.eca-cr-summary-num {
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+  font-size: 1.4rem;
+  color: var(--eca-navy-ink);
+  font-weight: 500;
+}
+.eca-cr-summary-lbl {
+  font-size: 0.7rem;
+  color: #5C6B88;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-mono, "Spline Sans Mono", ui-monospace, monospace);
+}
+
+/* ── Mobile lane: board top, video below, chat bottom-sheet ───────────── */
+@media (max-width: 880px) {
+  .eca-cr-stage {
+    grid-template-columns: 1fr;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+  .eca-cr-board-shell { padding: 0.4rem; }
+  .eca-cr-rail { flex-direction: column; }
+  .eca-cr-tile[data-coach="true"] { grid-column: span 2; }
+  .eca-cr-deck { width: 100vw; }
+  .eca-cr-controls { padding: 0.5rem; gap: 0.35rem; }
+  .eca-cr-ctl { padding: 0.5rem 0.55rem; font-size: 0.72rem; }
+  .eca-cr-ctl-label { display: none; }
+  .eca-cr-chat-mobile-toggle { display: inline-flex !important; }
+}
+
+@media (min-width: 881px) {
+  .eca-cr-chat-mobile-toggle { display: none; }
+}
+
+/* Mobile chat sheet — slides up from bottom when toggled */
+.eca-cr-chat-sheet {
+  display: none;
+}
+@media (max-width: 880px) {
+  .eca-cr-chat-sheet {
+    display: flex;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 60vh;
+    background: linear-gradient(180deg, #14233F 0%, #0A1830 100%);
+    border-top: 1px solid rgba(198, 204, 241, 0.18);
+    transform: translateY(100%);
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 25;
+    flex-direction: column;
+  }
+  .eca-cr-chat-sheet[data-open="true"] { transform: translateY(0); }
+  .eca-cr-chat-rail { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eca-cr-hand-pill, .eca-cr-deck, .eca-cr-chat-sheet {
+    animation: none !important;
+    transition: none !important;
+  }
+}

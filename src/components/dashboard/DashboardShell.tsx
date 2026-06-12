@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useLang } from "@/context/LangContext";
 import Logo from "@/components/brand/Logo";
+import { NotificationCenter } from "@/components/console/widgets/NotificationCenter";
 
 export interface NavItem {
   key:     string;
@@ -169,9 +170,12 @@ export default function DashboardShell({
             )}
           </div>
 
-          {/* Avatar */}
-          <div style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", fontSize: ".75rem", fontWeight: 700, color: "#fff", background: roleColor, cursor: "default" }}>
-            {userInitial}
+          {/* Notifications + avatar */}
+          <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+            <NotificationCenter />
+            <div style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", fontSize: ".75rem", fontWeight: 700, color: "#fff", background: roleColor, cursor: "default" }}>
+              {userInitial}
+            </div>
           </div>
         </div>
 

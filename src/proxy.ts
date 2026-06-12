@@ -16,7 +16,7 @@ const PROTECTED_PREFIXES = ["/dashboard"];
 // intentionally NOT listed — anyone, signed in or not, may open it.
 const AUTH_ROUTES = ["/login"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // ── Locale resolution ───────────────────────────────────────────────────
@@ -88,7 +88,7 @@ export async function middleware(request: NextRequest) {
         }
       }
     } else {
-      console.error("middleware getUser:", msg);
+      console.error("proxy getUser:", msg);
     }
   }
 

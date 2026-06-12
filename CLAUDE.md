@@ -55,13 +55,13 @@ Three roles, stored in `public.profiles.role` and mirrored to `auth.users.raw_us
 - `coach`
 - `player`
 
-Defined in `src/lib/auth.ts`. Old code referenced `parent` / `board` — these are gone since commit `2d242d2`. `normaliseRole()` in both `middleware.ts` and `AuthContext.tsx` maps any unknown value to `player`.
+Defined in `src/lib/auth.ts`. Old code referenced `parent` / `board` — these are gone since commit `2d242d2`. `normaliseRole()` in both `src/proxy.ts` and `AuthContext.tsx` maps any unknown value to `player`.
 
 ### Auth flow
 
 1. `signIn(supabase, ...)` in `src/lib/auth.ts` calls `signInWithPassword`, then preferentially reads the role from `profiles` table.
 2. Login page hard-navigates with `window.location.assign(dashboard)` (not `router.push`) — production was silently swallowing client-router errors.
-3. `middleware.ts` calls `getUser()` (not `getSession()` — the latter doesn't refresh cookies). Redirects:
+3. `src/proxy.ts` (Next 16 `proxy` convention, formerly `middleware.ts`) calls `getUser()` (not `getSession()` — the latter doesn't refresh cookies). Redirects:
    - protected route + no user → `/login`
    - auth route + user → role's dashboard
    - wrong-role dashboard → correct dashboard
@@ -73,12 +73,12 @@ Defined in `src/lib/auth.ts`. Old code referenced `parent` / `board` — these a
 - `src/components/home/Hero.tsx` — hero with **background video**, parallax, CTAs
 - `src/context/AuthContext.tsx` — auth state, the deadlock fix lives here
 - `src/lib/supabase/client.ts` — singleton browser client
-- `src/lib/supabase/middleware.ts` — server client for middleware
+- `src/lib/supabase/middleware.ts` — server client for the proxy
 - `src/lib/auth.ts` — roles, dashboards, signIn/signUp/signOut
 - `src/app/dashboard/{admin,coach,player}/page.tsx` — role-specific dashboards
 - `src/components/admin/` — CrudShell, EnrollmentsList, CoachAssignments, UsersManager, configs
 - `src/components/coach/` — PlayersList, AttendanceTaker, ParticipationsEditor (all scoped via `useCurrentCoach`)
-- `middleware.ts` — root middleware (auth + role redirects)
+- `src/proxy.ts` — request proxy (auth + role redirects; Next 16 rename of `middleware.ts`)
 
 ### DB tables (Supabase)
 

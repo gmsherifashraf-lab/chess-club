@@ -144,7 +144,6 @@ insert into public.partners (name_ar, name_en, sort_order)
 select * from (values
   ('مجلس الشارقة الرياضي','Sharjah Sports Council',0),
   ('اتحاد الإمارات للشطرنج','UAE Chess Federation',1),
-  ('مكتب الشارقة لرياضة المرأة','Sharjah Women''s Sport',2),
   ('الاتحاد الآسيوي للشطرنج','Asian Chess Federation',3)
 ) v(name_ar,name_en,sort_order)
 where not exists (select 1 from public.partners);

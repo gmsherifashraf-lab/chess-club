@@ -15,7 +15,6 @@ import { cn } from "@/lib/utils";
 const FALLBACK: Partner[] = [
   { ar: "مجلس الشارقة الرياضي", en: "Sharjah Sports Council" },
   { ar: "اتحاد الإمارات للشطرنج", en: "UAE Chess Federation" },
-  { ar: "مكتب الشارقة لرياضة المرأة", en: "Sharjah Women's Sport" },
   { ar: "الاتحاد الآسيوي للشطرنج", en: "Asian Chess Federation" },
 ];
 
